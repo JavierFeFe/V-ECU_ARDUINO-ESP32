@@ -18,7 +18,7 @@ Productos localizados en **Amazon España**; precios orientativos (IVA incl., oc
 |---|---|
 | A. Electrónica (CAN + OLED) | 13–18 € |
 | B. Instalación en la máquina | 90–125 € |
-| C. Diagnóstico (adaptador USB-CAN) | 25–35 € |
+| C. Diagnóstico (un adaptador USB-CAN) | 25–35 € |
 | **Total** | **≈ 130–180 €** |
 | Opcionales (optoacoplador, bornes DIN, fuente de banco…) | +6–120 € |
 
@@ -47,6 +47,8 @@ Productos localizados en **Amazon España**; precios orientativos (IVA incl., oc
 ## C. Diagnóstico — adaptador USB-CAN (imprescindible)
 
 Necesario para la **captura del bus** (Fase 1) antes de transmitir nada, y para probar el módulo CAN en el banco.
+
+**Comprar solo uno** de estos tres (son alternativas). Recomendado: **C1**.
 
 | # | Producto | ASIN | Precio | Notas |
 |---|---|---|---|---|
