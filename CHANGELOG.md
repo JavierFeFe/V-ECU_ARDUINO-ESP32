@@ -11,6 +11,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 - Módulo CAN elegido: **Adafruit CAN Pal (TJA1051T/3)**, con interruptor de terminación (OFF en la máquina). Su pin **SLNT va a GPIO4**: el firmware lo pone en alto desde el arranque (transceptor en silencio por hardware) salvo en el entorno `esp32dev_tsc1`.
 
+- Firmware con SLNT grabado en la placa y verificado por la consola serie (Reposo, relé en reposo, CAN en solo escucha).
+- `tools/gen_esquema_montaje.py`: script que genera `docs/esquema_montaje_ESP32.svg` (el PNG se exporta con Chrome en modo headless).
+
 ### Cambiado
 - Diagrama de montaje redibujado con la placa vista por delante (como en las fotos del fabricante), el número de GPIO de cada pin y el CAN Pal con su forma real.
 - `docs/LISTA_COMPRA.md` reducida al control de rpm: quitado lo que ya cubre la placa ESP32_Relay y el programador; pendiente solo módulo CAN, OLED, USB-CAN y material de instalación (≈ 130–180 €).

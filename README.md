@@ -4,7 +4,7 @@ Sustitución / emulación de la **V-ECU** (Vehicle ECU, MID 187) de una excavado
 
 > **Estado (2026-10-19):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Plan, hardware y pruebas en [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) y [`docs/esquema_rpm_ESP32.png`](docs/esquema_rpm_ESP32.png); montaje con la placa **ESP32_Relay X1 V1.2** que ya tenemos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
 >
-> **Hardware en banco:** la placa se programa por P4 con el programador USB-C (ESP32-D0WD-V3, flash 4 MB) y el **relé de la vía B está confirmado en GPIO16**. **Firmware v0.1** en [`firmware/esp32/`](firmware/esp32/): modos Reposo / Alto / Auto-ralentí sobre el relé, lectura J1939 en solo escucha, TSC1 tras un flag de compilación, encoder, OLED opcional y consola serie. Falta comprar el módulo CAN, la OLED y el adaptador USB-CAN ([`docs/LISTA_COMPRA.md`](docs/LISTA_COMPRA.md)).
+> **Hardware en banco:** la placa se programa por P4 con el programador USB-C (ESP32-D0WD-V3, flash 4 MB) y el **relé de la vía B está confirmado en GPIO16**. **Firmware v0.1** en [`firmware/esp32/`](firmware/esp32/): modos Reposo / Alto / Auto-ralentí sobre el relé, lectura J1939 en solo escucha, TSC1 tras un flag de compilación, encoder, OLED opcional y consola serie. **Grabado y verificado en la placa**: arranca en Reposo, CAN en solo escucha y el SLNT del CAN Pal (IO4) en alto. Módulo CAN elegido: **Adafruit CAN Pal**. Falta comprar el CAN Pal, la OLED y el adaptador USB-CAN ([`docs/LISTA_COMPRA.md`](docs/LISTA_COMPRA.md)).
 
 ## El problema
 
@@ -52,6 +52,8 @@ docs/
 firmware/
 ├── esp32/                          ← firmware del control de rpm (PlatformIO, Arduino-ESP32 3.x)
 └── pruebas/                        ← pruebas de banco: led (GPIO2), rele (GPIO16, conmutación comentada)
+tools/
+└── gen_esquema_montaje.py          ← genera docs/esquema_montaje_ESP32.svg
 ```
 
 ## Montaje
