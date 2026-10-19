@@ -8,7 +8,7 @@ Productos localizados en **Amazon España**; precios orientativos (IVA incl., oc
 > - **Placa ESP32-WROOM-32E con relé y entrada 24 V** (LC Technology; ver [`HARDWARE_PLACA_ESP32_RELE.md`](HARDWARE_PLACA_ESP32_RELE.md)) → sobran **A1/A2** (ESP32 + bornes), **A4** (relé) y **A8** (convertidor).
 > - **Encoder rotativo** → sobra **A6**.
 >
-> Núcleo pendiente de comprar: módulo CAN (A3), optoacoplador (A5, opcional), OLED (A7) y un adaptador USB-TTL 3,3 V para programar la placa (≈ 25–35 €).
+> Núcleo pendiente de comprar: módulo CAN (A3), **adaptador USB-TTL 3,3 V (A10)** —el micro-USB de la placa es solo de alimentación—, OLED (A7) y optoacoplador (A5, opcional): ≈ 25–35 €.
 
 ## Resumen
 
@@ -35,6 +35,7 @@ Productos localizados en **Amazon España**; precios orientativos (IVA incl., oc
 | A7 | **OLED 0,96" SSD1306 I²C** | AZDelivery 0,96" I²C | [B01L9GC470](https://www.amazon.es/dp/B01L9GC470) | ≈ 7–9 € | 1 | Alternativa ×2 [B07JN2NHT4](https://www.amazon.es/dp/B07JN2NHT4) (comprobar que es SSD1306) |
 | A8 | **Convertidor DC-DC 24 → 5 V** | **Opción recomendada en Amazon:** módulo sellado automoción **8–58 V → 5 V 3 A** | [B07WSWMNN8](https://www.amazon.es/dp/B07WSWMNN8) | ≈ 12–16 € | 1 | Entrada hasta 58 V: margen frente a los picos del alternador sin añadir nada. Alternativa carril DIN Mean Well **DDR-15G-5** [B07B6553JY](https://www.amazon.es/dp/B07B6553JY) (≈ 20 €) **pero** su máximo es 36 V: añadir el TVS A9 y el fusible. Industrial fuera de Amazon: **Traco THN 10-4811WIR** (18–75 V, aislado) en RS España ≈ 37 € |
 | A9 | TVS SMCJ33A (solo con la Mean Well) | Pack 40 uds | [B0D1QHP3N8](https://www.amazon.es/dp/B0D1QHP3N8) | ≈ 8 € | 1 | O Littelfuse en RS/Farnell (≈ 0,55 €/ud) |
+| A10 | **Adaptador USB-TTL a 3,3 V** (programar la placa ESP32 con relé: su micro-USB es solo de alimentación) | **AZDelivery CP2102 HW-598** (3,3 V / 5 V, con cables) | [B082FMFHNP](https://www.amazon.es/dp/B082FMFHNP) | ≈ 8 € | 1 | Alternativas: AZDelivery **FT232RL** con jumper 3,3/5 V [B082FMKG5C](https://www.amazon.es/dp/B082FMKG5C) (≈ 8 €; **mover el jumper a 3,3 V**, viene en 5 V); SATKIT CP2102 con fusible [B06Y42DX3C](https://www.amazon.es/dp/B06Y42DX3C) (≈ 5 €); CH340G AZDelivery [B08T24NML9](https://www.amazon.es/dp/B08T24NML9) (≈ 10 €). Conectar solo **GND, TX→RX, RX→TX** a P4; la placa se alimenta por su micro-USB o su borne, **no** desde el adaptador |
 
 ## B. Instalación
 

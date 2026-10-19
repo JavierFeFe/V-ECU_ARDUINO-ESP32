@@ -9,7 +9,7 @@
 | Módulo | **ESP32-WROOM-32E** (Espressif) | Tiene controlador CAN (TWAI) interno: solo hace falta el transceptor externo |
 | Relé | **Songle SRD-05VDC-SL-C**, 10 A / 30 VDC, contactos **COM / NO / NC** en borne de 3 tornillos, mandado por transistor S8050 ("J3Y") | Sirve tal cual para la **vía B**: poner 24 V en la línea B4 (corriente de mA) |
 | Alimentación | Borne de 2 tornillos **+ / −**, convertidor conmutado con bobina 470 µH, diodo SS210 y circuito integrado en SOIC-8 (**XL7005A**, a confirmar en la serigrafía: entrada 5–80 V, 0,4 A) + regulador 3,3 V (AMS1117, U3) | Se alimenta **directamente a 24 V** de la máquina. Si el chip es el XL7005A, aguanta 80 V: margen sobrado frente a los picos del alternador |
-| USB micro | Sin chip USB-serie visible (no hay CH340/CP2102) | Probablemente **solo alimentación**: para programar hace falta un **adaptador USB-TTL de 3,3 V** en el conector P4 |
+| USB micro | Sin chip USB-serie (no hay CH340/CP2102) | **Confirmado por el usuario: solo alimentación.** Para programar hace falta un **adaptador USB-TTL de 3,3 V** en el conector P4 (ver `LISTA_COMPRA.md`, A10) |
 | P4 | Conector de 6 pines con un puente | Cabecera de programación/consola (GND, TX, RX, 5 V/3,3 V, IO0, EN, según modelo). Comprobar la serigrafía del reverso |
 | Botón | **IO0** | Entrar en modo de carga de firmware: mantener pulsado al dar tensión |
 | Filas de pines | Dos filas de **taladros sin soldar** a ambos lados del módulo | Hay que soldar tiras de pines para sacar los GPIO (CAN, I²C, encoder, optoacoplador) |
@@ -39,6 +39,9 @@ Cableado de la vía B con esta placa: **COM ← terminal 2 del interruptor de em
 | 7 | Capacidad del convertidor (0,4 A si es XL7005A) | Medir la tensión de 5 V con WiFi activo | El WiFi del ESP32 tiene picos de ≈0,4 A; si cae la tensión, desactivar WiFi en la instalación o alimentar los módulos externos desde una fuente aparte |
 
 ## Programación
+
+Adaptador recomendado: **AZDelivery CP2102 HW-598** ([B082FMFHNP](https://www.amazon.es/dp/B082FMFHNP)) o FT232RL con el jumper en 3,3 V.
+
 
 - Si P4 lleva RX/TX: adaptador USB-TTL a **3,3 V** (GND–GND, TX↔RX cruzados), mantener **IO0** pulsado al dar alimentación (o puentear IO0 a GND con el jumper si está previsto), cargar con PlatformIO/Arduino IDE a 115200 baud, soltar IO0 y reiniciar.
 - Placa en PlatformIO: `board = esp32dev`. Reservar en `config.h` el GPIO del relé que resulte de la comprobación 3.
