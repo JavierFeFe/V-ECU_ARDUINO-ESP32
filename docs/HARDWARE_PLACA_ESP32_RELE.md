@@ -48,3 +48,23 @@ Cableado de la vía B con esta placa: **COM ← terminal 2 del interruptor de em
 - `fotos/E-ECU_etiquetas_superior.jpg` — etiquetas de programación (VCE56003584 / D6D EAE2, EC210 010828).
 - `fotos/E-ECU_placa_LucasVarity_03161983.jpg` — placa del fabricante (LucasVarity, 03161983 P03).
 - `fotos/E-ECU_conectores_36pines.jpg` — los dos conectores de 36 pines.
+
+---
+
+# Otro módulo disponible: driver L298N (doble puente H, MW-095 / HW-095)
+
+![Módulo L298N](fotos/modulo_L298N.jpg)
+
+**Qué es:** doble puente en H L298N (hasta 46 V y 2 A por canal), con 8 diodos de libre circulación (M7), regulador 78M05 con jumper "12 V EN" y condensadores de 220 µF / 35 V. Pensado para motores DC y paso a paso.
+
+**Para el alcance actual (rpm): no hace falta.** La vía B (24 V en B4) la resuelve el relé de la placa ESP32, que da aislamiento galvánico; la vía A es solo CAN.
+
+**Para la fase hidráulica aplazada: sí puede servir** como etapa de potencia de la válvula power shift (≈17,5 Ω, 200–650 mA), en lugar del MOSFET discreto o del amplificador comercial:
+
+- Una salida (OUT1) con PWM en ENA desde el ESP32; caída de ≈2 V en el L298N, sin problema (650 mA × 17,5 Ω ≈ 11,4 V).
+- Lleva diodos de libre circulación; el dither se hace por software.
+- **Hace falta medir la corriente** (INA226 o la resistencia de "sense" del L298N) para regular en lazo cerrado: el módulo no la regula por sí mismo.
+- **Quitar el jumper "12 V EN"** y alimentar la lógica a 5 V aparte: el 78M05 y los condensadores de 35 V quedan muy justos con los 28 V del alternador y sus picos.
+- Implica cambiar el cableado de la válvula: el L298N tiene que alimentarla él (OUT1 → válvula + / válvula − → GND o OUT2), por lo que el + que llega del selector en modo Manual debe quedar desconectado de la válvula mientras el L298N la controle, y el relé de seguridad tiene que devolver **ambos** hilos a la configuración de fábrica.
+
+Se deja anotado para retomarlo con la parte hidráulica.
