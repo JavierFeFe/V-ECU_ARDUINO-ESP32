@@ -4,7 +4,11 @@ Alcance actual: **gestión de las rpm del motor** por CAN J1939 y por el pin B4 
 
 Productos localizados en **Amazon España**; precios orientativos (IVA incl., octubre 2026, "según buscador": Amazon no deja leer las fichas de forma automática, así que **comprueba precio y disponibilidad al abrir el enlace**). Enlace: `https://www.amazon.es/dp/ASIN`. Informe completo con alternativas en el [Anexo I](anexos/I_productos_amazon_es.md).
 
-> **Placa ya disponible:** una **ESP32-WROOM-32E con relé y entrada 24 V** (LC Technology; ver [`HARDWARE_PLACA_ESP32_RELE.md`](HARDWARE_PLACA_ESP32_RELE.md)). Si se usa, **sobran A1/A2 (ESP32 + bornes), A4 (relé) y A8 (convertidor)**: el núcleo se reduce al módulo CAN, el optoacoplador, el encoder, la OLED y un adaptador USB-TTL (≈ 35–50 €).
+> **Ya disponible:**
+> - **Placa ESP32-WROOM-32E con relé y entrada 24 V** (LC Technology; ver [`HARDWARE_PLACA_ESP32_RELE.md`](HARDWARE_PLACA_ESP32_RELE.md)) → sobran **A1/A2** (ESP32 + bornes), **A4** (relé) y **A8** (convertidor).
+> - **Encoder rotativo** → sobra **A6**.
+>
+> Núcleo pendiente de comprar: módulo CAN (A3), optoacoplador (A5, opcional), OLED (A7) y un adaptador USB-TTL 3,3 V para programar la placa (≈ 25–35 €).
 
 ## Resumen
 
@@ -27,7 +31,7 @@ Productos localizados en **Amazon España**; precios orientativos (IVA incl., oc
 | A3 | **Módulo transceptor CAN 3,3 V** | Waveshare SN65HVD230 CAN Board | [B00KM6XMXO](https://www.amazon.es/dp/B00KM6XMXO) | ≈ 6–9 € | 2 | 4,7★. **Trae resistencia de 120 Ω soldada: quitarla** (R2). Alternativas: Luckfox [B0CNP17MCH](https://www.amazon.es/dp/B0CNP17MCH); pack 3 Hailege [B0B1WW5XHV](https://www.amazon.es/dp/B0B1WW5XHV) |
 | A4 | **Módulo relé 1 canal, optoacoplado, disparo a nivel ALTO, 3 V/3,3 V** (NO/NC, 10 A / 30 VDC) | AYWHP ×6 | [B0DQL4SVN6](https://www.amazon.es/dp/B0DQL4SVN6) | ≈ 8–10 € (6 uds) | 1 pack | Alimentar la bobina (≈120 mA) desde el 3,3 V del ESP32 o desde 5 V según versión, **nunca desde un GPIO**. Alternativa ARCELI ×5 [B0CLTZFWY4](https://www.amazon.es/dp/B0CLTZFWY4). Los módulos "de 24 V" no se disparan con 3,3 V: evitar |
 | A5 | **Módulo optoacoplador PC817, 4 canales, entrada 3,6–30 V** | Módulo aislamiento 4 ch 24 V → 3,3/5 V | [B0B7D15YW5](https://www.amazon.es/dp/B0B7D15YW5) | ≈ 6–9 € | 1 | Lee B4 y la posición del selector. Alternativas [B07M78S8LB](https://www.amazon.es/dp/B07M78S8LB), [B07Y8LNQ4M](https://www.amazon.es/dp/B07Y8LNQ4M) (3,3 V ↔ 24 V tipo PLC) |
-| A6 | **Encoder rotativo KY-040** con botón | WayinTop ×5 | [B07T3672VK](https://www.amazon.es/dp/B07T3672VK) | ≈ 7–9 € | 1 pack | Con pomo: [B06XQTHDRR](https://www.amazon.es/dp/B06XQTHDRR) |
+| A6 | ~~**Encoder rotativo KY-040** con botón~~ **(ya disponible)** | WayinTop ×5 | [B07T3672VK](https://www.amazon.es/dp/B07T3672VK) | ≈ 7–9 € | 1 pack | Con pomo: [B06XQTHDRR](https://www.amazon.es/dp/B06XQTHDRR) |
 | A7 | **OLED 0,96" SSD1306 I²C** | AZDelivery 0,96" I²C | [B01L9GC470](https://www.amazon.es/dp/B01L9GC470) | ≈ 7–9 € | 1 | Alternativa ×2 [B07JN2NHT4](https://www.amazon.es/dp/B07JN2NHT4) (comprobar que es SSD1306) |
 | A8 | **Convertidor DC-DC 24 → 5 V** | **Opción recomendada en Amazon:** módulo sellado automoción **8–58 V → 5 V 3 A** | [B07WSWMNN8](https://www.amazon.es/dp/B07WSWMNN8) | ≈ 12–16 € | 1 | Entrada hasta 58 V: margen frente a los picos del alternador sin añadir nada. Alternativa carril DIN Mean Well **DDR-15G-5** [B07B6553JY](https://www.amazon.es/dp/B07B6553JY) (≈ 20 €) **pero** su máximo es 36 V: añadir el TVS A9 y el fusible. Industrial fuera de Amazon: **Traco THN 10-4811WIR** (18–75 V, aislado) en RS España ≈ 37 € |
 | A9 | TVS SMCJ33A (solo con la Mean Well) | Pack 40 uds | [B0D1QHP3N8](https://www.amazon.es/dp/B0D1QHP3N8) | ≈ 8 € | 1 | O Littelfuse en RS/Farnell (≈ 0,55 €/ud) |
