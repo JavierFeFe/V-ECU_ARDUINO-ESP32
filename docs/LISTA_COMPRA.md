@@ -4,6 +4,8 @@ Alcance actual: **gestión de las rpm del motor** por CAN J1939 y por el pin B4 
 
 Productos localizados en **Amazon España**; precios orientativos (IVA incl., octubre 2026, "según buscador": Amazon no deja leer las fichas de forma automática, así que **comprueba precio y disponibilidad al abrir el enlace**). Enlace: `https://www.amazon.es/dp/ASIN`. Informe completo con alternativas en el [Anexo I](anexos/I_productos_amazon_es.md).
 
+> **Placa ya disponible:** una **ESP32-WROOM-32E con relé y entrada 24 V** (LC Technology; ver [`HARDWARE_PLACA_ESP32_RELE.md`](HARDWARE_PLACA_ESP32_RELE.md)). Si se usa, **sobran A1/A2 (ESP32 + bornes), A4 (relé) y A8 (convertidor)**: el núcleo se reduce al módulo CAN, el optoacoplador, el encoder, la OLED y un adaptador USB-TTL (≈ 35–50 €).
+
 ## Resumen
 
 | Bloque | Coste aprox. |

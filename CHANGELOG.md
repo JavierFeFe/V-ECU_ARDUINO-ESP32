@@ -4,6 +4,10 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (hardware disponible)
+- `docs/HARDWARE_PLACA_ESP32_RELE.md`: evaluación de la placa ESP32-WROOM-32E con relé y entrada 24 V (LC Technology) que ya tiene el usuario: sirve como cerebro, convertidor y relé de la vía B; lista de comprobaciones (chip del convertidor, GPIO del relé, programación por P4) y qué módulos sobran de la lista de compra.
+- `docs/fotos/`: fotos de la E-ECU (etiquetas, placa LucasVarity, conectores) y de la placa ESP32.
+
 ### Cambiado (lista de compra y referencias)
 - `docs/LISTA_COMPRA.md` reescrita para el alcance "solo rpm": únicamente componentes (sin herramientas ya disponibles ni material hidráulico), todos **módulos premontados** y con **productos de Amazon España** (ASIN, precio orientativo, alternativas), más adaptador USB-CAN como imprescindible y pedido mínimo para empezar. Informe de búsqueda completo en `docs/anexos/I_productos_amazon_es.md`.
 - Corregida la referencia del convertidor Traco: **THN 10-4811WIR** (el sufijo "TEN 10-…WIR" no existe) en documentos y esquemas.
