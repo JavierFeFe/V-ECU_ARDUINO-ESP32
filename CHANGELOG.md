@@ -4,6 +4,13 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (firmware v0.1)
+- `firmware/esp32/`: firmware del control de rpm para la placa ESP32_Relay X1. Modos **Reposo / Alto / Auto-ralentí** sobre el relé de B4 (GPIO16), lectura J1939 en solo escucha (EEC1 rpm y par, ET1 refrigerante, DM1 averías), **TSC1** solo en el entorno `esp32dev_tsc1`, encoder con selección de modo y ajustes, OLED SSD1306 opcional, consola serie, ajustes guardados en flash y watchdog de 500 ms.
+
+### Cambiado
+- `docs/LISTA_COMPRA.md` reducida al control de rpm: quitado lo que ya cubre la placa ESP32_Relay y el programador; pendiente solo módulo CAN, OLED, USB-CAN y material de instalación (≈ 130–180 €).
+- `README.md` y `firmware/README.md` actualizados con el estado del banco y el firmware.
+
 ### Añadido (pruebas de banco)
 - `firmware/pruebas/led` y `firmware/pruebas/rele`: proyectos PlatformIO de prueba. Programación por P4 con el programador USB-C (COM5) verificada: ESP32-D0WD-V3 rev 3.1, flash 4 MB. **Relé confirmado en GPIO16**; el LED de la placa es el indicador del relé (no hay LED en GPIO2).
 

@@ -1,24 +1,77 @@
 # Firmware
 
-Estructura prevista (ver el plan en `../docs/INVESTIGACION_V-ECU_EC210B.md` §6 y los pines en `../docs/ESQUEMA_CONEXION.md`):
+Alcance actual: **control de rpm del motor** ([`../docs/CONTROL_RPM.md`](../docs/CONTROL_RPM.md)). La regulación de la válvula power shift queda aplazada.
 
 ```
 firmware/
-├── esp32/            ← proyecto PlatformIO (Arduino-ESP32 core 3.x)
-│   ├── platformio.ini
+├── esp32/                    ← firmware del proyecto (PlatformIO, Arduino-ESP32 3.x)
+│   ├── platformio.ini        ← entornos esp32dev (solo escucha) y esp32dev_tsc1
 │   └── src/
-│       ├── main.cpp          ← bucle principal, watchdog, máquina de estados
-│       ├── valve_driver.*    ← lazo PI de corriente, PWM 1 kHz + dither, rampas, relé de seguridad
-│       ├── can_j1939.*       ← TWAI 250 kbit/s: escucha EEC1/ET1/DM1; TSC1 (Fase 3, deshabilitado por defecto)
-│       ├── ui.*              ← encoder KY-040 + OLED SSD1306
-│       └── config.h          ← pines, límites (200–650 mA, 800–2000 rpm), tabla de modos
-└── arduino_nano/     ← alternativa ATmega328P + MCP2515 (Fase 1 y escucha CAN)
+│       ├── main.cpp          ← arranque, watchdog y bucle principal
+│       ├── config.h          ← pines, límites (800–2000 rpm), tiempos y opciones
+│       ├── rele.*            ← relé de la vía B (GPIO16 → línea B4)
+│       ├── can_j1939.*       ← TWAI 250 kbit/s: EEC1 / ET1 / DM1; TSC1 (deshabilitado por defecto)
+│       ├── control.*         ← modos Reposo / Alto / Auto-ralentí / TSC1 y manejo del encoder
+│       ├── encoder.*         ← encoder rotativo (interrupción) y pulsador
+│       ├── pantalla.*        ← OLED SSD1306 (opcional, se detecta sola)
+│       └── consola.*         ← comandos por el puerto serie
+└── pruebas/                  ← pruebas de banco (led GPIO2, relé GPIO16)
 ```
 
-Reglas de seguridad que el firmware debe cumplir:
+## Hardware
 
-1. Arranque con el relé K1 en reposo (Resistor Box de fábrica) y PWM a 0; el relé solo se activa cuando el lazo de corriente está en marcha y el watchdog armado.
-2. Consigna de corriente limitada a 200–650 mA; sin lectura válida del sensor de corriente no se activa el relé.
-3. Si la corriente medida se aleja más de 120 mA de la consigna durante más de 300 ms → PWM a 0 y relé en reposo.
-4. CAN en `LISTEN_ONLY` por defecto. La transmisión de TSC1 requiere una opción de compilación explícita y el selector Auto/Manual en Auto con la V-ECU desconectada.
-5. Watchdog hardware de 500 ms.
+Placa **ESP32_Relay X1 V1.2**. Pines en [`../docs/HARDWARE_PLACA_ESP32_RELE.md`](../docs/HARDWARE_PLACA_ESP32_RELE.md):
+
+| Función | GPIO |
+|---|---|
+| Relé (B4) | 16 (confirmado) |
+| CAN TX / RX → SN65HVD230 | 17 / 18 |
+| OLED SDA / SCL | 21 / 22 |
+| Encoder CLK / DT / SW | 32 / 33 / 27 |
+| Opto B4 / selector (opcional, `VECU_OPTO=1`) | 35 / 39 |
+
+## Modos
+
+| Modo | Relé | Comportamiento |
+|---|---|---|
+| **Reposo** | reposo | Manda el interruptor de emergencia original. Siempre se arranca aquí |
+| **Alto** | excitado | 24 V en B4 → 1900 rpm |
+| **Auto-ralentí** | según el par | 1900 rpm mientras el par real (EEC1) supere el umbral; tras `ralenti` segundos por debajo baja a 800 rpm y vuelve en cuanto sube el par o se toca el encoder. **Sin datos CAN no baja a ralentí** |
+| **TSC1** | reposo | Envía TSC1 (`0x0C000011`, 10 ms) con la consigna 800–2000 rpm. Solo existe en el entorno `esp32dev_tsc1` |
+
+Para que el relé pueda bajar a 800 rpm, el interruptor de emergencia 26 debe estar en **ralentí**: el relé está en paralelo con su contacto de alta.
+
+## Encoder
+
+- **Girar:** elegir modo (`> MODO ?` en la OLED); **pulsar** para aplicarlo. Si no se pulsa, se cancela a los 5 s.
+- **Pulsar sin girar** (en Auto-ralentí o TSC1): editar el parámetro (segundos de ralentí o rpm de consigna); girar para cambiarlo y pulsar para guardar.
+- **Pulsación larga (1,5 s):** vuelta inmediata a **Reposo**.
+
+Los ajustes (segundos de ralentí, umbral de par, consigna) se guardan en la flash; el modo no.
+
+## Consola serie (115200)
+
+| Comando | Qué hace |
+|---|---|
+| `estado` (`e`) | Modo, relé, datos del motor, estado del bus |
+| `modo reposo\|alto\|auto\|tsc1` | Cambiar de modo |
+| `ralenti <s>` | Segundos sin par antes de bajar a 800 rpm (3–120) |
+| `par <pct>` | Par real mínimo que cuenta como trabajo (por defecto 15 %) |
+| `rpm <n>` | Consigna TSC1 |
+| `log` | Estado cada segundo (activar/desactivar) |
+
+## Compilar y grabar
+
+```bash
+python -m platformio run -d firmware/esp32 -e esp32dev -t upload
+```
+
+Sin EN cableado al programador: mantener **IO0** pulsado al dar tensión antes de grabar y, al terminar, quitar y volver a dar tensión. Monitor: `python -m platformio device monitor -d firmware/esp32`.
+
+## Reglas de seguridad que cumple el firmware
+
+1. Arranque con el relé en reposo; el modo no se recuerda entre arranques.
+2. CAN en `LISTEN_ONLY` por defecto. TSC1 solo con el entorno `esp32dev_tsc1` (Fase 2 de `CONTROL_RPM.md`: tras la captura del bus y con la máquina parada).
+3. Consigna TSC1 limitada a 800–2000 rpm.
+4. Watchdog de 500 ms: si el programa se cuelga, el ESP32 se reinicia y el relé vuelve a reposo.
+5. Auto-ralentí no baja a 800 rpm sin datos válidos del motor.

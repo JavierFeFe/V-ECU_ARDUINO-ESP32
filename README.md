@@ -3,6 +3,8 @@
 Sustitución / emulación de la **V-ECU** (Vehicle ECU, MID 187) de una excavadora **Volvo EC210B** (2002, motor Volvo **D6D EAE2**) con un **ESP32** (o Arduino Nano) y un potenciómetro/encoder, para poder **regular la potencia** de la máquina cuando trabaja sin V-ECU en modo de emergencia (Manual).
 
 > **Estado (2026-10-19):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Plan, hardware y pruebas en [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) y [`docs/esquema_rpm_ESP32.png`](docs/esquema_rpm_ESP32.png); montaje con la placa **ESP32_Relay X1 V1.2** que ya tenemos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
+>
+> **Hardware en banco:** la placa se programa por P4 con el programador USB-C (ESP32-D0WD-V3, flash 4 MB) y el **relé de la vía B está confirmado en GPIO16**. **Firmware v0.1** en [`firmware/esp32/`](firmware/esp32/): modos Reposo / Alto / Auto-ralentí sobre el relé, lectura J1939 en solo escucha, TSC1 tras un flag de compilación, encoder, OLED opcional y consola serie. Falta comprar el módulo CAN, la OLED y el adaptador USB-CAN ([`docs/LISTA_COMPRA.md`](docs/LISTA_COMPRA.md)).
 
 ## El problema
 
@@ -10,12 +12,14 @@ Sin V-ECU, la EC210B funciona en **Manual** con el interruptor de régimen de em
 
 ## La solución por fases
 
+> Plan general del proyecto. **Ahora mismo solo se trabaja la Fase 3 (rpm)**, por dos vías: TSC1 por CAN y el relé sobre B4 (ver [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md)). Las Fases 1 y 2 (válvula power shift y anti-calado) están aplazadas.
+
 | Fase | Qué hace | Cómo | Estado |
 |---|---|---|---|
 | **0** | Mediciones en la máquina | Bobina, Resistor Box, corriente real, resistencia del bus CAN | Pendiente (lista en `docs/ESQUEMA_CONEXION.md`) |
 | **1** | Regular la **potencia de la bomba** | Driver de corriente (200–650 mA, PWM + dither) sobre la válvula power shift, en lugar de la Resistor Box, con **relé de seguridad** que devuelve la Resistor Box si el ESP32 falla | Diseño listo |
 | **2** | Leer el motor y **anti-calado** | CAN J1939 en modo solo escucha (EEC1 → rpm, ET1 → temperatura); subir la corriente si caen las rpm | Diseño listo |
-| **3** | Regular las **rpm del motor** | Petición de régimen **TSC1** por J1939 desde la dirección de la V-ECU (0x11) | Protocolo probable, pendiente de captura CAN |
+| **3** | Regular las **rpm del motor** | **Vía B:** relé de la placa sobre la línea B4 (800 / 1900 rpm, auto-ralentí). **Vía A:** petición de régimen **TSC1** por J1939 desde la dirección de la V-ECU (0x11) | **En curso.** Vía B: firmware listo, relé probado en banco. Vía A: protocolo probable, pendiente de captura CAN |
 
 ## Lo que ya sabemos (confirmado con documentación OEM Volvo)
 
@@ -39,13 +43,32 @@ docs/
 ├── HARDWARE_PLACA_ESP32_RELE.md    ← hardware disponible (placa ESP32 con relé, programador, L298N, IBT-2, SSR) y pinout
 ├── CONTROL_RPM.md                  ← alcance actual: control de rpm (TSC1 por CAN y relé sobre B4), plan de pruebas
 ├── esquema_rpm_ESP32.svg/.png      ← esquema de la versión solo-rpm con módulos premontados
-├── LISTA_COMPRA.md                 ← lista de compra (solo componentes, módulos premontados, Amazon España)
+├── LISTA_COMPRA.md                 ← lo que falta comprar para el control de rpm (Amazon España)
 ├── esquema_conexion_ESP32.svg/.png ← esquema de conexión completo
 ├── anexos/ A…H                     ← informes de investigación con todas las fuentes y su fiabilidad
 ├── esquemas/                       ← 132 imágenes: circuitos OEM Volvo (E-ECU, V-ECU, bus, emergencia), pinouts D12, Volvo Penta, Deutz EMR2
 └── manuales/README.md              ← índice de los manuales consultados y dónde descargarlos (los PDF no se suben al repo)
-firmware/                           ← (próximo) proyecto PlatformIO para ESP32 y alternativa Arduino Nano
+firmware/
+├── esp32/                          ← firmware del control de rpm (PlatformIO, Arduino-ESP32 3.x)
+└── pruebas/                        ← pruebas de banco: led (GPIO2), rele (GPIO16, conmutación comentada)
 ```
+
+## Firmware
+
+Proyecto PlatformIO en [`firmware/esp32/`](firmware/esp32/) para la placa ESP32_Relay X1 V1.2. Detalle de módulos, modos, consola y procedimiento de carga en [`firmware/README.md`](firmware/README.md).
+
+| Modo | Relé (B4) | Qué hace |
+|---|---|---|
+| **Reposo** (al arrancar) | Reposo | Manda el interruptor de emergencia original |
+| **Alto** | Excitado | 1900 rpm fijas |
+| **Auto-ralentí** | Según el par | 1900 rpm mientras hay par (EEC1); tras N s sin par baja a 800 rpm y vuelve en cuanto sube. Sin datos CAN se queda en alto |
+| **TSC1** | Reposo | Consigna continua 800–2000 rpm por CAN. Solo con el entorno `esp32dev_tsc1` |
+
+```bash
+python -m platformio run -d firmware/esp32 -e esp32dev -t upload
+```
+
+La placa no tiene EN cableado: antes de grabar hay que mantener **IO0** pulsado al darle tensión, y al terminar quitar y volver a dar tensión.
 
 ## Esquemas eléctricos
 
@@ -143,6 +166,7 @@ Del manual Volvo Trucks "Vectro II" (PV776-144528). El conector EB del camión c
 - Con la válvula a **0 mA la bomba absorbe el máximo** y puede calar el motor: el relé de seguridad en reposo mantiene la Resistor Box de fábrica.
 - Transmitir por CAN **solo** tras una captura en modo escucha, con la V-ECU original desconectada y el selector en Auto.
 - Límites por software: 200–650 mA en la válvula, 800–2000 rpm en TSC1.
+- El firmware arranca siempre en **Reposo** (manda el interruptor original), lleva watchdog de 500 ms, y la **pulsación larga del encoder** vuelve a Reposo en cualquier momento.
 
 ## Fiabilidad de la información
 
