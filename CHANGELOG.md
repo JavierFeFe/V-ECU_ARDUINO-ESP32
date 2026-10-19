@@ -4,6 +4,10 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Cambiado (lista de compra y referencias)
+- `docs/LISTA_COMPRA.md` reescrita para el alcance "solo rpm": únicamente componentes (sin herramientas ya disponibles ni material hidráulico), todos **módulos premontados** y con **productos de Amazon España** (ASIN, precio orientativo, alternativas), más adaptador USB-CAN como imprescindible y pedido mínimo para empezar. Informe de búsqueda completo en `docs/anexos/I_productos_amazon_es.md`.
+- Corregida la referencia del convertidor Traco: **THN 10-4811WIR** (el sufijo "TEN 10-…WIR" no existe) en documentos y esquemas.
+
 ### Cambiado (alcance)
 - **El proyecto se centra, por ahora, solo en la gestión de las rpm del motor**; la regulación hidráulica (válvula power shift) se aplaza. Nuevo documento `docs/CONTROL_RPM.md` (dos vías: TSC1 por CAN y relé sobre el pin B4; regla de seguridad con el selector en Manual; plan de captura y pruebas) y esquema `docs/esquema_rpm_ESP32.svg/.png` con solo módulos premontados. README actualizado.
 

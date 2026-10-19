@@ -77,7 +77,7 @@
   <g transform="translate(340,90)">
     <rect x="0" y="0" width="300" height="110" class="mod" rx="6"/>
     <text x="10" y="18" class="h">M1 · Convertidor DC-DC 24 → 5 V</text>
-    <text x="10" y="38" class="pin">Traco TEN 10-4811WIR (18–75 V → 5 V / 2 A, aislado,</text>
+    <text x="10" y="38" class="pin">Traco THN 10-4811WIR (18–75 V → 5 V / 2 A, aislado,</text>
     <text x="10" y="54" class="pin">protección polaridad, cortocircuito, picos 100 V)</text>
     <text x="10" y="74" class="pin">Alternativa carril DIN: Mean Well DDR-15G-5 + TVS</text>
     <text x="10" y="96" class="pin">+Vin ← 24 V · −Vin ← masa · +Vout → 5 V · −Vout → GND</text>

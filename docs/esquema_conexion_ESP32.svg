@@ -56,7 +56,7 @@
     <rect x="15" y="40" width="50" height="18" class="box"/><text x="20" y="53" class="pin">F 3 A</text>
     <rect x="90" y="28" width="315" height="44" class="box"/>
     <text x="96" y="44" class="pin" font-weight="bold">Convertidor DC-DC comercial, aislado, entrada ancha</text>
-    <text x="96" y="58" class="pin">Traco TEN 10-4811WIR: 18–75 V → 5 V / 2 A, sobretensión 100 V</text>
+    <text x="96" y="58" class="pin">Traco THN 10-4811WIR: 18–75 V → 5 V / 2 A, sobretensión 100 V</text>
     <text x="96" y="70" class="pin">(alternativa: Mean Well DDR-15G-5, 9–36 V, + TVS SMCJ33A)</text>
     <line x1="0" y1="49" x2="15" y2="49" class="w24"/>
     <line x1="65" y1="49" x2="90" y2="49" class="w24"/>

@@ -65,7 +65,7 @@ Esquema: [`esquema_modular_ESP32.svg`](esquema_modular_ESP32.svg) · [`.png`](es
 
 | Módulo | Función | Conexiones |
 |---|---|---|
-| **M1** Convertidor DC-DC 24 → 5 V (Traco TEN 10-4811WIR, 18–75 V, aislado; alternativa Mean Well DDR-15G-5 + TVS) | Alimenta el ESP32 y los módulos de 5 V | +Vin ← 24 V (fusible 3 A) · −Vin ← masa · +Vout → VIN ESP32 · −Vout → GND común |
+| **M1** Convertidor DC-DC 24 → 5 V (Traco THN 10-4811WIR, 18–75 V, aislado; alternativa Mean Well DDR-15G-5 + TVS) | Alimenta el ESP32 y los módulos de 5 V | +Vin ← 24 V (fusible 3 A) · −Vin ← masa · +Vout → VIN ESP32 · −Vout → GND común |
 | **M2** Amplificador de válvula proporcional (24 V, entrada 0–10 V, Imín/Imáx y dither ajustables) | Regula la corriente de la válvula en lazo cerrado, con dither y rampa; incluye el diodo de libre circulación | +24 V · GND · IN ← M3 · SOL+ → válvula (+) *(solo si se alimenta la válvula desde el amplificador; en modo Manual el + ya llega del selector, entonces SOL+ no se usa)* · SOL− → M4 → M5 NO |
 | **M3** DAC I²C 0–10 V (DFRobot GP8403) o módulo PWM → 0–10 V | Convierte la consigna del ESP32 en 0–10 V | SDA/SCL · 5 V · OUT0 → IN de M2 |
 | **M4** Módulo INA226 (shunt 0,1 Ω integrado, hasta 0,8 A) | Supervisa que la corriente real coincide con la consigna | En serie con SOL− · SDA/SCL · 3,3 V |
@@ -134,7 +134,7 @@ Esquema: [`esquema_modular_ESP32.svg`](esquema_modular_ESP32.svg) · [`.png`](es
 | U2 | Transceptor CAN 3,3 V | SN65HVD230 (módulo) o TJA1051T/3 | 1 | sin terminación |
 | U3 | Medidor de corriente I²C | INA226 (módulo) | 1 | shunt externo |
 | U4 | Pantalla | OLED 0,96" SSD1306 I²C | 1 | |
-| U5 | **Convertidor DC-DC comercial 24 → 5 V**, aislado, entrada ancha | **Traco TEN 10-4811WIR** (18–75 V, 5 V / 2 A, aguanta 100 V durante 1 s, EN 50155) | 1 | Incluye protección contra polaridad inversa, transitorios y cortocircuito. Alternativas: Traco TEN 5-4811WI (1 A); Mean Well DDR-15G-5 (9–36 V, carril DIN) **añadiendo un TVS SMCJ33A** en la entrada |
+| U5 | **Convertidor DC-DC comercial 24 → 5 V**, aislado, entrada ancha | **Traco THN 10-4811WIR** (18–75 V, 5 V / 2 A, aguanta 100 V durante 1 s, EN 50155) | 1 | Incluye protección contra polaridad inversa, transitorios y cortocircuito. Alternativas: Traco TEN 5-4811WI (1 A); Mean Well DDR-15G-5 (9–36 V, carril DIN) **añadiendo un TVS SMCJ33A** en la entrada |
 | F1 | Fusible | 3 A, portafusibles en línea | 1 | único componente externo al módulo |
 | C2 | Condensador | 220 µF/10 V en la salida de 5 V | 1 | opcional, cerca del ESP32 |
 | Q1 | MOSFET nivel lógico | IRLZ44N o IRLB8721 (≥55 V) | 1 | disipador pequeño |

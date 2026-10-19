@@ -35,7 +35,9 @@ docs/
 ├── INVESTIGACION_V-ECU_EC210B.md   ← documento principal (resumen ejecutivo, arquitectura, protocolo, plan)
 ├── ESQUEMA_CONEXION.md             ← puntos de conexión en la máquina, tablas de pines ESP32 / Nano, BOM
 ├── PINOUT_E-ECU.md                 ← pinout de los conectores A y B de la E-ECU y conexión al ESP32
-├── LISTA_COMPRA.md                 ← lista de compra por bloques con referencias, tiendas y precios
+├── CONTROL_RPM.md                  ← alcance actual: control de rpm (TSC1 por CAN y relé sobre B4), plan de pruebas
+├── esquema_rpm_ESP32.svg/.png      ← esquema de la versión solo-rpm con módulos premontados
+├── LISTA_COMPRA.md                 ← lista de compra (solo componentes, módulos premontados, Amazon España)
 ├── esquema_conexion_ESP32.svg/.png ← esquema de conexión completo
 ├── anexos/ A…H                     ← informes de investigación con todas las fuentes y su fiabilidad
 ├── esquemas/                       ← 132 imágenes: circuitos OEM Volvo (E-ECU, V-ECU, bus, emergencia), pinouts D12, Volvo Penta, Deutz EMR2
