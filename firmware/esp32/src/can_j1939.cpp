@@ -23,6 +23,9 @@ static uint32_t pgnDe(uint32_t id) {
 
 bool begin(bool soloEscuchaBus) {
   escucha = soloEscuchaBus;
+  // Silencio también por hardware: con SLNT en alto el transceptor no puede transmitir.
+  pinMode(cfg::PIN_CAN_SLNT, OUTPUT);
+  digitalWrite(cfg::PIN_CAN_SLNT, escucha ? HIGH : LOW);
   twai_general_config_t g = TWAI_GENERAL_CONFIG_DEFAULT(
       (gpio_num_t)cfg::PIN_CAN_TX, (gpio_num_t)cfg::PIN_CAN_RX,
       escucha ? TWAI_MODE_LISTEN_ONLY : TWAI_MODE_NORMAL);

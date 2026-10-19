@@ -19,7 +19,7 @@
 
 Cubre de golpe tres módulos de la lista de compra: el **ESP32**, el **convertidor 24 → 5 V** y el **relé** de la vía B. Solo hay que añadir:
 
-1. **Módulo transceptor CAN 3,3 V** (SN65HVD230, sin su resistencia de 120 Ω) en GPIO17 (TX) / GPIO18 (RX).
+1. **Módulo transceptor CAN 3,3 V** (Adafruit CAN Pal con la terminación en OFF, o SN65HVD230 sin su resistencia de 120 Ω) en GPIO17 (TX) / GPIO18 (RX); SLNT del CAN Pal en GPIO4.
 2. **Módulo optoacoplador 24 V → 3,3 V** para leer el estado real de B4 y del selector (opcional).
 3. **Encoder y OLED** en los GPIO de las filas laterales.
 4. ~~Adaptador USB-TTL~~: se usa el programador USB-C con auto-descarga que ya tenemos.
@@ -75,8 +75,9 @@ Otros: borne **VCC / GND** (alimentación de entrada), borne del relé **NC / CO
 | Función | GPIO | Pin de la placa | Notas |
 |---|---|---|---|
 | **Relé (vía B, línea B4)** | **GPIO16** (confirmado) | interno | Lógica (excitado con el pin en alto) pendiente de medir COM–NO, comprobación 4 |
-| CAN TX → módulo SN65HVD230 | **GPIO17** | tira superior | |
-| CAN RX ← módulo SN65HVD230 | **GPIO18** | tira superior | |
+| CAN TX → módulo CAN (CAN Pal) | **GPIO17** | tira superior | |
+| CAN RX ← módulo CAN (CAN Pal) | **GPIO18** | tira superior | |
+| SLNT del CAN Pal (silencio) | **GPIO4** | tira superior | Alto = el transceptor no transmite |
 | OLED SDA | **GPIO21** | tira superior | I²C |
 | OLED SCL | **GPIO22** | tira superior | I²C |
 | Encoder A (CLK) | **GPIO32** | tira inferior | |

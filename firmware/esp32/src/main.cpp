@@ -21,6 +21,12 @@
 
 static EstadoMotor motor;
 
+static void silenciarCan() {
+  // Antes de nada: transceptor CAN en silencio hasta que can::begin() decida.
+  digitalWrite(cfg::PIN_CAN_SLNT, HIGH);
+  pinMode(cfg::PIN_CAN_SLNT, OUTPUT);
+}
+
 static void iniciarWatchdog() {
   esp_task_wdt_config_t c = {};
   c.timeout_ms = cfg::WDT_MS;
@@ -32,6 +38,7 @@ static void iniciarWatchdog() {
 
 void setup() {
   rele::begin();  // lo primero: relé en reposo
+  silenciarCan();
 
   Serial.begin(115200);
   Serial.printf("\nV-ECU rpm — reinicio: %d, TSC1 %s\n", (int)esp_reset_reason(),

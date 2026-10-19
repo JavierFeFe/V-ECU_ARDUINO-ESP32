@@ -9,7 +9,10 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 - `docs/esquema_montaje_ESP32.svg/.png`: diagrama ilustrado de montaje (placa vista por la serigrafía, programador, CAN, OLED, encoder, conector B de la E-ECU, interruptor 26 y alimentación), enlazado en `README.md` y `docs/MONTAJE.md`.
 
+- Módulo CAN elegido: **Adafruit CAN Pal (TJA1051T/3)**, con interruptor de terminación (OFF en la máquina). Su pin **SLNT va a GPIO4**: el firmware lo pone en alto desde el arranque (transceptor en silencio por hardware) salvo en el entorno `esp32dev_tsc1`.
+
 ### Cambiado
+- Diagrama de montaje redibujado con la placa vista por delante (como en las fotos del fabricante), el número de GPIO de cada pin y el CAN Pal con su forma real.
 - `docs/LISTA_COMPRA.md` reducida al control de rpm: quitado lo que ya cubre la placa ESP32_Relay y el programador; pendiente solo módulo CAN, OLED, USB-CAN y material de instalación (≈ 130–180 €).
 - `README.md` y `firmware/README.md` actualizados con el estado del banco y el firmware.
 

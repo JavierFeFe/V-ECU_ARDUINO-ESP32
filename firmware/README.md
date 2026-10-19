@@ -25,7 +25,8 @@ Placa **ESP32_Relay X1 V1.2**. Pines en [`../docs/HARDWARE_PLACA_ESP32_RELE.md`]
 | Función | GPIO |
 |---|---|
 | Relé (B4) | 16 (confirmado) |
-| CAN TX / RX → SN65HVD230 | 17 / 18 |
+| CAN TX / RX → CAN Pal (TJA1051T/3) | 17 / 18 |
+| SLNT del CAN Pal (alto = silencio) | 4 |
 | OLED SDA / SCL | 21 / 22 |
 | Encoder CLK / DT / SW | 32 / 33 / 27 |
 | Opto B4 / selector (opcional, `VECU_OPTO=1`) | 35 / 39 |
@@ -71,7 +72,7 @@ Sin EN cableado al programador: mantener **IO0** pulsado al dar tensión antes d
 ## Reglas de seguridad que cumple el firmware
 
 1. Arranque con el relé en reposo; el modo no se recuerda entre arranques.
-2. CAN en `LISTEN_ONLY` por defecto. TSC1 solo con el entorno `esp32dev_tsc1` (Fase 2 de `CONTROL_RPM.md`: tras la captura del bus y con la máquina parada).
+2. CAN en `LISTEN_ONLY` por defecto y, además, el transceptor en silencio por hardware (SLNT del CAN Pal en alto desde el arranque). TSC1 solo con el entorno `esp32dev_tsc1` (Fase 2 de `CONTROL_RPM.md`: tras la captura del bus y con la máquina parada).
 3. Consigna TSC1 limitada a 800–2000 rpm.
 4. Watchdog de 500 ms: si el programa se cuelga, el ESP32 se reinicia y el relé vuelve a reposo.
 5. Auto-ralentí no baja a 800 rpm sin datos válidos del motor.

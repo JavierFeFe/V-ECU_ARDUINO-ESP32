@@ -4,13 +4,13 @@ Guía de conexión con el hardware que ya tenemos. Pinout de la placa y fotos: [
 
 ![Diagrama ilustrado de montaje](esquema_montaje_ESP32.png)
 
-Diagrama ilustrado de todas las conexiones (fuente editable: [`esquema_montaje_ESP32.svg`](esquema_montaje_ESP32.svg)): placa vista por el reverso con los rótulos de la serigrafía, programador, módulo CAN, OLED, encoder, conector B de la E-ECU, interruptor de emergencia 26 y alimentación.
+Diagrama ilustrado de todas las conexiones (fuente editable: [`esquema_montaje_ESP32.svg`](esquema_montaje_ESP32.svg)): placa vista por delante con el número de GPIO de cada pin, programador, Adafruit CAN Pal, OLED, encoder, conector B de la E-ECU, interruptor de emergencia 26 y alimentación.
 
 ## 0. Material
 
 | Disponible | Pendiente de comprar ([`LISTA_COMPRA.md`](LISTA_COMPRA.md)) |
 |---|---|
-| Placa **ESP32_Relay X1 V1.2** (ESP32-WROOM-32E, relé Songle 10 A, entrada 24 V, P4 de programación) | **Módulo CAN SN65HVD230** (A3) |
+| Placa **ESP32_Relay X1 V1.2** (ESP32-WROOM-32E, relé Songle 10 A, entrada 24 V, P4 de programación) | **Módulo CAN Adafruit CAN Pal** (A3) |
 | **Encoder** rotativo | **OLED SSD1306** 0,96" I²C (A7) |
 | **Programador USB-C** con auto-descarga (WCH + AMS1117; pines 5V/3.3V/RXD/TXD/EN/G0/GND) | Optoacoplador 24 V → 3,3 V (A5, opcional) |
 | Multímetro, cables, soldador | Adaptador **USB-CAN** para el PC (C1) · fusible en línea 3 A, caja, cable |
@@ -18,7 +18,7 @@ Diagrama ilustrado de todas las conexiones (fuente editable: [`esquema_montaje_E
 ## 1. Preparar la placa
 
 1. **Soldar pines macho** en los taladros que se van a usar (las dos tiras dobles están sin soldar):
-   - Tira superior: **G17, G18, G21, G22**, **3V3** y un **GND**.
+   - Tira superior: **G4, G17, G18, G21, G22**, **3V3** y un **GND**.
    - Tira inferior: **G27, G32, G33**, **EN**, y si se usa el optoacoplador **G35, SVN (G39)**; opcional **G34** (dial original).
 2. **Quitar el puente de P4.** En la foto frontal hay un jumper en dos pines de P4; casi seguro une **IO0 con GND**, lo que deja la placa siempre en modo carga. Comprobar con el multímetro qué dos pines une y retirarlo.
 3. **Comprobar el convertidor de entrada**: leer la referencia del chip SOIC-8 junto al borne VCC/GND (se espera **XL7005A**, 5–80 V). En banco, alimentar el borne a 24 V y luego a 30 V y medir 5 V y 3,3 V estables.
@@ -52,10 +52,11 @@ PlatformIO: `board = esp32dev`, `upload_speed = 921600` (bajar a 115200 si falla
 
 | Módulo | Pin del módulo | Pin de la placa | Notas |
 |---|---|---|---|
-| **CAN SN65HVD230** | CTX (TX) | **G17** | |
-| | CRX (RX) | **G18** | |
-| | 3V3 / GND | **3V3 / GND** | |
-| | CANH / CANL | → máquina: **B1 / B2** de la E-ECU (o JB14 / JB6 del mazo de la V-ECU) | **Quitar la resistencia de 120 Ω del módulo**; par trenzado < 1 m |
+| **CAN Pal** (Adafruit, TJA1051T/3) | TX | **G17** | |
+| | RX | **G18** | |
+| | SLNT | **G4** | alto = silencio (no puede transmitir); el firmware lo deja en alto salvo en el entorno TSC1 |
+| | Vcc / GND | **3V3 / GND** | |
+| | H / L (bornero) | → máquina: **B1 / B2** de la E-ECU (o JB14 / JB6 del mazo de la V-ECU) | **Interruptor de terminación en OFF**; par trenzado < 1 m. El borne GND central no se usa |
 | **OLED SSD1306** | SDA / SCL | **G21 / G22** | dirección 0x3C |
 | | VCC / GND | **3V3 / GND** | |
 | **Encoder** | CLK / DT / SW | **G32 / G33 / G27** | pull-up interno en SW |
@@ -83,5 +84,5 @@ Pines que **no se usan**: G0, G2, G5, G12, G15 (pines de arranque), SD0–SD3, C
 1. Alimentar la placa por el micro-USB o con 24 V en el borne. Conectar el programador y cargar un programa de prueba que:
    - parpadee el relé por **GPIO16** (debe oírse el clic y medirse continuidad COM–NO) — ✅ clic confirmado con `firmware/pruebas/rele`; falta medir COM–NO. El LED de la placa es el indicador del relé (sigue a GPIO16); no hay LED en GPIO2;
    - muestre en la OLED un texto y la posición del encoder.
-2. Con el módulo CAN conectado y el adaptador USB-CAN del PC unidos entre sí (con una resistencia de 120 Ω solo en el banco), comprobar que el ESP32 envía y recibe tramas a **250 kbit/s**.
+2. Con el módulo CAN conectado y el adaptador USB-CAN del PC unidos entre sí (en el banco, interruptor de terminación del CAN Pal en **ON**; en la máquina, en **OFF**), comprobar que el ESP32 envía y recibe tramas a **250 kbit/s**.
 3. Ya en la máquina: conectar el CAN en **modo solo escucha** y verificar que llega EEC1 (`0x0CF00400`, rpm) con el motor en marcha. Seguir el plan de [`CONTROL_RPM.md`](CONTROL_RPM.md) §4.

@@ -20,6 +20,7 @@ namespace cfg {
 constexpr uint8_t PIN_RELE = 16;  // confirmado; relé excitado = 24 V en B4 = 1900 rpm
 constexpr uint8_t PIN_CAN_TX = 17;
 constexpr uint8_t PIN_CAN_RX = 18;
+constexpr uint8_t PIN_CAN_SLNT = 4;   // SLNT del CAN Pal (TJA1051T/3): alto = silencio, no transmite
 constexpr uint8_t PIN_SDA = 21;
 constexpr uint8_t PIN_SCL = 22;
 constexpr uint8_t PIN_ENC_CLK = 32;
