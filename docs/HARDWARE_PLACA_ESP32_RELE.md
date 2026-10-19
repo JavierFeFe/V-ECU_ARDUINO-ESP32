@@ -91,3 +91,18 @@ Se deja anotado para retomarlo con la parte hidráulica.
 | Tamaño para 0,7 A | muy sobredimensionado | adecuado |
 
 **Conclusión:** para una válvula de 0,7 A en una máquina de 24 V es preferible el **L298N** (por margen de tensión) o, mejor aún, el amplificador de válvula comercial. El IBT-2 solo tendría sentido alimentado a través de un limitador/estabilizador de tensión. Se deja anotado para la fase hidráulica.
+
+---
+
+# Otro módulo disponible: 4 relés de estado sólido ("4 Solid State Relay")
+
+![Módulo 4 SSR](fotos/modulo_4_SSR.jpg)
+
+**Qué es (casi seguro):** el módulo común de 4 canales con relés **Omron G3MB-202P** (o clones), entrada DC+/DC−/CH1–CH4 a 5 V y salidas por borne de 2 tornillos. Confirmar leyendo la etiqueta de los relés negros: si pone **G3MB-202P** o "**240 VAC 2 A**", es de **salida en alterna**.
+
+**Para este proyecto: no sirve.**
+
+- Los G3MB-202P son **triacs con paso por cero, solo para corriente alterna** (100–240 VAC). Con **corriente continua** (los 24 V de la máquina), una vez que conducen **no vuelven a cortar** aunque se quite la señal de control: dejarían B4 permanentemente a 24 V (1900 rpm fijas) y no se podría volver a ralentí. Además tienen una red RC en paralelo con la salida que deja pasar algo de corriente incluso apagados.
+- La entrada está pensada para 5 V (y suele dispararse a nivel bajo), así que tampoco encaja directamente con los 3,3 V del ESP32.
+
+Para la línea B4 se usa el **relé electromecánico** de la placa ESP32 (contacto real, aislado). Si alguna vez hiciera falta un relé de estado sólido para 24 V DC, tendría que ser un SSR **DC-DC** (salida MOSFET, p. ej. Omron G3VM / "SSR DC 3–32 V → 5–60 VDC").
