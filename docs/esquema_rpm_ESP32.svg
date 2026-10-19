@@ -78,10 +78,10 @@
 
   <g transform="translate(360,230)">
     <rect x="0" y="0" width="300" height="120" class="mod" rx="6"/>
-    <text x="10" y="18" class="h">M2 · Módulo transceptor CAN 3,3 V</text>
-    <text x="10" y="38" class="pin">Waveshare SN65HVD230 CAN Board (o TJA1051T/3)</text>
-    <text x="10" y="58" class="warn">Quitar la resistencia de 120 Ω del módulo</text>
-    <text x="10" y="78" class="pin">CANH ← B1 · CANL ← B2 (par trenzado &lt; 1 m)</text>
+    <text x="10" y="18" class="h">M2 · Módulo CAN Adafruit CAN Pal</text>
+    <text x="10" y="38" class="pin">TJA1051T/3, 3,3 V · SLNT ← G4 (alto = silencio)</text>
+    <text x="10" y="58" class="warn">Interruptor de terminación en OFF</text>
+    <text x="10" y="78" class="pin">CANH ← B1 · CANL ← B2 · GND ← B10 (3 hilos)</text>
     <text x="10" y="94" class="pin">CTX ← G17 · CRX → G18 · 3V3 · GND</text>
     <text x="10" y="112" class="pin">Modo escucha primero; TSC1 solo tras validar</text>
   </g>
@@ -96,7 +96,7 @@
     <text x="10" y="74" class="pin">NO  → terminal 3 (línea B4)</text>
     <text x="10" y="94" class="pin">Excitado = 24 V en B4 = 1900 rpm;</text>
     <text x="10" y="110" class="pin">en reposo manda el interruptor original.</text>
-    <text x="10" y="126" class="pin">Mandado por GPIO16 (probable, a confirmar)</text>
+    <text x="10" y="126" class="pin">Mandado por GPIO16 (confirmado en banco)</text>
   </g>
   <line x1="280" y1="430" x2="360" y2="448" class="w24"/>
   <line x1="280" y1="462" x2="360" y2="464" class="sig"/>
@@ -119,18 +119,18 @@
     <g class="pin">
       <text x="10" y="72">Borne VCC/GND ← 24 V · P4: IO0/GND/GND/RX/TX/5V</text>
       <text x="10" y="92">3V3 / GND (tiras) → M2, M4, encoder, OLED</text>
-      <text x="10" y="122">G17 → M2 CTX · G18 ← M2 CRX</text>
-      <text x="10" y="152">GPIO16 → relé de la placa (a confirmar)</text>
+      <text x="10" y="122">G17 → TX · G18 ← RX · G4 → SLNT (CAN Pal)</text>
+      <text x="10" y="152">GPIO16 → relé de la placa (confirmado)</text>
       <text x="10" y="182">G35 ← M4 OUT1 · SVN (G39) ← M4 OUT2</text>
       <text x="10" y="212">G21 SDA / G22 SCL → OLED</text>
       <text x="10" y="242">G32 / G33 / G27 ← encoder CLK / DT / SW</text>
       <text x="10" y="272">G34 ← dial original (opcional, divisor 10k/10k)</text>
       <text x="10" y="302">Programación: programador USB-C en P4 (+ EN opcional)</text>
     </g>
-    <text x="10" y="340" class="note">Firmware: captura CAN → PC por USB/WiFi; decodifica</text>
-    <text x="10" y="356" class="note">EEC1 (rpm), ET1, DM1; envía TSC1 (PGN 0) desde SA 0x11</text>
-    <text x="10" y="372" class="note">cada 10 ms con límite 800–2000 rpm; watchdog 500 ms;</text>
-    <text x="10" y="388" class="note">vía B por relé si TSC1 no es aceptado.</text>
+    <text x="10" y="340" class="note">Firmware v0.1 (firmware/esp32): Reposo / Alto / Auto-ralentí;</text>
+    <text x="10" y="356" class="note">lee EEC1, ET1, DM1 en solo escucha; TSC1 (SA 0x11)</text>
+    <text x="10" y="372" class="note">solo con el entorno esp32dev_tsc1, 800–2000 rpm;</text>
+    <text x="10" y="388" class="note">watchdog 500 ms; arranque siempre en Reposo.</text>
   </g>
   <path d="M660 145 L720 145 L720 160 L760 160" class="w5"/>
   <path d="M660 290 L720 290 L720 212 L760 212" class="sig"/>

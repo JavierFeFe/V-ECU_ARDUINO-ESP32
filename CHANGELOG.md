@@ -4,6 +4,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Cambiado (documentación sincronizada con el firmware v0.1)
+- `README.md`, `docs/PINOUT_E-ECU.md`, `docs/CONTROL_RPM.md`, `docs/HARDWARE_PLACA_ESP32_RELE.md`, `docs/ESQUEMA_CONEXION.md`, `docs/INVESTIGACION_V-ECU_EC210B.md` y los esquemas `esquema_rpm_ESP32` y `pinout_E-ECU_conector_B_ESP32`: módulo CAN **CAN Pal** (G17/G18, SLNT en G4, terminación OFF, GND a B10), **relé confirmado en GPIO16**, placa ESP32_Relay X1 en lugar de ESP32 DevKit; el esquema de conexión original queda marcado como diseño de la fase hidráulica. Lista de pendientes actualizada.
+
 ### Añadido (firmware v0.1)
 - `firmware/esp32/`: firmware del control de rpm para la placa ESP32_Relay X1. Modos **Reposo / Alto / Auto-ralentí** sobre el relé de B4 (GPIO16), lectura J1939 en solo escucha (EEC1 rpm y par, ET1 refrigerante, DM1 averías), **TSC1** solo en el entorno `esp32dev_tsc1`, encoder con selección de modo y ajustes, OLED SSD1306 opcional, consola serie, ajustes guardados en flash y watchdog de 500 ms.
 
@@ -53,10 +56,12 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 - `docs/LISTA_COMPRA.md`: lista de compra completa por bloques (medida, electrónica Fase 1, CAN, conectores, protección/caja, banco de pruebas, alternativa Nano), con referencias, cantidades, tiendas, precios orientativos, coste total estimado y orden de compra.
 
 ### Pendiente
-- Fase 0: mediciones en la máquina (bobina, Resistor Box, corriente real en emergencia, resistencia CAN H–L con la V-ECU desenchufada, tensión en B4).
-- Firmware Fase 1 (ESP32, PlatformIO): lazo PI de corriente, dither, rampas, relé de seguridad, watchdog, encoder + OLED.
-- Firmware Fase 2: TWAI en solo escucha, decodificación EEC1/ET1/DM1, anti-calado (ESSPC).
-- Captura del bus J1939 de una EC210B sana para confirmar el mensaje de petición de régimen (Fase 3).
+- Comprar y montar el **CAN Pal**, la **OLED** y el adaptador **USB-CAN** (`docs/LISTA_COMPRA.md`).
+- Confirmar el chip del convertidor de la placa (XL7005A, 5–80 V) y probarla en banco a 24–30 V.
+- Mediciones en la máquina: resistencia CAN H–L con la V-ECU desenchufada (¿hay que puentear JB13↔JB14 y JB5↔JB6?), tensión en B4 con el interruptor 26 en ralentí y en alta.
+- **Captura del bus J1939** de esta máquina (y, si es posible, de una EC210B sana en Auto) con el USB-CAN y con el firmware en solo escucha.
+- Validar en la máquina el modo **Auto-ralentí** (umbral de par en EEC1) y, tras la captura, la **vía A (TSC1)** con el entorno `esp32dev_tsc1` y la máquina parada.
+- Fase hidráulica (aplazada): driver de la válvula power shift y anti-calado.
 - Identificar la familia de los conectores de 36 vías (E-ECU) y JA/JB (V-ECU).
 
 ## [0.1.0] — 2026-10-19

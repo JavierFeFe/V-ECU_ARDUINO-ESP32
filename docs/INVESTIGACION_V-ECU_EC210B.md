@@ -9,6 +9,7 @@
 | Módulo con el que hay que dialogar | **E-ECU / EMS** del motor, etiqueta "VOLVO VCE56003584 D6D EAE2 — S/N E00747373", MID 128 |
 | Situación actual | La máquina funciona **sin V-ECU**, con el selector Auto/Manual en **Manual** y el interruptor de régimen de emergencia en **alta** |
 | Objetivo fase 1 | **Regular la potencia** (bomba hidráulica y/o régimen del motor) con un **ESP32/Arduino** y un potenciómetro o encoder |
+| **Estado actual** | Alcance reducido a **control de rpm** (parte hidráulica aplazada). Placa **ESP32_Relay X1 V1.2** con relé confirmado en GPIO16, módulo CAN **Adafruit CAN Pal** (G17/G18, SLNT en G4) y **firmware v0.1** grabado y verificado en banco (modos Reposo / Alto / Auto-ralentí, J1939 en solo escucha, TSC1 bajo flag). Ver [`CONTROL_RPM.md`](CONTROL_RPM.md), [`MONTAJE.md`](MONTAJE.md) y [`../firmware/README.md`](../firmware/README.md) |
 
 > **Nota sobre la referencia del módulo.** "D6D EAE2" es el motor: Volvo D6D, 6 cilindros, 5,7 l, Tier 2/Stage II, derivado de Deutz 2012 con bombas unitarias. Por tanto el módulo **VCE56003584 es la ECU del motor (E-ECU/EMS)**, no la V-ECU. La V-ECU es la centralita de la máquina: modos de trabajo, bomba, auto-ralentí, etc. Además le pide el régimen a la E-ECU por el bus. La referencia "VCE56003584" **no aparece en ninguna fuente pública**. Lo más probable es que sea un número de conjunto o de software de Volvo CE. Para identificarla con certeza hay que leer MSW/DST1/DST2 con VCADS Pro.
 

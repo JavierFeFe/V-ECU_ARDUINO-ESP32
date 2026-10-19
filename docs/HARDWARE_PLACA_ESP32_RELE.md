@@ -35,7 +35,7 @@ Cableado de la vía B con esta placa: **COM ← terminal 2 del interruptor de em
 | 3 | GPIO que gobierna el relé | ✅ **Confirmado: GPIO16** (sketch `firmware/pruebas/rele`: el relé hace clic al conmutar el pin). El LED de la placa es el **indicador del relé**: se enciende con él (mismo GPIO16). No hay LED en GPIO2 | — |
 | 4 | Lógica del relé | Medir con el multímetro COM–NO al poner el GPIO en alto | Para que "sin excitar" = contacto NC (interruptor original manda) |
 | 5 | Función del micro-USB y pines de P4 | Mirar el reverso de la placa (serigrafía) y medir continuidad con el módulo | Saber si se programa por USB o por USB-TTL |
-| 6 | GPIO libres en las filas laterales | Serigrafía del reverso | Reservar GPIO5/4 (CAN), 21/22 (I²C), 32/33/27 (encoder), 35/39 (opto). Evitar GPIO6–11 |
+| 6 | GPIO libres en las filas laterales | Serigrafía del reverso | Asignados: 17/18 (CAN) + 4 (SLNT del CAN Pal), 21/22 (I²C), 32/33/27 (encoder), 35/39 (opto). Evitar GPIO6–11 |
 | 7 | Capacidad del convertidor (0,4 A si es XL7005A) | Medir la tensión de 5 V con WiFi activo | El WiFi del ESP32 tiene picos de ≈0,4 A; si cae la tensión, desactivar WiFi en la instalación o alimentar los módulos externos desde una fuente aparte |
 
 ## Programación (confirmada con la serigrafía del reverso)

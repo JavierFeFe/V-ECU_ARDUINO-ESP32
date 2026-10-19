@@ -70,12 +70,13 @@ Observaciones:
 
 | Señal | Conector B | ESP32 / módulo | Notas |
 |---|---|---|---|
-| CAN H | **B1** (amarillo) | CANH del SN65HVD230 | Par trenzado, derivación < 1 m |
-| CAN L | **B2** (verde) | CANL del SN65HVD230 | **Sin resistencia de 120 Ω** en el módulo |
-| CAN TX / RX | — | D ← GPIO5 · R → GPIO4 | Transceptor a 3,3 V, RS a GND |
-| Masa | **B9 / B10** o chasis junto a la E-ECU | GND del ESP32 y del transceptor | Masa única |
-| Estado emergencia (opcional) | **B4** | R 100 kΩ → nodo → R 10 kΩ → GND; nodo → **GPIO35**; Zener 3,3 V + 100 nF | Solo lectura: 24 V → ≈2,2 V. Alta impedancia, no altera B4 |
-| +24 V | **no** desde B11/B12 | Alimentar desde JB7/JB8 (mazo V-ECU) o fusible propio de 3 A | B11/B12 solo viven con el relé R3 activo |
+| CAN H | **B1** (amarillo) | CANH del **CAN Pal** (TJA1051T/3) | H y L trenzados, derivación < 1 m |
+| CAN L | **B2** (verde) | CANL del CAN Pal | **Interruptor de terminación del CAN Pal en OFF** (con un SN65HVD230, quitar su resistencia de 120 Ω) |
+| Masa del CAN | **B10** (o B9) | Borne GND del CAN Pal | Va en el mismo cable que H/L (3 hilos): referencia común con la E-ECU |
+| CAN TX / RX / SLNT | — | **G17** → TX · **G18** ← RX · **G4** → SLNT | Transceptor a 3,3 V; SLNT en alto = silencio por hardware (firmware por defecto) |
+| Masa de la placa ESP32 | mismo punto que la E-ECU (B9/B10 o perno de chasis junto a la E-ECU) | Borne GND de la placa | Masa única; no alimentar otros equipos desde B9/B10 |
+| Estado emergencia (opcional) | **B4** | Optoacoplador 24 V → 3,3 V, OUT1 → **G35** | Solo lectura; alternativa: divisor 100 kΩ / 10 kΩ + Zener 3,3 V |
+| +24 V | **no** desde B11/B12 | Borne VCC de la placa ESP32_Relay X1 desde +24 V tras la llave (JB7/JB8 del mazo V-ECU o caja de fusibles) con fusible de 3 A | B11/B12 solo viven con el relé R3 activo |
 | J1708 | B25 / B26 | no se conecta | Solo diagnóstico/VCADS; si hiciera falta, MAX3485 a 9600 baud |
 
 **Dónde pinchar el CAN, por orden de preferencia**
@@ -87,5 +88,5 @@ Observaciones:
 1. Batería desconectada. Verificar colores (B1 amarillo, B2 verde) y numeración moldeada.
 2. Resistencia B1–B2: ≈60 Ω con el bus íntegro; ≈120 Ω si la V-ECU desenchufada ha dejado solo un terminador en este tramo → puentear JB13↔JB14 y JB5↔JB6.
 3. Con contacto: tensión CAN H ≈2,5–3,5 V y CAN L ≈1,5–2,5 V respecto a masa (reposo ≈2,5 V).
-4. ESP32 en `TWAI_MODE_LISTEN_ONLY` a 250 kbit/s: debe recibir EEC1 (ID `0x0CF00400`) cada 20 ms con el motor en marcha.
+4. Firmware v0.1 (entorno `esp32dev`): TWAI en `LISTEN_ONLY` a 250 kbit/s y SLNT en alto: debe recibir EEC1 (ID `0x0CF00400`) cada 20 ms con el motor en marcha.
 5. Nunca transmitir con la V-ECU original conectada; nunca aplicar tensión a B4, B24 ni a pines de sensores.

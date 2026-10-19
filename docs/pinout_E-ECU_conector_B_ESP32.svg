@@ -126,11 +126,11 @@
   <!-- Transceiver -->
   <g transform="translate(470,420)">
     <rect x="0" y="0" width="230" height="110" rx="6" class="box"/>
-    <text x="10" y="20" class="h">SN65HVD230 (3,3 V)</text>
+    <text x="10" y="20" class="h">Adafruit CAN Pal (TJA1051T/3)</text>
     <text x="10" y="42" class="pin">CANH ← B1      CANL ← B2</text>
-    <text x="10" y="60" class="pin">D (TXD) ← GPIO5   R (RXD) → GPIO4</text>
-    <text x="10" y="78" class="pin">VCC 3,3 V · GND · RS → GND</text>
-    <text x="10" y="98" class="warn">Sin terminación de 120 Ω</text>
+    <text x="10" y="60" class="pin">TX ← G17 · RX → G18 · SLNT ← G4</text>
+    <text x="10" y="78" class="pin">Vcc 3V3 · GND bus → B10 (3 hilos)</text>
+    <text x="10" y="98" class="warn">Interruptor de terminación OFF</text>
   </g>
   <path d="M270 466 L470 466" class="canh"/>
   <path d="M270 506 L470 506" class="canl"/>
@@ -139,14 +139,14 @@
   <!-- ESP32 -->
   <g transform="translate(900,400)">
     <rect x="0" y="0" width="230" height="340" rx="8" class="box"/>
-    <text x="10" y="22" class="h">ESP32 DevKit V1</text>
+    <text x="10" y="22" class="h">ESP32_Relay X1 V1.2</text>
     <g class="pin">
-      <text x="10" y="60">GPIO5  CAN TX</text>
-      <text x="10" y="84">GPIO4  CAN RX</text>
+      <text x="10" y="60">G17  CAN TX</text>
+      <text x="10" y="84">G18  CAN RX</text>
       <text x="10" y="130">GND</text>
-      <text x="10" y="180">GPIO35  ADC "Manual/alta"</text>
-      <text x="10" y="230">VIN 5 V ← DC-DC</text>
-      <text x="10" y="300">3V3 → transceptor, INA226, OLED</text>
+      <text x="10" y="180">G35  opto "B4 en alta"</text>
+      <text x="10" y="230">Borne VCC ← +24 V (fusible 3 A)</text>
+      <text x="10" y="300">3V3 → CAN Pal, OLED, encoder</text>
     </g>
     <circle cx="0" cy="56" r="4" fill="#1f77b4"/><circle cx="0" cy="80" r="4" fill="#1f77b4"/><circle cx="0" cy="126" r="4" fill="#222"/><circle cx="0" cy="176" r="4" fill="#1f77b4"/><circle cx="0" cy="226" r="4" fill="#ff7f0e"/>
   </g>
@@ -161,7 +161,7 @@
   <!-- B4 divider -->
   <g transform="translate(470,620)">
     <rect x="0" y="0" width="350" height="80" rx="6" class="box"/>
-    <text x="10" y="20" class="h" font-size="13">Lectura opcional de B4 (solo observar)</text>
+    <text x="10" y="20" class="h" font-size="13">Lectura opcional de B4 (opto o divisor)</text>
     <text x="10" y="40" class="pin">B4 → R 100 kΩ → nodo → R 10 kΩ → GND</text>
     <text x="10" y="56" class="pin">nodo → GPIO35 ; Zener 3,3 V nodo–GND ; 100 nF</text>
     <text x="10" y="72" class="pin">24 V → ≈2,2 V ; 0 V → 0 V. Impedancia alta: no altera B4.</text>
@@ -207,8 +207,8 @@
       <text x="10" y="262">   propio, nunca desde B11/B12.</text>
       <text x="10" y="286">7. Arrancar el ESP32 en LISTEN_ONLY a 250 kbit/s</text>
       <text x="10" y="302">   y comprobar que llega EEC1 (ID 0x0CF00400).</text>
-      <text x="10" y="326">8. Solo entonces conectar B4 (opcional) y pasar</text>
-      <text x="10" y="342">   a las pruebas de la Fase 1 con la válvula.</text>
+      <text x="10" y="326">8. Solo entonces conectar el relé (COM/NO en el</text>
+      <text x="10" y="342">   interruptor 26) y probar Alto / Auto-ralentí.</text>
       <text x="10" y="372" class="warn">Nunca inyectar tensión en B4, B24 ni en</text>
       <text x="10" y="388" class="warn">los pines de sensores. Nunca transmitir CAN</text>
       <text x="10" y="404" class="warn">con la V-ECU original conectada.</text>

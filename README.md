@@ -83,7 +83,9 @@ La placa no tiene EN cableado: antes de grabar hay que mantener **IO0** pulsado 
 
 Todas las imágenes están en `docs/esquemas/` (132 en total). Las de abajo son las que sustentan el diseño.
 
-### 1. Esquema de conexión del regulador (ESP32)
+### 1. Esquema de conexión del regulador completo (diseño original, incluye la parte hidráulica)
+
+> Este es el diseño inicial con regulación de la válvula power shift (Fases 1–2, aplazadas) y componentes discretos sobre un ESP32 DevKit. **Para el control de rpm actual** valen el diagrama de montaje de arriba, [`docs/MONTAJE.md`](docs/MONTAJE.md) y [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) (placa ESP32_Relay X1, CAN Pal en G17/G18 con SLNT en G4).
 
 ![Esquema de conexión ESP32](docs/esquema_conexion_ESP32.png)
 
@@ -129,7 +131,7 @@ El fusible **F24 (5 A)** alimenta el terminal 2 del interruptor de 3 posiciones.
 
 ![Pinout conector B E-ECU](docs/pinout_E-ECU_conector_B_ESP32.png)
 
-Diagrama propio a partir del circuito OEM y de la tabla EB del manual Vectro II. Del conector de 36 pines **solo se tocan cuatro**: **B1 (CAN H, amarillo)** y **B2 (CAN L, verde)** al transceptor SN65HVD230 sin terminación, **B9/B10 (masa)** como masa común, y opcionalmente **B4** (estado del interruptor de emergencia) a través de un divisor 100 k/10 k hacia GPIO35. **No** se alimenta el ESP32 desde B11/B12 (solo viven con el relé R3 activo) ni se conecta nada en B24 (programación de fábrica) o en los pines de sensores. Tablas completas de los conectores A y B, colores de cable y procedimiento de conexión en [`docs/PINOUT_E-ECU.md`](docs/PINOUT_E-ECU.md).
+Diagrama propio a partir del circuito OEM y de la tabla EB del manual Vectro II. Del conector de 36 pines **solo se tocan cuatro**: **B1 (CAN H, amarillo)** y **B2 (CAN L, verde)** al módulo CAN (**Adafruit CAN Pal** con la terminación en OFF), **B10 (o B9) (masa)** al borne GND del CAN Pal como masa común (cable de 3 hilos), y opcionalmente **B4** (estado del interruptor de emergencia) a través del optoacoplador hacia GPIO35. **No** se alimenta el ESP32 desde B11/B12 (solo viven con el relé R3 activo) ni se conecta nada en B24 (programación de fábrica) o en los pines de sensores. Tablas completas de los conectores A y B, colores de cable y procedimiento de conexión en [`docs/PINOUT_E-ECU.md`](docs/PINOUT_E-ECU.md).
 
 ### 3. Circuito OEM de la E-ECU (motor D6D, EC160B–290B)
 

@@ -2,6 +2,8 @@
 
 Esquema gráfico: [`esquema_conexion_ESP32.svg`](esquema_conexion_ESP32.svg) · [`esquema_conexion_ESP32.png`](esquema_conexion_ESP32.png)
 
+> **Documento del diseño original (Fases 1–2, parte hidráulica, aplazadas).** Los puntos de conexión en la máquina (§1) siguen siendo válidos. Para el **control de rpm actual** con la placa ESP32_Relay X1, el CAN Pal y el firmware v0.1, usar [`MONTAJE.md`](MONTAJE.md), [`CONTROL_RPM.md`](CONTROL_RPM.md) y el diagrama [`esquema_montaje_ESP32.png`](esquema_montaje_ESP32.png); las tablas de pines de ESP32 DevKit / Arduino Nano de este documento no se corresponden con esa placa.
+
 Cubre la **Fase 1** (driver de corriente de la válvula power shift con vuelta automática a la Resistor Box) y deja preparado el **bus J1939** para las Fases 2 y 3. La placa recomendada es el **ESP32 DevKit V1**, porque trae controlador CAN. El Arduino Nano sirve para la Fase 1 y, con un módulo MCP2515, también para el CAN.
 
 > Fiabilidad: todos los pines de la E-ECU (conector B) y de la V-ECU (JA/JB) de esta tabla proceden del **boletín OEM Volvo "UPDATE EC160B~460B"**, páginas "EECU Electric Circuit" y **"Control Circuit (EC160B~EC460B)"** (`docs/esquemas/ce_EC-B_UPDATE_p06_control_circuit_300dpi.png` y recortes `…_zoom_*.png`). Es documentación oficial, pero del año 2004: en una máquina de 2002 **medir siempre antes de conectar**.
