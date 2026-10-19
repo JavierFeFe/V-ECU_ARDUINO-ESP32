@@ -48,7 +48,7 @@ Se programa con el **programador USB-C con auto-descarga** que ya tenemos (ver m
 | TXD | **RX** | P4 |
 | RXD | **TX** | P4 |
 | G0 | **IO0** | P4 |
-| EN | **EN** | fila inferior de taladros (si no se suelda, pulsar IO0 al encender) |
+| EN | **EN** | fila inferior de taladros — **opcional** (sin él, pulsar IO0 al encender y reiniciar a mano) |
 | 3.3V / 5V | — | **no conectar** con la placa alimentada por su micro-USB o su borne |
 
 - **Jumper de P4:** en la foto frontal hay un puente en dos pines de P4; casi seguro une **IO0 con GND** (modo carga fija). **Quitarlo** para que la placa arranque el programa y para que funcione la auto-descarga; comprobar con el multímetro qué dos pines une.
@@ -174,6 +174,6 @@ Para la línea B4 se usa el **relé electromecánico** de la placa ESP32 (contac
 | G0 | IO0 |
 | 3.3V / 5V | **no conectar** si la placa se alimenta por su micro-USB o su borne de 24 V |
 
-- Si P4 no saca EN e IO0, basta con GND/TXD/RXD y pulsar el botón **IO0** de la placa al encender.
+- **EN es opcional.** Con EN y G0 conectados la carga es automática; sin EN hay que mantener pulsado **IO0** al dar tensión y reiniciar a mano tras cargar. Detalle en [`MONTAJE.md`](MONTAJE.md) §2.
 - Antes del primer uso, medir con el multímetro la tensión de reposo del pin TXD respecto a GND: debe ser **≈ 3,3 V** (si diera 5 V, no conectarlo al ESP32).
 - Para alimentar la placa solo desde el programador (pruebas en mesa sin 24 V) se puede usar su salida 3.3V, pero el AMS1117 del programador va justo para el ESP32 con WiFi y el relé; es preferible alimentar la placa por su micro-USB.

@@ -67,11 +67,11 @@
   <!-- MÓDULOS -->
   <g transform="translate(360,90)">
     <rect x="0" y="0" width="300" height="100" class="mod" rx="6"/>
-    <text x="10" y="18" class="h">M1 · Convertidor DC-DC 24 → 5 V</text>
-    <text x="10" y="38" class="pin">Traco THN 10-4811WIR (18–75 V, aislado, protegido)</text>
-    <text x="10" y="54" class="pin">o convertidor automoción sellado 9–36 V → 5 V 3 A</text>
-    <text x="10" y="74" class="pin">+Vin ← 24 V · −Vin ← masa</text>
-    <text x="10" y="90" class="pin">+Vout → VIN ESP32 · −Vout → GND común</text>
+    <text x="10" y="18" class="h">M1 · Alimentación: integrada en la placa</text>
+    <text x="10" y="38" class="pin">ESP32_Relay X1 V1.2: borne VCC / GND admite 24 V</text>
+    <text x="10" y="54" class="pin">(convertidor XL7005A a confirmar, 5–80 V)</text>
+    <text x="10" y="74" class="pin">VCC ← +24 V tras llave (fusible 3 A)</text>
+    <text x="10" y="90" class="pin">GND ← masa de la máquina</text>
   </g>
   <line x1="280" y1="130" x2="360" y2="130" class="w24"/>
   <line x1="280" y1="164" x2="360" y2="164" class="gnd"/>
@@ -82,7 +82,7 @@
     <text x="10" y="38" class="pin">Waveshare SN65HVD230 CAN Board (o TJA1051T/3)</text>
     <text x="10" y="58" class="warn">Quitar la resistencia de 120 Ω del módulo</text>
     <text x="10" y="78" class="pin">CANH ← B1 · CANL ← B2 (par trenzado &lt; 1 m)</text>
-    <text x="10" y="94" class="pin">CTX ← GPIO5 · CRX → GPIO4 · 3,3 V · GND</text>
+    <text x="10" y="94" class="pin">CTX ← G17 · CRX → G18 · 3V3 · GND</text>
     <text x="10" y="112" class="pin">Modo escucha primero; TSC1 solo tras validar</text>
   </g>
   <line x1="280" y1="270" x2="360" y2="270" class="canh"/>
@@ -90,13 +90,13 @@
 
   <g transform="translate(360,390)">
     <rect x="0" y="0" width="300" height="130" class="mod" rx="6"/>
-    <text x="10" y="18" class="h">M3 · Módulo relé 1 canal (vía B)</text>
-    <text x="10" y="38" class="pin">Optoacoplado, disparo a nivel ALTO, 3,3 V OK</text>
+    <text x="10" y="18" class="h">M3 · Relé de la placa (vía B)</text>
+    <text x="10" y="38" class="pin">Songle SRD-05VDC-SL-C, 10 A / 30 VDC (integrado)</text>
     <text x="10" y="58" class="pin">COM ← terminal 2 (+24 V de F24)</text>
     <text x="10" y="74" class="pin">NO  → terminal 3 (línea B4)</text>
     <text x="10" y="94" class="pin">Excitado = 24 V en B4 = 1900 rpm;</text>
     <text x="10" y="110" class="pin">en reposo manda el interruptor original.</text>
-    <text x="10" y="126" class="pin">IN ← GPIO26 · VCC 5 V · GND</text>
+    <text x="10" y="126" class="pin">Mandado por GPIO16 (probable, a confirmar)</text>
   </g>
   <line x1="280" y1="430" x2="360" y2="448" class="w24"/>
   <line x1="280" y1="462" x2="360" y2="464" class="sig"/>
@@ -114,18 +114,18 @@
   <!-- ESP32 -->
   <g transform="translate(760,90)">
     <rect x="0" y="0" width="300" height="400" class="box" rx="8" stroke-width="2.2"/>
-    <text x="10" y="22" class="h">M5 · ESP32 DevKit V1 en placa de</text>
-    <text x="10" y="40" class="h">expansión con bornes de tornillo</text>
+    <text x="10" y="22" class="h">M5 · Placa ESP32_Relay X1 V1.2</text>
+    <text x="10" y="40" class="h">(ESP32-WROOM-32E + relé + 24 V)</text>
     <g class="pin">
-      <text x="10" y="72">VIN 5 V ← M1 · GND ← M1 y masa máquina</text>
-      <text x="10" y="92">3V3 → M2, M4, encoder, OLED · 5 V → M3</text>
-      <text x="10" y="122">GPIO5 → M2 CTX · GPIO4 ← M2 CRX</text>
-      <text x="10" y="152">GPIO26 → M3 relé (bajo al arrancar)</text>
-      <text x="10" y="182">GPIO35 ← M4 OUT1 · GPIO39 ← M4 OUT2</text>
-      <text x="10" y="212">GPIO21 SDA / GPIO22 SCL → OLED</text>
-      <text x="10" y="242">GPIO32 / 33 / 27 ← encoder A / B / SW</text>
-      <text x="10" y="272">GPIO34 ← dial original (opcional, divisor 10k/10k)</text>
-      <text x="10" y="302">GPIO2 LED estado</text>
+      <text x="10" y="72">Borne VCC/GND ← 24 V · P4: IO0/GND/GND/RX/TX/5V</text>
+      <text x="10" y="92">3V3 / GND (tiras) → M2, M4, encoder, OLED</text>
+      <text x="10" y="122">G17 → M2 CTX · G18 ← M2 CRX</text>
+      <text x="10" y="152">GPIO16 → relé de la placa (a confirmar)</text>
+      <text x="10" y="182">G35 ← M4 OUT1 · SVN (G39) ← M4 OUT2</text>
+      <text x="10" y="212">G21 SDA / G22 SCL → OLED</text>
+      <text x="10" y="242">G32 / G33 / G27 ← encoder CLK / DT / SW</text>
+      <text x="10" y="272">G34 ← dial original (opcional, divisor 10k/10k)</text>
+      <text x="10" y="302">Programación: programador USB-C en P4 (+ EN opcional)</text>
     </g>
     <text x="10" y="340" class="note">Firmware: captura CAN → PC por USB/WiFi; decodifica</text>
     <text x="10" y="356" class="note">EEC1 (rpm), ET1, DM1; envía TSC1 (PGN 0) desde SA 0x11</text>
@@ -136,7 +136,7 @@
   <path d="M660 290 L720 290 L720 212 L760 212" class="sig"/>
   <text x="668" y="284" class="pin">TX/RX</text>
   <path d="M760 242 L700 242 L700 516 L660 516" class="sig"/>
-  <text x="705" y="510" class="pin">GPIO26</text>
+  <text x="705" y="510" class="pin">GPIO16</text>
   <path d="M660 616 L690 616 L690 272 L760 272" class="sig"/>
   <text x="668" y="632" class="pin">OUT1/OUT2</text>
 

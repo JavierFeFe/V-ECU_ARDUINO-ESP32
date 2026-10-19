@@ -6,6 +6,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ### Añadido (hardware disponible)
 - `docs/HARDWARE_PLACA_ESP32_RELE.md`: evaluación de la placa ESP32-WROOM-32E con relé y entrada 24 V (LC Technology) que ya tiene el usuario: sirve como cerebro, convertidor y relé de la vía B; lista de comprobaciones (chip del convertidor, GPIO del relé, programación por P4) y qué módulos sobran de la lista de compra.
+- `docs/MONTAJE.md`: guía de montaje con el hardware real (preparación de la placa, programación con EN opcional explicado, conexión de módulos y a la máquina, primeras pruebas). `CONTROL_RPM.md` y `esquema_rpm_ESP32.svg/.png` actualizados a la placa ESP32_Relay X1 (CAN G17/G18, relé GPIO16 a confirmar, alimentación 24 V integrada).
 - Placa identificada como **ESP32_Relay X1 V1.2** (serigrafía del reverso): pinout completo de las dos tiras de taladros, P4 = IO0/GND/GND/RX/TX/5V, conexión del programador y **asignación de GPIO para el control de rpm** (relé GPIO16 a confirmar, CAN 17/18, I²C 21/22, encoder 32/33/27, opto 35/39) en `docs/HARDWARE_PLACA_ESP32_RELE.md`.
 - Programador USB-C con auto-descarga (WCH + AMS1117, pines 5V/3.3V/RXD/TXD/EN/G0/GND) disponible: sustituye al adaptador USB-TTL A10; conexión documentada.
 - Confirmado que el micro-USB de la placa ESP32 es solo de alimentación: añadido a la lista de compra el **adaptador USB-TTL 3,3 V** (A10, AZDelivery CP2102 HW-598 y alternativas en Amazon.es).

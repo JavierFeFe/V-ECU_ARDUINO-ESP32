@@ -15,13 +15,15 @@ No hay entrada analógica de acelerador ni PWM: la vía A es la única que da r�
 
 ## 2. Hardware (solo módulos)
 
+> **Hardware real disponible:** la placa **ESP32_Relay X1 V1.2** (ESP32-WROOM-32E + relé + entrada 24 V) cubre M1, M3 y M5; el encoder y el programador USB-C también están disponibles. Pinout, asignación de GPIO y cableado completos en [`HARDWARE_PLACA_ESP32_RELE.md`](HARDWARE_PLACA_ESP32_RELE.md) y [`MONTAJE.md`](MONTAJE.md).
+
 | Módulo | Para qué | Notas |
 |---|---|---|
 | **M1** Convertidor DC-DC 24 → 5 V comercial (Traco THN 10-4811WIR o convertidor automoción sellado 9–36 V) | Alimentar el ESP32 | Fusible en línea 3 A, alimentación tras la llave |
 | **M2** Módulo CAN SN65HVD230 (3,3 V) | Bus J1939 | **Quitar la resistencia de 120 Ω** del módulo; par trenzado < 1 m a B1/B2 o JB14/JB6 |
 | **M3** Módulo relé 1 canal NO/NC, optoacoplado, disparo a nivel alto | Vía B: poner 24 V en la línea B4 | COM ← terminal 2 del interruptor 26 (+24 V de F24); NO → terminal 3 (línea B4). En reposo manda el interruptor original |
 | **M4** Módulo optoacoplador 24 V → 3,3 V, 2 canales | Leer el estado real de B4 y la posición del selector Auto/Manual | OUT1 → GPIO35, OUT2 → GPIO39 |
-| **M5** ESP32 DevKit V1 en placa de expansión con bornes | Lógica, CAN, interfaz | GPIO5/4 CAN, GPIO26 relé, GPIO21/22 I²C, GPIO32/33/27 encoder |
+| **M5** ESP32 DevKit V1 en placa de expansión con bornes | Lógica, CAN, interfaz | G17/G18 CAN, GPIO16 relé, G21/G22 I²C, G32/G33/G27 encoder |
 | **M6** Encoder KY-040 + OLED SSD1306 | Mando y pantalla | rpm real, consigna, estado B4, temperatura, códigos DM1 |
 | **Herramienta** adaptador USB-CAN para el PC (CANable / candleLight o "USB CAN analyzer") | Capturar el bus y validar TSC1 | Imprescindible antes de transmitir nada |
 

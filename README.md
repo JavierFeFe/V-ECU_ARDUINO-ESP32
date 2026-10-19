@@ -2,7 +2,7 @@
 
 Sustitución / emulación de la **V-ECU** (Vehicle ECU, MID 187) de una excavadora **Volvo EC210B** (2002, motor Volvo **D6D EAE2**) con un **ESP32** (o Arduino Nano) y un potenciómetro/encoder, para poder **regular la potencia** de la máquina cuando trabaja sin V-ECU en modo de emergencia (Manual).
 
-> **Estado (2026-10-19):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Plan, hardware y pruebas en [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) y [`docs/esquema_rpm_ESP32.png`](docs/esquema_rpm_ESP32.png).
+> **Estado (2026-10-19):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Plan, hardware y pruebas en [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) y [`docs/esquema_rpm_ESP32.png`](docs/esquema_rpm_ESP32.png); montaje con la placa **ESP32_Relay X1 V1.2** que ya tenemos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
 
 ## El problema
 
@@ -35,6 +35,8 @@ docs/
 ├── INVESTIGACION_V-ECU_EC210B.md   ← documento principal (resumen ejecutivo, arquitectura, protocolo, plan)
 ├── ESQUEMA_CONEXION.md             ← puntos de conexión en la máquina, tablas de pines ESP32 / Nano, BOM
 ├── PINOUT_E-ECU.md                 ← pinout de los conectores A y B de la E-ECU y conexión al ESP32
+├── MONTAJE.md                      ← guía de montaje con la placa ESP32_Relay X1: programación, módulos, máquina, pruebas
+├── HARDWARE_PLACA_ESP32_RELE.md    ← hardware disponible (placa ESP32 con relé, programador, L298N, IBT-2, SSR) y pinout
 ├── CONTROL_RPM.md                  ← alcance actual: control de rpm (TSC1 por CAN y relé sobre B4), plan de pruebas
 ├── esquema_rpm_ESP32.svg/.png      ← esquema de la versión solo-rpm con módulos premontados
 ├── LISTA_COMPRA.md                 ← lista de compra (solo componentes, módulos premontados, Amazon España)
