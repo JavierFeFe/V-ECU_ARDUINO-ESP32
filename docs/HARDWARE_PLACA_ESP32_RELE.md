@@ -10,19 +10,19 @@
 | Relé | **Songle SRD-05VDC-SL-C**, 10 A / 30 VDC, contactos **COM / NO / NC** en borne de 3 tornillos, mandado por transistor S8050 ("J3Y") | Sirve tal cual para la **vía B**: poner 24 V en la línea B4 (corriente de mA) |
 | Alimentación | Borne de 2 tornillos **+ / −**, convertidor conmutado con bobina 470 µH, diodo SS210 y circuito integrado en SOIC-8 (**XL7005A**, a confirmar en la serigrafía: entrada 5–80 V, 0,4 A) + regulador 3,3 V (AMS1117, U3) | Se alimenta **directamente a 24 V** de la máquina. Si el chip es el XL7005A, aguanta 80 V: margen sobrado frente a los picos del alternador |
 | USB micro | Sin chip USB-serie (no hay CH340/CP2102) | **Confirmado por el usuario: solo alimentación.** Para programar hace falta un **adaptador USB-TTL de 3,3 V** en el conector P4 (ver `LISTA_COMPRA.md`, A10) |
-| P4 | Conector de 6 pines con un puente | Cabecera de programación/consola (GND, TX, RX, 5 V/3,3 V, IO0, EN, según modelo). Comprobar la serigrafía del reverso |
+| P4 | Conector de 6 pines con un puente | **Confirmado (reverso): IO0 · GND · GND · RX · TX · 5V.** El puente probablemente une IO0–GND: quitarlo para el funcionamiento normal |
 | Botón | **IO0** | Entrar en modo de carga de firmware: mantener pulsado al dar tensión |
 | Filas de pines | Dos filas de **taladros sin soldar** a ambos lados del módulo | Hay que soldar tiras de pines para sacar los GPIO (CAN, I²C, encoder, optoacoplador) |
-| Fecha / marca | 2022-04-22, logotipo LC | Familia "LC Technology ESP32 relay X1" |
+| Fecha / marca | 2022-04-22, logotipo LC; reverso: **ESP32_Relay X1_V1.2 (303E32DC110)** | LC Technology ESP32 Relay X1 V1.2 |
 
 ## ¿Sirve para el proyecto? Sí
 
 Cubre de golpe tres módulos de la lista de compra: el **ESP32**, el **convertidor 24 → 5 V** y el **relé** de la vía B. Solo hay que añadir:
 
-1. **Módulo transceptor CAN 3,3 V** (SN65HVD230, sin su resistencia de 120 Ω) en dos GPIO libres (p. ej. GPIO5 TX / GPIO4 RX).
+1. **Módulo transceptor CAN 3,3 V** (SN65HVD230, sin su resistencia de 120 Ω) en GPIO17 (TX) / GPIO18 (RX).
 2. **Módulo optoacoplador 24 V → 3,3 V** para leer el estado real de B4 y del selector (opcional).
 3. **Encoder y OLED** en los GPIO de las filas laterales.
-4. **Adaptador USB-TTL 3,3 V** (CP2102 o CH340) para cargar el firmware por P4, si el micro-USB resulta ser solo de alimentación.
+4. ~~Adaptador USB-TTL~~: se usa el programador USB-C con auto-descarga que ya tenemos.
 
 Cableado de la vía B con esta placa: **COM ← terminal 2 del interruptor de emergencia (+24 V de F24)**, **NO → terminal 3 (línea B4)**. Relé en reposo = manda el interruptor original; relé excitado = 24 V en B4 = 1900 rpm. El borne + / − de alimentación va a +24 V tras la llave (con fusible de 3 A en línea) y a masa de la máquina.
 
@@ -38,13 +38,56 @@ Cableado de la vía B con esta placa: **COM ← terminal 2 del interruptor de em
 | 6 | GPIO libres en las filas laterales | Serigrafía del reverso | Reservar GPIO5/4 (CAN), 21/22 (I²C), 32/33/27 (encoder), 35/39 (opto). Evitar GPIO6–11 |
 | 7 | Capacidad del convertidor (0,4 A si es XL7005A) | Medir la tensión de 5 V con WiFi activo | El WiFi del ESP32 tiene picos de ≈0,4 A; si cae la tensión, desactivar WiFi en la instalación o alimentar los módulos externos desde una fuente aparte |
 
-## Programación
+## Programación (confirmada con la serigrafía del reverso)
 
-Adaptador recomendado: **AZDelivery CP2102 HW-598** ([B082FMFHNP](https://www.amazon.es/dp/B082FMFHNP)) o FT232RL con el jumper en 3,3 V.
+Se programa con el **programador USB-C con auto-descarga** que ya tenemos (ver más abajo). El conector **P4** de la placa trae: **IO0 · GND · GND · RX · TX · 5V**. EN no está en P4, pero sí en la fila inferior de taladros.
 
+| Programador | Placa | Dónde |
+|---|---|---|
+| GND | GND | P4 |
+| TXD | **RX** | P4 |
+| RXD | **TX** | P4 |
+| G0 | **IO0** | P4 |
+| EN | **EN** | fila inferior de taladros (si no se suelda, pulsar IO0 al encender) |
+| 3.3V / 5V | — | **no conectar** con la placa alimentada por su micro-USB o su borne |
 
-- Si P4 lleva RX/TX: adaptador USB-TTL a **3,3 V** (GND–GND, TX↔RX cruzados), mantener **IO0** pulsado al dar alimentación (o puentear IO0 a GND con el jumper si está previsto), cargar con PlatformIO/Arduino IDE a 115200 baud, soltar IO0 y reiniciar.
-- Placa en PlatformIO: `board = esp32dev`. Reservar en `config.h` el GPIO del relé que resulte de la comprobación 3.
+- **Jumper de P4:** en la foto frontal hay un puente en dos pines de P4; casi seguro une **IO0 con GND** (modo carga fija). **Quitarlo** para que la placa arranque el programa y para que funcione la auto-descarga; comprobar con el multímetro qué dos pines une.
+- PlatformIO: `board = esp32dev`, `upload_speed = 921600` (bajar a 115200 si falla).
+
+## Pinout de la placa ESP32_Relay X1 V1.2 (303E32DC110)
+
+![Reverso de la placa](fotos/placa_ESP32_rele_LC_reverso.jpg)
+
+Serigrafía del reverso (dos tiras dobles de 2×10 taladros, sin soldar):
+
+| Tira superior (fila 1) | 3V3 | SD0 | G15 | G0 | G16 | G5 | G19 | G21 | TX0 | G23 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Tira superior (fila 2)** | CLK | SD1 | G2 | G4 | G17 | G18 | GND | RX0 | G22 | GND |
+
+| Tira inferior (fila 1) | 5V | SD3 | G13 | G14 | G26 | G33 | G35 | SVN (G39) | EN | GND |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Tira inferior (fila 2)** | GND | CMD | SD2 | G12 | G27 | G25 | G32 | G34 | SVP (G36) | 3V3 |
+
+Otros: borne **VCC / GND** (alimentación de entrada), borne del relé **NC / COM / NO**, **P4** (programación).
+
+### Asignación propuesta para el control de rpm
+
+| Función | GPIO | Pin de la placa | Notas |
+|---|---|---|---|
+| **Relé (vía B, línea B4)** | **GPIO16** (probable, a confirmar) | interno | Confirmar con un sketch de prueba; si no es el 16, buscar la pista desde el transistor del relé |
+| CAN TX → módulo SN65HVD230 | **GPIO17** | tira superior | |
+| CAN RX ← módulo SN65HVD230 | **GPIO18** | tira superior | |
+| OLED SDA | **GPIO21** | tira superior | I²C |
+| OLED SCL | **GPIO22** | tira superior | I²C |
+| Encoder A (CLK) | **GPIO32** | tira inferior | |
+| Encoder B (DT) | **GPIO33** | tira inferior | |
+| Encoder pulsador (SW) | **GPIO27** | tira inferior | pull-up interno |
+| Opto 1: estado real de B4 | **GPIO35** | tira inferior | solo entrada |
+| Opto 2: selector Auto/Manual | **GPIO39 (SVN)** | tira inferior | solo entrada |
+| Dial original (opcional) | **GPIO34** | tira inferior | solo entrada, divisor 10 k/10 k |
+| 3,3 V y GND para módulos | 3V3 / GND | ambas tiras | |
+
+Pines que **no se usan**: GPIO0, 2, 5, 12, 15 (arranque), SD0–SD3/CLK/CMD (memoria flash), TX0/RX0 (programación y consola).
 
 ## Fotos de la máquina guardadas en el repositorio
 
