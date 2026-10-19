@@ -52,19 +52,17 @@
   <!-- Alimentación protegida -->
   <g transform="translate(380,90)">
     <rect x="0" y="0" width="420" height="130" class="box" rx="6"/>
-    <text x="10" y="18" class="h">ALIMENTACIÓN PROTEGIDA</text>
+    <text x="10" y="18" class="h">ALIMENTACIÓN 24 V → 5 V (módulo comercial)</text>
     <rect x="15" y="40" width="50" height="18" class="box"/><text x="20" y="53" class="pin">F 3 A</text>
-    <rect x="80" y="36" width="90" height="26" class="box"/><text x="84" y="47" class="pin">Polaridad inv.</text><text x="84" y="58" class="pin">P-MOSFET / diodo</text>
-    <rect x="185" y="36" width="60" height="26" class="box"/><text x="190" y="47" class="pin">TVS</text><text x="190" y="58" class="pin">SMCJ33A</text>
-    <rect x="260" y="30" width="145" height="40" class="box"/><text x="265" y="45" class="pin">DC-DC 9–72 V → 5 V</text><text x="265" y="60" class="pin">Recom R-78HB5.0-0.5 / XL7015</text>
+    <rect x="90" y="28" width="315" height="44" class="box"/>
+    <text x="96" y="44" class="pin" font-weight="bold">Convertidor DC-DC comercial, aislado, entrada ancha</text>
+    <text x="96" y="58" class="pin">Traco TEN 10-4811WIR: 18–75 V → 5 V / 2 A, sobretensión 100 V</text>
+    <text x="96" y="70" class="pin">(alternativa: Mean Well DDR-15G-5, 9–36 V, + TVS SMCJ33A)</text>
     <line x1="0" y1="49" x2="15" y2="49" class="w24"/>
-    <line x1="65" y1="49" x2="80" y2="49" class="w24"/>
-    <line x1="170" y1="49" x2="185" y2="49" class="w24"/>
-    <line x1="245" y1="49" x2="260" y2="49" class="w24"/>
+    <line x1="65" y1="49" x2="90" y2="49" class="w24"/>
     <line x1="405" y1="49" x2="420" y2="49" class="w5"/>
-    <text x="10" y="95" class="pin">Masa común con el chasis de la máquina</text>
-    <text x="10" y="112" class="pin">Cond. 100 µF/50 V a la entrada, 220 µF/10 V a la salida</text>
-    <text x="250" y="95" class="pin">Salida +5 V (≥1 A) → VIN del ESP32</text>
+    <text x="10" y="95" class="pin">Protecciones (polaridad, transitorios, cortocircuito) incluidas en el módulo</text>
+    <text x="10" y="112" class="pin">Salida +5 V → VIN del ESP32 · masa de salida unida al chasis (GND común)</text>
     <line x1="0" y1="115" x2="420" y2="115" class="gnd"/>
   </g>
   <line x1="320" y1="140" x2="380" y2="139" class="w24"/>

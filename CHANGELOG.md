@@ -8,6 +8,10 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 - `docs/PINOUT_E-ECU.md`: tablas completas de los conectores B (máquina) y A (motor) de la E-ECU 03161983, con la función en la excavadora (circuito OEM EC160B–290B), la función de referencia en el camión D12 (Vectro II), colores de cable y la conexión pin a pin al ESP32 con el procedimiento de comprobación.
 - `docs/pinout_E-ECU_conector_B_ESP32.svg` / `.png`: diagrama del conector B de 36 pines con código de colores por función y el esquema de conexión al ESP32 (CAN, masa, lectura opcional de B4).
 - README: sección 2d con el diagrama del conector B y su explicación.
+- `docs/esquema_modular_ESP32.svg` / `.png` y sección 1.3 de `ESQUEMA_CONEXION.md`: **versión modular** del regulador con solo módulos premontados (convertidor DC-DC comercial, amplificador de válvula proporcional 0–10 V, DAC GP8403, INA226, módulo relé NO/NC, módulo CAN, módulo optoacoplador, ESP32 sobre placa de bornes). Pasa a ser la versión recomendada; el circuito discreto queda como alternativa.
+
+### Cambiado
+- Alimentación: se sustituye el circuito propio (fusible + polaridad + TVS + DC-DC) por un **convertidor comercial aislado de entrada ancha** (Traco TEN 10-4811WIR) en el esquema, la BOM y la lista de compra.
 - `docs/LISTA_COMPRA.md`: lista de compra completa por bloques (medida, electrónica Fase 1, CAN, conectores, protección/caja, banco de pruebas, alternativa Nano), con referencias, cantidades, tiendas, precios orientativos, coste total estimado y orden de compra.
 
 ### Pendiente

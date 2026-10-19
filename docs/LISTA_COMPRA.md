@@ -10,9 +10,9 @@ Todo lo necesario para hacer las mediciones (Fase 0), montar el regulador de la 
 | B. Electrónica del regulador (Fase 1) | ≈ 60–80 € | — |
 | C. Bus CAN (Fases 2–3) | ≈ 10–15 € | +25–40 € (adaptador USB-CAN) |
 | D. Conectores y cableado | ≈ 40–60 € | +150–300 € (pigtails Volvo) |
-| E. Alimentación, protección y caja | ≈ 35–50 € | — |
+| E. Alimentación (módulo comercial), protección y caja | ≈ 65–85 € | — |
 | F. Banco de pruebas | ≈ 30–45 € | — |
-| **Total para empezar (A+B+C+D+E+F sin opcionales)** | **≈ 210–330 €** | |
+| **Total para empezar (A+B+C+D+E+F sin opcionales)** | **≈ 240–365 €** | |
 
 ---
 
@@ -78,10 +78,9 @@ Con A1 y A2 ya puedes hacer todas las mediciones de la Fase 0: bobina (≈17,5 �
 
 | # | Ref. | Artículo | Especificación | Cant. | Dónde | Precio |
 |---|---|---|---|---|---|---|
-| E1 | U5 | **Convertidor DC-DC 24 → 5 V**: Recom **R-78HB5.0-0.5** (9–72 V, 0,5 A, formato TO-220) | alternativa barata: módulo buck **XL7015** (5–80 V); evitar LM2596 (máx. 40 V, sin margen) | 1–2 | Mouser, RS, TME / Amazon.es | 10–14 € (Recom) · 3–5 € (XL7015) |
-| E2 | TVS1 | Diodo TVS **SMCJ33A** (33 V, 1500 W, unidireccional) | en la entrada de 24 V | 3 | Mouser, RS | 0,5–1 €/ud |
-| E3 | D3 | Protección contra polaridad inversa: MOSFET canal P **IRF4905** + Zener 12 V + 100 kΩ, o simplemente diodo Schottky **SB560** (60 V, 5 A) | | 1 | Mouser, Amazon.es | 1–3 € |
-| E4 | F1 | **Portafusibles en línea** + fusibles de cuchilla 3 A (×5) | en el cable de +24 V | 1 | Amazon.es, recambios | 5–8 € |
+| E1 | U5 | **Convertidor DC-DC comercial 24 → 5 V, aislado, entrada ancha: Traco TEN 10-4811WIR** (18–75 V → 5 V / 2 A, 10 W, encapsulado, aguanta 100 V/1 s, protección contra polaridad inversa, cortocircuito y sobretensión) | Es la opción "comprar y conectar": no hace falta TVS, diodo ni circuito de protección propio. Alternativas: **Traco TEN 5-4811WI** (1 A, ≈25 €); **Mean Well DDR-15G-5** (carril DIN, 9–36 V, 3 A, ≈20 €) **solo si se le añade un TVS SMCJ33A** en la entrada, porque 36 V no da margen frente a los picos del alternador | 1 | Mouser, RS, TME, Farnell | 35–45 € (TEN 10) |
+| E2 | — | *Solo con la alternativa Mean Well:* diodo TVS **SMCJ33A** | en paralelo con la entrada de 24 V del módulo | 2 | Mouser, RS | 0,5–1 €/ud |
+| E4 | F1 | **Portafusibles en línea** + fusibles de cuchilla 3 A (×5) | en el cable de +24 V, antes del convertidor | 1 | Amazon.es, recambios | 5–8 € |
 | E5 | — | **Caja estanca IP65/IP67** ABS ≈ 200×120×75 mm | con tapa (transparente si quieres ver el OLED) | 1 | Amazon.es, RS (Hammond/Fibox) | 12–20 € |
 | E6 | — | Prensaestopas **M16/M20 IP68** (×6) o conector Deutsch DT de brida para la entrada de la caja | | 1 | Amazon.es | 8–10 € |
 | E7 | — | Fijaciones: velcro industrial o soportes para la caja, tornillería M4 | | — | — | 5 € |
@@ -116,6 +115,6 @@ Con A1 y A2 ya puedes hacer todas las mediciones de la Fase 0: bobina (≈17,5 �
 
 ## Orden de compra sugerido
 
-1. **Hoy:** bloque A (medida) + F1/F2 (banco) + B1 (ESP32) + C1 (transceptor) + E1 (DC-DC).
+1. **Hoy:** bloque A (medida) + F1/F2 (banco) + B1 (ESP32) + C1 (transceptor) + E1 (convertidor Traco).
 2. **Con las mediciones hechas:** resto del bloque B, E y D1–D8.
 3. **Cuando la Fase 1 funcione en la máquina:** C3 (USB-CAN) para capturar el bus y, si procede, D9.

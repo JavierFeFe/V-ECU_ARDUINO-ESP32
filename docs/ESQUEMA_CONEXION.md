@@ -59,6 +59,26 @@ La V-ECU recibe el bus en **dos pares** (JB13/JB5 desde la E-ECU y JB14/JB6 haci
 
 ---
 
+## 1.3 Versión MODULAR (recomendada): solo módulos premontados
+
+Esquema: [`esquema_modular_ESP32.svg`](esquema_modular_ESP32.svg) · [`.png`](esquema_modular_ESP32.png). Sustituye el driver discreto (MOSFET + shunt + relé con transistor) por módulos comerciales que se cablean con bornes:
+
+| Módulo | Función | Conexiones |
+|---|---|---|
+| **M1** Convertidor DC-DC 24 → 5 V (Traco TEN 10-4811WIR, 18–75 V, aislado; alternativa Mean Well DDR-15G-5 + TVS) | Alimenta el ESP32 y los módulos de 5 V | +Vin ← 24 V (fusible 3 A) · −Vin ← masa · +Vout → VIN ESP32 · −Vout → GND común |
+| **M2** Amplificador de válvula proporcional (24 V, entrada 0–10 V, Imín/Imáx y dither ajustables) | Regula la corriente de la válvula en lazo cerrado, con dither y rampa; incluye el diodo de libre circulación | +24 V · GND · IN ← M3 · SOL+ → válvula (+) *(solo si se alimenta la válvula desde el amplificador; en modo Manual el + ya llega del selector, entonces SOL+ no se usa)* · SOL− → M4 → M5 NO |
+| **M3** DAC I²C 0–10 V (DFRobot GP8403) o módulo PWM → 0–10 V | Convierte la consigna del ESP32 en 0–10 V | SDA/SCL · 5 V · OUT0 → IN de M2 |
+| **M4** Módulo INA226 (shunt 0,1 Ω integrado, hasta 0,8 A) | Supervisa que la corriente real coincide con la consigna | En serie con SOL− · SDA/SCL · 3,3 V |
+| **M5** Módulo relé 1 canal NO/NC, optoacoplado, disparo a nivel alto, compatible 3,3 V | Seguridad: sin excitar conecta la Resistor Box de fábrica | COM ← terminal 6 (retorno válvula) · NC → Resistor Box · NO → SOL− · IN ← GPIO26 · 5 V · GND |
+| **M6** Módulo CAN SN65HVD230 (o TJA1051T/3) **sin la resistencia de 120 Ω** | Bus J1939 | CANH ← B1 / JB14 · CANL ← B2 / JB6 · TX ← GPIO5 · RX → GPIO4 · 3,3 V |
+| **M7** Módulo optoacoplador 24 V → 3,3 V (2–4 canales) | Lee el estado del interruptor de emergencia (B4) y del selector Auto/Manual (terminal 2) | IN1 ← B4 · IN2 ← terminal 2 · OUT1 → GPIO35 · OUT2 → GPIO39 · VCC 3,3 V |
+| **M8** ESP32 DevKit V1 sobre **placa de expansión con bornes de tornillo** | Lógica, consignas, supervisión, watchdog | Ver tabla de pines §2 |
+| **M9** Encoder KY-040 + OLED SSD1306 | Interfaz | GPIO32/33/27 · SDA/SCL · 3,3 V |
+
+**Ajuste del amplificador M2:** Imín = 200 mA, Imáx = 650 mA, dither 100–150 Hz, rampa 0,5–1 s. Con esos límites la consigna del ESP32 se calcula como *V = 10 · (I − 200) / 450*: 215 mA ≈ 0,3 V · 250 mA ≈ 1,1 V · 290 mA ≈ 2,0 V · 340 mA ≈ 3,1 V · 450 mA ≈ 5,6 V · 555 mA ≈ 7,9 V. Se calibra con la lectura del M4.
+
+**Cableado de la válvula en modo Manual:** la válvula sigue recibiendo su +24 V por el selector (terminal 2–3). El amplificador M2 solo conmuta el lado de masa: SOL− del M2 **no** se conecta a la válvula directamente, sino que el retorno de la válvula (terminal 6) entra en COM del relé M5; NC va a la Resistor Box y NO va, a través del M4, a SOL− del M2. Si el amplificador elegido exige controlar los dos hilos de la bobina (SOL+ y SOL−), hay que llevar el + de la válvula a SOL+ y dejar el terminal 3 del selector sin conectar; en ese caso el relé debe conmutar también el +. Se decidirá al ver la hoja del amplificador comprado.
+
 ## 2. Tabla de pines — ESP32 DevKit V1
 
 | Función | GPIO | Notas |
@@ -114,11 +134,9 @@ La V-ECU recibe el bus en **dos pares** (JB13/JB5 desde la E-ECU y JB14/JB6 haci
 | U2 | Transceptor CAN 3,3 V | SN65HVD230 (módulo) o TJA1051T/3 | 1 | sin terminación |
 | U3 | Medidor de corriente I²C | INA226 (módulo) | 1 | shunt externo |
 | U4 | Pantalla | OLED 0,96" SSD1306 I²C | 1 | |
-| U5 | DC-DC 24 → 5 V | Recom R-78HB5.0-0.5 (9–72 V) o módulo XL7015 | 1 | ≥ 0,5 A |
-| F1 | Fusible | 3 A, portafusibles en línea | 1 | |
-| D3 | Protección polaridad | P-MOSFET (IRF4905) con Zener 12 V, o diodo Schottky 5 A | 1 | |
-| TVS1 | Supresor | SMCJ33A (33 V, 1500 W) | 1 | en la entrada de 24 V |
-| C1, C2 | Condensadores | 100 µF/50 V · 220 µF/10 V | 1+1 | entrada / salida DC-DC |
+| U5 | **Convertidor DC-DC comercial 24 → 5 V**, aislado, entrada ancha | **Traco TEN 10-4811WIR** (18–75 V, 5 V / 2 A, aguanta 100 V durante 1 s, EN 50155) | 1 | Incluye protección contra polaridad inversa, transitorios y cortocircuito. Alternativas: Traco TEN 5-4811WI (1 A); Mean Well DDR-15G-5 (9–36 V, carril DIN) **añadiendo un TVS SMCJ33A** en la entrada |
+| F1 | Fusible | 3 A, portafusibles en línea | 1 | único componente externo al módulo |
+| C2 | Condensador | 220 µF/10 V en la salida de 5 V | 1 | opcional, cerca del ESP32 |
 | Q1 | MOSFET nivel lógico | IRLZ44N o IRLB8721 (≥55 V) | 1 | disipador pequeño |
 | R1, R2 | Puerta Q1 | 100 Ω · 10 kΩ | 1+1 | |
 | D1 | Diodo libre circulación | MBR5100 / SB5100 (100 V, 5 A) | 1 | cátodo al +24 V de la bobina |

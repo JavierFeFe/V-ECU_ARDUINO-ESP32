@@ -1,0 +1,233 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1040" viewBox="0 0 1600 1040" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1f77b4"/></marker>
+    <marker id="arrP" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8c564b"/></marker>
+    <style>
+      .box{fill:#fff;stroke:#333;stroke-width:1.6}
+      .mod{fill:#eef5ff;stroke:#2b5aa6;stroke-width:1.8}
+      .mach{fill:#f3f3f3;stroke:#555;stroke-width:1.4;stroke-dasharray:6 3}
+      .h{font-weight:bold;font-size:14px;fill:#111}
+      .pin{font-size:11.5px;fill:#333}
+      .note{font-size:11.5px;fill:#444}
+      .warn{font-size:12px;fill:#b00020;font-weight:bold}
+      .w24{stroke:#d62728;stroke-width:2.4;fill:none}
+      .w5{stroke:#ff7f0e;stroke-width:2;fill:none}
+      .gnd{stroke:#222;stroke-width:2;fill:none}
+      .canh{stroke:#e5c100;stroke-width:2.2;fill:none}
+      .canl{stroke:#2ca02c;stroke-width:2.2;fill:none}
+      .sig{stroke:#1f77b4;stroke-width:1.8;fill:none;marker-end:url(#arr)}
+      .pwr{stroke:#8c564b;stroke-width:2.4;fill:none}
+      .i2c{stroke:#1f77b4;stroke-width:1.6;fill:none;stroke-dasharray:5 3}
+    </style>
+  </defs>
+  <rect width="1600" height="1040" fill="#fff"/>
+  <text x="20" y="30" class="h" font-size="20">Regulador EC210B — versión MODULAR (solo módulos premontados, sin circuitos propios)</text>
+  <text x="20" y="50" class="note">Cada bloque azul es un módulo comercial que se conecta con cable y bornes. El ESP32 solo da consignas y lee estados; la regulación de corriente y el dither los hace el amplificador de válvula.</text>
+
+  <!-- ===== MÁQUINA izquierda ===== -->
+  <g transform="translate(20,90)">
+    <rect x="0" y="0" width="250" height="110" class="mach" rx="6"/>
+    <text x="10" y="18" class="h">MÁQUINA — 24 V</text>
+    <text x="10" y="40" class="pin">+24 V: JB7/JB8 del mazo V-ECU</text>
+    <text x="10" y="56" class="pin">   o salida libre de la caja de fusibles</text>
+    <text x="10" y="76" class="pin">Masa: JA15/JA63 o chasis junto a E-ECU</text>
+    <text x="10" y="96" class="pin">Fusible en línea 3 A en el +24 V</text>
+    <circle cx="250" cy="40" r="4" fill="#d62728"/><circle cx="250" cy="76" r="4" fill="#222"/>
+  </g>
+  <g transform="translate(20,240)">
+    <rect x="0" y="0" width="250" height="150" class="mach" rx="6"/>
+    <text x="10" y="18" class="h">MÁQUINA — Válvula power shift</text>
+    <text x="10" y="38" class="pin">Kawasaki KDRDE5K, ≈17,5 Ω, 0–0,7 A</text>
+    <text x="10" y="56" class="pin">(+) = terminal 3 del selector (24 V en MANU)</text>
+    <text x="10" y="72" class="pin">(−) = terminal 5 → 6 → Resistor Box → masa</text>
+    <text x="10" y="96" class="pin">Se intercala el regulador entre el</text>
+    <text x="10" y="112" class="pin">terminal 6 y la Resistor Box / masa.</text>
+    <text x="10" y="134" class="pin">Conector válvula: TE Econoseal 174352-2</text>
+    <circle cx="250" cy="110" r="4" fill="#8c564b"/>
+  </g>
+  <g transform="translate(20,430)">
+    <rect x="0" y="0" width="250" height="90" class="mach" rx="6"/>
+    <text x="10" y="18" class="h">MÁQUINA — Resistor Box</text>
+    <text x="10" y="38" class="pin">≈60 Ω original → masa</text>
+    <text x="10" y="56" class="pin">Se conserva como respaldo en el</text>
+    <text x="10" y="72" class="pin">contacto NC del módulo de relé.</text>
+    <circle cx="250" cy="38" r="4" fill="#8c564b"/>
+  </g>
+  <g transform="translate(20,560)">
+    <rect x="0" y="0" width="250" height="110" class="mach" rx="6"/>
+    <text x="10" y="18" class="h">MÁQUINA — Bus J1939</text>
+    <text x="10" y="38" class="pin">E-ECU B1 = CAN H (amarillo), B2 = CAN L (verde)</text>
+    <text x="10" y="54" class="pin">o mazo V-ECU JB14/JB6 · JB13/JB5</text>
+    <text x="10" y="74" class="warn">Sin 120 Ω en el módulo CAN</text>
+    <text x="10" y="94" class="pin">Si falta la V-ECU: puentear JB13↔JB14, JB5↔JB6</text>
+    <circle cx="250" cy="38" r="4" fill="#e5c100"/><circle cx="250" cy="54" r="4" fill="#2ca02c"/>
+  </g>
+  <g transform="translate(20,710)">
+    <rect x="0" y="0" width="250" height="100" class="mach" rx="6"/>
+    <text x="10" y="18" class="h">MÁQUINA — Señales 24 V (opcional)</text>
+    <text x="10" y="38" class="pin">Línea B4 (interruptor emergencia en "alta")</text>
+    <text x="10" y="54" class="pin">Terminal 2 del selector (Auto/Manual)</text>
+    <text x="10" y="74" class="pin">Dial original: JA39 0,5–4,5 V (necesita</text>
+    <text x="10" y="90" class="pin">   +5 V en JB11 y masa en JA14)</text>
+    <circle cx="250" cy="38" r="4" fill="#1f77b4"/><circle cx="250" cy="54" r="4" fill="#1f77b4"/>
+  </g>
+
+  <!-- ===== MÓDULOS centro ===== -->
+  <!-- DC-DC -->
+  <g transform="translate(340,90)">
+    <rect x="0" y="0" width="300" height="110" class="mod" rx="6"/>
+    <text x="10" y="18" class="h">M1 · Convertidor DC-DC 24 → 5 V</text>
+    <text x="10" y="38" class="pin">Traco TEN 10-4811WIR (18–75 V → 5 V / 2 A, aislado,</text>
+    <text x="10" y="54" class="pin">protección polaridad, cortocircuito, picos 100 V)</text>
+    <text x="10" y="74" class="pin">Alternativa carril DIN: Mean Well DDR-15G-5 + TVS</text>
+    <text x="10" y="96" class="pin">+Vin ← 24 V · −Vin ← masa · +Vout → 5 V · −Vout → GND</text>
+  </g>
+  <line x1="270" y1="130" x2="340" y2="130" class="w24"/>
+  <line x1="270" y1="166" x2="340" y2="166" class="gnd"/>
+  <!-- Amplificador válvula -->
+  <g transform="translate(340,240)">
+    <rect x="0" y="0" width="300" height="280" class="mod" rx="6"/>
+    <text x="10" y="18" class="h">M2 · Amplificador de válvula proporcional</text>
+    <text x="10" y="36" class="pin">Tarjeta comercial 24 V, entrada 0–10 V, salida PWM</text>
+    <text x="10" y="52" class="pin">en corriente regulada con Imín/Imáx y dither ajustables</text>
+    <text x="10" y="74" class="pin">Industrial: EWM-A-PV, Hansa-Flex HK PAM 19,</text>
+    <text x="10" y="90" class="pin">Danfoss EHH-AMP-702 · Económica: tarjeta genérica</text>
+    <text x="10" y="106" class="pin">"proportional valve amplifier 0-10V 24V 2A"</text>
+    <text x="10" y="130" class="pin" font-weight="bold">Ajustes iniciales:</text>
+    <text x="10" y="146" class="pin">Imín = 200 mA · Imáx = 650 mA · dither ≈ 100–150 Hz</text>
+    <text x="10" y="162" class="pin">rampa 0,5–1 s · entrada 0–10 V</text>
+    <text x="10" y="186" class="pin">Bornes: +24 V · GND · IN 0–10 V (desde M3) ·</text>
+    <text x="10" y="202" class="pin">SOL+ / SOL− (a la válvula vía relé M5 y medidor M4)</text>
+    <text x="10" y="226" class="warn">Comprobar que admite Imáx ≥ 0,7 A y bobina de 17,5 Ω</text>
+    <text x="10" y="246" class="pin">Incluye diodo de libre circulación y regulación en</text>
+    <text x="10" y="262" class="pin">lazo cerrado: no hace falta MOSFET ni shunt propios.</text>
+  </g>
+  <!-- DAC -->
+  <g transform="translate(700,240)">
+    <rect x="0" y="0" width="260" height="110" class="mod" rx="6"/>
+    <text x="10" y="18" class="h">M3 · Consigna 0–10 V</text>
+    <text x="10" y="38" class="pin">DAC I²C DFRobot GP8403 (2 canales, 0–10 V,</text>
+    <text x="10" y="54" class="pin">12 bits) alimentado a 5 V (genera los 10 V)</text>
+    <text x="10" y="74" class="pin">Alternativa: módulo "PWM → 0–10 V" (comprobar</text>
+    <text x="10" y="90" class="pin">que acepta PWM de 3,3 V) alimentado a 24 V</text>
+    <text x="10" y="104" class="pin">I²C 0x58 · OUT0 → IN de M2</text>
+  </g>
+  <path d="M700 300 L640 300" class="sig"/>
+  <text x="648" y="294" class="pin">0–10 V</text>
+  <!-- INA226 -->
+  <g transform="translate(700,370)">
+    <rect x="0" y="0" width="260" height="90" class="mod" rx="6"/>
+    <text x="10" y="18" class="h">M4 · Medidor de corriente INA226</text>
+    <text x="10" y="38" class="pin">Módulo con shunt de 0,1 Ω integrado (hasta 0,8 A)</text>
+    <text x="10" y="54" class="pin">en serie con SOL− · I²C 0x40 · VCC 3,3 V</text>
+    <text x="10" y="74" class="pin">Solo supervisión: el ESP32 verifica que la corriente</text>
+    <text x="10" y="86" class="pin">real coincide con la consigna.</text>
+  </g>
+  <!-- Relay -->
+  <g transform="translate(700,480)">
+    <rect x="0" y="0" width="260" height="120" class="mod" rx="6"/>
+    <text x="10" y="18" class="h">M5 · Módulo relé 1 canal (NO/NC)</text>
+    <text x="10" y="38" class="pin">Relé SRD-05VDC 10 A, optoacoplado, disparo a nivel</text>
+    <text x="10" y="54" class="pin">ALTO (seguro al arrancar), compatible 3,3 V</text>
+    <text x="10" y="74" class="pin">COM ← retorno válvula (terminal 6)</text>
+    <text x="10" y="90" class="pin">NC → Resistor Box (fábrica) · NO → SOL− del M2/M4</text>
+    <text x="10" y="110" class="pin">IN ← GPIO26 · VCC 5 V · GND</text>
+  </g>
+  <!-- Valve power path -->
+  <path d="M270 350 L310 350 L310 560 L700 560" class="pwr" marker-end="url(#arrP)"/>
+  <text x="320" y="556" class="pin">retorno válvula (−), terminal 6 → COM</text>
+  <path d="M700 540 L295 540 L295 468 L270 468" class="pwr"/>
+  <text x="470" y="535" class="pin">NC → Resistor Box</text>
+  <path d="M960 575 L985 575 L985 430 L960 430" class="pwr"/>
+  <text x="988" y="500" class="pin" font-size="10.5">NO→SOL−</text>
+  <path d="M700 430 L660 430 L660 470 L640 470" class="pwr"/>
+  <text x="645" y="462" class="pin" font-size="10.5">SOL−</text>
+  <!-- CAN -->
+  <g transform="translate(340,560)">
+    <rect x="0" y="0" width="300" height="110" class="mod" rx="6"/>
+    <text x="10" y="18" class="h">M6 · Módulo transceptor CAN</text>
+    <text x="10" y="38" class="pin">Waveshare SN65HVD230 CAN Board (3,3 V)</text>
+    <text x="10" y="54" class="pin">o módulo TJA1051T/3</text>
+    <text x="10" y="74" class="warn">Retirar la resistencia de 120 Ω del módulo</text>
+    <text x="10" y="94" class="pin">CANH ← B1 · CANL ← B2 · TX ← GPIO5 · RX → GPIO4</text>
+  </g>
+  <line x1="270" y1="598" x2="340" y2="598" class="canh"/>
+  <line x1="270" y1="614" x2="340" y2="614" class="canl"/>
+  <!-- Opto inputs -->
+  <g transform="translate(340,710)">
+    <rect x="0" y="0" width="300" height="100" class="mod" rx="6"/>
+    <text x="10" y="18" class="h">M7 · Módulo optoacoplador 24 V → 3,3 V (2–4 canales)</text>
+    <text x="10" y="38" class="pin">Entradas aisladas tipo PC817 / EL817, 3–24 V</text>
+    <text x="10" y="54" class="pin">IN1 ← línea B4 (emergencia alta) → OUT1 → GPIO35</text>
+    <text x="10" y="70" class="pin">IN2 ← terminal 2 selector (Manual) → OUT2 → GPIO39</text>
+    <text x="10" y="90" class="pin">VCC lado ESP32 = 3,3 V</text>
+  </g>
+  <line x1="270" y1="748" x2="340" y2="748" class="sig"/>
+  <line x1="270" y1="764" x2="340" y2="764" class="sig"/>
+
+  <!-- ===== ESP32 derecha ===== -->
+  <g transform="translate(1080,90)">
+    <rect x="0" y="0" width="290" height="420" class="box" rx="8" stroke-width="2.2"/>
+    <text x="10" y="22" class="h">M8 · ESP32 DevKit V1 sobre placa de</text>
+    <text x="10" y="40" class="h">expansión con bornes de tornillo</text>
+    <g class="pin">
+      <text x="10" y="72">VIN 5 V ← M1 · GND ← M1 (−Vout) y masa máquina</text>
+      <text x="10" y="92">3V3 → M4, M6, M7, encoder, OLED</text>
+      <text x="10" y="112">5 V → M3 (GP8403), M5 (relé)</text>
+      <text x="10" y="142">GPIO21 SDA / GPIO22 SCL → M3, M4, OLED</text>
+      <text x="10" y="172">GPIO26 → M5 relé (bajo al arrancar)</text>
+      <text x="10" y="202">GPIO5 → M6 TX · GPIO4 ← M6 RX</text>
+      <text x="10" y="232">GPIO35 ← M7 OUT1 · GPIO39 ← M7 OUT2</text>
+      <text x="10" y="262">GPIO34 ← dial original (divisor 10k/10k)</text>
+      <text x="10" y="292">GPIO32 / 33 / 27 ← encoder A / B / SW</text>
+      <text x="10" y="322">GPIO2 LED estado</text>
+    </g>
+    <text x="10" y="360" class="note">Placa de expansión "ESP32 DevKit screw terminal</text>
+    <text x="10" y="376" class="note">breakout": todos los pines en bornes, sin soldar.</text>
+    <text x="10" y="404" class="note">Software: consigna mA → voltios (0–10 V) para M2,</text>
+    <text x="10" y="420" class="note" font-size="11">tabla de modos, anti-calado con rpm de CAN, watchdog.</text>
+  </g>
+  <path d="M640 145 L1000 145 L1000 160 L1080 160" class="w5"/>
+  <text x="820" y="140" class="pin">+5 V</text>
+  <path d="M960 290 L1050 290 L1050 230 L1080 230" class="i2c"/>
+  <path d="M960 410 L1050 410 L1050 230" class="i2c"/>
+  <text x="1052" y="330" class="pin">I²C</text>
+  <path d="M1080 262 L1070 262 L1070 590 L960 590" class="sig"/>
+  <text x="1010" y="604" class="pin">GPIO26</text>
+  <path d="M640 640 L1060 640 L1060 292 L1080 292" class="sig"/>
+  <text x="700" y="634" class="pin">TX/RX CAN</text>
+  <path d="M640 770 L1040 770 L1040 322 L1080 322" class="sig"/>
+  <text x="700" y="764" class="pin">OUT1 / OUT2 (3,3 V)</text>
+
+  <!-- UI -->
+  <g transform="translate(1080,540)">
+    <rect x="0" y="0" width="290" height="130" class="mod" rx="6"/>
+    <text x="10" y="18" class="h">M9 · Interfaz</text>
+    <text x="10" y="38" class="pin">Encoder KY-040 (módulo) → GPIO32/33/27</text>
+    <text x="10" y="56" class="pin">OLED 0,96" SSD1306 I²C (0x3C) → SDA/SCL</text>
+    <text x="10" y="80" class="pin">Opcional: botones de modo P/H/G/F/I (módulo</text>
+    <text x="10" y="96" class="pin">de 4–5 pulsadores) o el dial original de la cabina</text>
+    <text x="10" y="120" class="pin">Alimentación 3,3 V</text>
+  </g>
+
+  <!-- Notas -->
+  <g transform="translate(1080,700)">
+    <rect x="0" y="0" width="490" height="260" class="box" rx="6"/>
+    <text x="10" y="20" class="h">Por qué así y qué vigilar</text>
+    <g class="note">
+      <text x="10" y="44">• La regulación de corriente, el dither, la rampa y el diodo de libre circulación</text>
+      <text x="10" y="60">  están dentro del amplificador M2: el ESP32 solo le da 0–10 V.</text>
+      <text x="10" y="84">• Relación consigna → corriente: Imín + (V/10 V)·(Imáx − Imín). Con Imín 200 y</text>
+      <text x="10" y="100">  Imáx 650 mA: 215 mA ≈ 0,3 V · 340 mA ≈ 3,1 V · 555 mA ≈ 7,9 V. Se calibra con M4.</text>
+      <text x="10" y="124">• Seguridad: M5 sin excitar = Resistor Box de fábrica (340 mA). El ESP32 solo lo</text>
+      <text x="10" y="140">  excita cuando M4 confirma corriente coherente; watchdog 500 ms → relé suelto.</text>
+      <text x="10" y="164">• 0 mA = bomba al máximo: Imín de M2 nunca por debajo de 200 mA.</text>
+      <text x="10" y="188">• Masa única: −Vout de M1, GND del ESP32, GND de M2 y masa de la máquina juntos</text>
+      <text x="10" y="204">  (la salida aislada de M1 se referencia al chasis en un solo punto).</text>
+      <text x="10" y="228">• CAN primero en SOLO ESCUCHA. TSC1 solo con V-ECU desconectada y selector en Auto.</text>
+      <text x="10" y="248">• Todo dentro de una caja IP65 con prensaestopas; cableado con bornes y faston.</text>
+    </g>
+  </g>
+  <text x="340" y="850" class="note">Esquema alternativo con circuito discreto (MOSFET + shunt + relé con transistor): esquema_conexion_ESP32.svg</text>
+  <text x="340" y="868" class="note">Lista de compra de esta versión: LISTA_COMPRA.md (sección "Versión modular")</text>
+</svg>
