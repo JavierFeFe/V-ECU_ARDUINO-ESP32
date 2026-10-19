@@ -1,0 +1,219 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="980" viewBox="0 0 1500 980" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <defs>
+    <style>
+      .h{font-weight:bold;font-size:15px;fill:#111}
+      .pin{font-size:11.5px;fill:#333}
+      .num{font-size:12px;font-weight:bold;fill:#111;text-anchor:middle}
+      .note{font-size:11.5px;fill:#444}
+      .warn{font-size:12px;fill:#b00020;font-weight:bold}
+      .box{fill:#fff;stroke:#333;stroke-width:1.6}
+      .canh{stroke:#e5c100;stroke-width:2.4;fill:none}
+      .canl{stroke:#2ca02c;stroke-width:2.4;fill:none}
+      .gnd{stroke:#222;stroke-width:2.2;fill:none}
+      .w24{stroke:#d62728;stroke-width:2.2;fill:none}
+      .sig{stroke:#1f77b4;stroke-width:1.8;fill:none}
+    </style>
+  </defs>
+  <rect width="1500" height="980" fill="#fff"/>
+  <text x="20" y="30" class="h" font-size="20">E-ECU Volvo 03161983 (D6D) — Conector B (rojo, lado máquina): pinout y conexión al ESP32</text>
+  <text x="20" y="50" class="note">Funciones según el circuito OEM "EECU Electric Circuit EC160B–290B" (boletín Volvo UPDATE EC160B~460B) y la tabla EB del manual Volvo Trucks Vectro II (PV776-144528), misma familia de hardware.</text>
+  <text x="20" y="66" class="note">Vista del conector tal como la dibuja el manual Volvo (W3000945): tres filas de 12, pestaña arriba, pin 1 arriba a la izquierda. Confirmar con los números moldeados en el conector real antes de conectar.</text>
+
+  <!-- ===== Conector ===== -->
+  <g transform="translate(40,100)">
+    <!-- pestaña -->
+    <rect x="245" y="0" width="150" height="22" rx="6" class="box"/>
+    <text x="320" y="15" class="pin" text-anchor="middle">pestaña / cierre</text>
+    <rect x="0" y="22" width="640" height="190" rx="18" class="box" stroke-width="2.4"/>
+    <rect x="12" y="34" width="616" height="166" rx="12" fill="#f7f7f7" stroke="#999"/>
+    <!-- filas -->
+    <!-- row 1: pins 1..12 ; row 2: 13..24 ; row 3: 25..36 -->
+    <!-- category fills -->
+    <!-- CAN -->
+    <circle cx="50" cy="70" r="18" fill="#ffe680" stroke="#333" stroke-width="1.5"/><text x="50" y="74" class="num">1</text>
+    <circle cx="100" cy="70" r="18" fill="#b7e4b7" stroke="#333" stroke-width="1.5"/><text x="100" y="74" class="num">2</text>
+    <circle cx="150" cy="70" r="18" fill="#dcdcdc" stroke="#333" stroke-width="1.5"/><text x="150" y="74" class="num">3</text>
+    <circle cx="200" cy="70" r="18" fill="#9ecae1" stroke="#333" stroke-width="1.5"/><text x="200" y="74" class="num">4</text>
+    <circle cx="250" cy="70" r="18" fill="#dcdcdc" stroke="#333" stroke-width="1.5"/><text x="250" y="74" class="num">5</text>
+    <circle cx="300" cy="70" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="300" y="74" class="num" fill="#999">6</text>
+    <circle cx="350" cy="70" r="18" fill="#dcdcdc" stroke="#333" stroke-width="1.5"/><text x="350" y="74" class="num">7</text>
+    <circle cx="400" cy="70" r="18" fill="#dcdcdc" stroke="#333" stroke-width="1.5"/><text x="400" y="74" class="num">8</text>
+    <circle cx="450" cy="70" r="18" fill="#333" stroke="#333" stroke-width="1.5"/><text x="450" y="74" class="num" fill="#fff">9</text>
+    <circle cx="500" cy="70" r="18" fill="#333" stroke="#333" stroke-width="1.5"/><text x="500" y="74" class="num" fill="#fff">10</text>
+    <circle cx="550" cy="70" r="18" fill="#f4a3a3" stroke="#333" stroke-width="1.5"/><text x="550" y="74" class="num">11</text>
+    <circle cx="600" cy="70" r="18" fill="#f4a3a3" stroke="#333" stroke-width="1.5"/><text x="600" y="74" class="num">12</text>
+    <!-- row 2 -->
+    <circle cx="50" cy="118" r="18" fill="#dcdcdc" stroke="#333" stroke-width="1.5"/><text x="50" y="122" class="num">13</text>
+    <circle cx="100" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="100" y="122" class="num" fill="#999">14</text>
+    <circle cx="150" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="150" y="122" class="num" fill="#999">15</text>
+    <circle cx="200" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="200" y="122" class="num" fill="#999">16</text>
+    <circle cx="250" cy="118" r="18" fill="#dcdcdc" stroke="#333" stroke-width="1.5"/><text x="250" y="122" class="num">17</text>
+    <circle cx="300" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="300" y="122" class="num" fill="#999">18</text>
+    <circle cx="350" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="350" y="122" class="num" fill="#999">19</text>
+    <circle cx="400" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="400" y="122" class="num" fill="#999">20</text>
+    <circle cx="450" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="450" y="122" class="num" fill="#999">21</text>
+    <circle cx="500" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="500" y="122" class="num" fill="#999">22</text>
+    <circle cx="550" cy="118" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="550" y="122" class="num" fill="#999">23</text>
+    <circle cx="600" cy="118" r="18" fill="#e8d5f5" stroke="#333" stroke-width="1.5"/><text x="600" y="122" class="num">24</text>
+    <!-- row 3 -->
+    <circle cx="50" cy="166" r="18" fill="#cfd8dc" stroke="#333" stroke-width="1.5"/><text x="50" y="170" class="num">25</text>
+    <circle cx="100" cy="166" r="18" fill="#ffd8b0" stroke="#333" stroke-width="1.5"/><text x="100" y="170" class="num">26</text>
+    <circle cx="150" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="150" y="170" class="num" fill="#999">27</text>
+    <circle cx="200" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="200" y="170" class="num" fill="#999">28</text>
+    <circle cx="250" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="250" y="170" class="num" fill="#999">29</text>
+    <circle cx="300" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="300" y="170" class="num" fill="#999">30</text>
+    <circle cx="350" cy="166" r="18" fill="#dcdcdc" stroke="#333" stroke-width="1.5"/><text x="350" y="170" class="num">31</text>
+    <circle cx="400" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="400" y="170" class="num" fill="#999">32</text>
+    <circle cx="450" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="450" y="170" class="num" fill="#999">33</text>
+    <circle cx="500" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="500" y="170" class="num" fill="#999">34</text>
+    <circle cx="550" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="550" y="170" class="num" fill="#999">35</text>
+    <circle cx="600" cy="166" r="18" fill="#fff" stroke="#999" stroke-width="1.2"/><text x="600" y="170" class="num" fill="#999">36</text>
+    <text x="0" y="235" class="note">Conector A (negro, lado motor) = sensores del motor e inyectores: no se toca.</text>
+  </g>
+
+  <!-- ===== Leyenda ===== -->
+  <g transform="translate(720,100)">
+    <rect x="0" y="0" width="330" height="236" rx="6" class="box"/>
+    <text x="10" y="18" class="h">Leyenda</text>
+    <circle cx="22" cy="40" r="9" fill="#ffe680" stroke="#333"/><text x="38" y="44" class="pin">J1939 CAN H</text>
+    <circle cx="22" cy="62" r="9" fill="#b7e4b7" stroke="#333"/><text x="38" y="66" class="pin">J1939 CAN L</text>
+    <circle cx="22" cy="84" r="9" fill="#333" stroke="#333"/><text x="38" y="88" class="pin">Masa (−)</text>
+    <circle cx="22" cy="106" r="9" fill="#f4a3a3" stroke="#333"/><text x="38" y="110" class="pin">+24 V (tras relé R3 "EMS power", F15 20 A)</text>
+    <circle cx="22" cy="128" r="9" fill="#9ecae1" stroke="#333"/><text x="38" y="132" class="pin">Entrada discreta (interruptor de emergencia)</text>
+    <circle cx="22" cy="150" r="9" fill="#cfd8dc" stroke="#333"/><text x="38" y="154" class="pin">J1708/J1587 A (+)</text>
+    <circle cx="22" cy="172" r="9" fill="#ffd8b0" stroke="#333"/><text x="38" y="176" class="pin">J1708/J1587 B (−)</text>
+    <circle cx="22" cy="194" r="9" fill="#dcdcdc" stroke="#333"/><text x="38" y="198" class="pin">Sensores / precalentamiento (no tocar)</text>
+    <circle cx="22" cy="216" r="9" fill="#e8d5f5" stroke="#333"/><text x="38" y="220" class="pin">Programación de fábrica (EOL)</text>
+    <circle cx="200" cy="40" r="9" fill="#fff" stroke="#999"/><text x="216" y="44" class="pin">Sin uso</text>
+  </g>
+
+  <!-- ===== Tabla de pines ===== -->
+  <g transform="translate(1070,100)">
+    <rect x="0" y="0" width="410" height="236" rx="6" class="box"/>
+    <text x="10" y="18" class="h">Pines usados en la excavadora</text>
+    <g class="pin">
+      <text x="10" y="40"><tspan font-weight="bold">B1</tspan>  J1939 CAN H (cable Y)   <tspan font-weight="bold">B2</tspan>  J1939 CAN L (GN)</text>
+      <text x="10" y="58"><tspan font-weight="bold">B4</tspan>  Emergency speed control ← F24 vía interruptor 26</text>
+      <text x="10" y="76"><tspan font-weight="bold">B9, B10</tspan>  masa    <tspan font-weight="bold">B11, B12</tspan>  +24 V</text>
+      <text x="10" y="94"><tspan font-weight="bold">B25</tspan>  J1708 A (GR)   <tspan font-weight="bold">B26</tspan>  J1708 B (OR)</text>
+      <text x="10" y="112"><tspan font-weight="bold">B3, B13</tspan>  temperatura de admisión</text>
+      <text x="10" y="130"><tspan font-weight="bold">B17, B8</tspan>  presión de admisión (B8 común −)</text>
+      <text x="10" y="148"><tspan font-weight="bold">B7</tspan>  nivel de refrigerante   <tspan font-weight="bold">B5</tspan>  bobina precalentamiento</text>
+      <text x="10" y="166"><tspan font-weight="bold">B31</tspan>  relé de precalentamiento (masa de bobina)</text>
+      <text x="10" y="184"><tspan font-weight="bold">B24</tspan>  programación de fábrica (EOL) — no usar</text>
+      <text x="10" y="202">Resto: sin uso (en camión: ventilador, EPG, filtro de aire…)</text>
+    </g>
+  </g>
+
+  <!-- ===== Conexión al ESP32 ===== -->
+  <text x="20" y="380" class="h" font-size="17">Conexión al ESP32 — solo se tocan 4 pines (+1 opcional). Nunca cortar el mazo: usar un derivador en "Y" o un pigtail.</text>
+
+  <!-- E-ECU side stubs -->
+  <g transform="translate(40,410)">
+    <rect x="0" y="0" width="230" height="330" rx="8" class="box"/>
+    <text x="10" y="22" class="h">Conector B (mazo)</text>
+    <g class="pin" text-anchor="end">
+      <text x="220" y="60">B1  CAN H</text>
+      <text x="220" y="100">B2  CAN L</text>
+      <text x="220" y="150">B9 / B10  masa</text>
+      <text x="220" y="200">B4  emergencia (0 / 24 V)</text>
+      <text x="220" y="250">B11 / B12  +24 V</text>
+      <text x="220" y="300">B25 / B26  J1708</text>
+    </g>
+    <circle cx="230" cy="56" r="4" fill="#e5c100"/><circle cx="230" cy="96" r="4" fill="#2ca02c"/><circle cx="230" cy="146" r="4" fill="#222"/><circle cx="230" cy="196" r="4" fill="#1f77b4"/><circle cx="230" cy="246" r="4" fill="#d62728"/><circle cx="230" cy="296" r="4" fill="#999"/>
+  </g>
+
+  <!-- Transceiver -->
+  <g transform="translate(470,420)">
+    <rect x="0" y="0" width="230" height="110" rx="6" class="box"/>
+    <text x="10" y="20" class="h">SN65HVD230 (3,3 V)</text>
+    <text x="10" y="42" class="pin">CANH ← B1      CANL ← B2</text>
+    <text x="10" y="60" class="pin">D (TXD) ← GPIO5   R (RXD) → GPIO4</text>
+    <text x="10" y="78" class="pin">VCC 3,3 V · GND · RS → GND</text>
+    <text x="10" y="98" class="warn">Sin terminación de 120 Ω</text>
+  </g>
+  <path d="M270 466 L470 466" class="canh"/>
+  <path d="M270 506 L470 506" class="canl"/>
+  <text x="330" y="460" class="pin">par trenzado, &lt; 1 m</text>
+
+  <!-- ESP32 -->
+  <g transform="translate(900,400)">
+    <rect x="0" y="0" width="230" height="340" rx="8" class="box"/>
+    <text x="10" y="22" class="h">ESP32 DevKit V1</text>
+    <g class="pin">
+      <text x="10" y="60">GPIO5  CAN TX</text>
+      <text x="10" y="84">GPIO4  CAN RX</text>
+      <text x="10" y="130">GND</text>
+      <text x="10" y="180">GPIO35  ADC "Manual/alta"</text>
+      <text x="10" y="230">VIN 5 V ← DC-DC</text>
+      <text x="10" y="300">3V3 → transceptor, INA226, OLED</text>
+    </g>
+    <circle cx="0" cy="56" r="4" fill="#1f77b4"/><circle cx="0" cy="80" r="4" fill="#1f77b4"/><circle cx="0" cy="126" r="4" fill="#222"/><circle cx="0" cy="176" r="4" fill="#1f77b4"/><circle cx="0" cy="226" r="4" fill="#ff7f0e"/>
+  </g>
+  <path d="M700 480 L800 480 L800 456 L900 456" class="sig"/>
+  <path d="M700 498 L810 498 L810 480 L900 480" class="sig"/>
+  <text x="815" y="450" class="pin">TX</text><text x="815" y="494" class="pin">RX</text>
+
+  <!-- GND -->
+  <path d="M270 556 L380 556 L380 600 L860 600 L860 526 L900 526" class="gnd"/>
+  <text x="400" y="594" class="pin">masa común: B9/B10 (o chasis junto a la E-ECU) → GND del ESP32 y del transceptor</text>
+
+  <!-- B4 divider -->
+  <g transform="translate(470,620)">
+    <rect x="0" y="0" width="350" height="80" rx="6" class="box"/>
+    <text x="10" y="20" class="h" font-size="13">Lectura opcional de B4 (solo observar)</text>
+    <text x="10" y="40" class="pin">B4 → R 100 kΩ → nodo → R 10 kΩ → GND</text>
+    <text x="10" y="56" class="pin">nodo → GPIO35 ; Zener 3,3 V nodo–GND ; 100 nF</text>
+    <text x="10" y="72" class="pin">24 V → ≈2,2 V ; 0 V → 0 V. Impedancia alta: no altera B4.</text>
+  </g>
+  <path d="M270 606 L380 606 L380 660 L470 660" class="sig"/>
+  <path d="M820 660 L870 660 L870 576 L900 576" class="sig"/>
+
+  <!-- 24V note -->
+  <g transform="translate(470,720)">
+    <rect x="0" y="0" width="350" height="80" rx="6" class="box"/>
+    <text x="10" y="20" class="h" font-size="13">+24 V: NO tomar de B11/B12</text>
+    <text x="10" y="40" class="pin">Solo están vivos cuando el relé R3 alimenta la E-ECU.</text>
+    <text x="10" y="56" class="pin">Alimentar el ESP32 desde JB7/JB8 del mazo V-ECU o desde</text>
+    <text x="10" y="72" class="pin">una salida de la caja de fusibles (3 A propio). Ver esquema general.</text>
+  </g>
+  <path d="M270 656 L300 656 L300 760 L470 760" class="w24" stroke-dasharray="6 4"/>
+
+  <!-- J1708 note -->
+  <g transform="translate(470,820)">
+    <rect x="0" y="0" width="350" height="60" rx="6" class="box"/>
+    <text x="10" y="20" class="h" font-size="13">J1708 (B25/B26): no necesario</text>
+    <text x="10" y="40" class="pin">Solo diagnóstico/VCADS. Si se quisiera leer: transceptor RS-485</text>
+    <text x="10" y="56" class="pin">(MAX3485, 3,3 V) a 9600 baud. Fuera del alcance de la Fase 1–3.</text>
+  </g>
+  <path d="M270 706 L320 706 L320 850 L470 850" stroke="#999" stroke-width="1.8" fill="none" stroke-dasharray="4 4"/>
+
+  <!-- Procedure -->
+  <g transform="translate(1160,400)">
+    <rect x="0" y="0" width="320" height="480" rx="8" class="box"/>
+    <text x="10" y="22" class="h">Procedimiento de conexión</text>
+    <g class="note">
+      <text x="10" y="50">1. Máquina apagada, batería desconectada.</text>
+      <text x="10" y="70">2. Localizar el conector B (rojo) y comprobar que</text>
+      <text x="10" y="86">   el pin 1 lleva cable amarillo y el 2 verde.</text>
+      <text x="10" y="110">3. Medir B1–B2 con todo desenchufado del ESP32:</text>
+      <text x="10" y="126">   ≈60 Ω bus completo · ≈120 Ω si la V-ECU</text>
+      <text x="10" y="142">   desenchufada ha partido el bus (ver ESQUEMA).</text>
+      <text x="10" y="166">4. Derivar CAN con un pigtail/Y en B1/B2; no</text>
+      <text x="10" y="182">   pelar el mazo. Longitud de la derivación &lt; 1 m.</text>
+      <text x="10" y="206">5. Masa del ESP32 a B9/B10 o al punto de masa</text>
+      <text x="10" y="222">   de la E-ECU en el chasis.</text>
+      <text x="10" y="246">6. Alimentar el ESP32 desde JB7/JB8 o fusible</text>
+      <text x="10" y="262">   propio, nunca desde B11/B12.</text>
+      <text x="10" y="286">7. Arrancar el ESP32 en LISTEN_ONLY a 250 kbit/s</text>
+      <text x="10" y="302">   y comprobar que llega EEC1 (ID 0x0CF00400).</text>
+      <text x="10" y="326">8. Solo entonces conectar B4 (opcional) y pasar</text>
+      <text x="10" y="342">   a las pruebas de la Fase 1 con la válvula.</text>
+      <text x="10" y="372" class="warn">Nunca inyectar tensión en B4, B24 ni en</text>
+      <text x="10" y="388" class="warn">los pines de sensores. Nunca transmitir CAN</text>
+      <text x="10" y="404" class="warn">con la V-ECU original conectada.</text>
+      <text x="10" y="434">Pinout del conector A y tablas completas:</text>
+      <text x="10" y="450">docs/PINOUT_E-ECU.md</text>
+    </g>
+  </g>
+</svg>

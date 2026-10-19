@@ -87,6 +87,12 @@ Dos pares J1939 entran en la V-ECU: uno desde la E-ECU (EB1/EB2) y otro hacia el
 
 El fusible **F24 (5 A)** alimenta el terminal 2 del interruptor de 3 posiciones. STOP cierra 1–2 y 4–5; ralentí 1–2 y 5–6; **alto cierra 2–3 y 5–6**: el terminal 3 lleva +24 V al pin **EB4** de la E-ECU. En los camiones Volvo con esta misma centralita EB4 es la entrada "idle validation" (< 4 V ralentí, > 8 V alto): es una entrada de **dos estados**, por eso no permite regulación continua. El contacto 4–5 de STOP actúa sobre los relés R3 "EMS power" y R4 "EMS data record" para parar el motor con la llave quitada.
 
+### 2d. Pinout del conector B de la E-ECU y conexión al ESP32
+
+![Pinout conector B E-ECU](docs/pinout_E-ECU_conector_B_ESP32.png)
+
+Diagrama propio a partir del circuito OEM y de la tabla EB del manual Vectro II. Del conector de 36 pines **solo se tocan cuatro**: **B1 (CAN H, amarillo)** y **B2 (CAN L, verde)** al transceptor SN65HVD230 sin terminación, **B9/B10 (masa)** como masa común, y opcionalmente **B4** (estado del interruptor de emergencia) a través de un divisor 100 k/10 k hacia GPIO35. **No** se alimenta el ESP32 desde B11/B12 (solo viven con el relé R3 activo) ni se conecta nada en B24 (programación de fábrica) o en los pines de sensores. Tablas completas de los conectores A y B, colores de cable y procedimiento de conexión en [`docs/PINOUT_E-ECU.md`](docs/PINOUT_E-ECU.md).
+
 ### 3. Circuito OEM de la E-ECU (motor D6D, EC160B–290B)
 
 ![Circuito E-ECU](docs/esquemas/d12_EC210B_EECU_electric_circuit_EC160B-290B-07.png)

@@ -4,6 +4,11 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido
+- `docs/PINOUT_E-ECU.md`: tablas completas de los conectores B (máquina) y A (motor) de la E-ECU 03161983, con la función en la excavadora (circuito OEM EC160B–290B), la función de referencia en el camión D12 (Vectro II), colores de cable y la conexión pin a pin al ESP32 con el procedimiento de comprobación.
+- `docs/pinout_E-ECU_conector_B_ESP32.svg` / `.png`: diagrama del conector B de 36 pines con código de colores por función y el esquema de conexión al ESP32 (CAN, masa, lectura opcional de B4).
+- README: sección 2d con el diagrama del conector B y su explicación.
+
 ### Pendiente
 - Fase 0: mediciones en la máquina (bobina, Resistor Box, corriente real en emergencia, resistencia CAN H–L con la V-ECU desenchufada, tensión en B4).
 - Firmware Fase 1 (ESP32, PlatformIO): lazo PI de corriente, dither, rampas, relé de seguridad, watchdog, encoder + OLED.
