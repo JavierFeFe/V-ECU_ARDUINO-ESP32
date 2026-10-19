@@ -2,7 +2,7 @@
 
 Sustitución / emulación de la **V-ECU** (Vehicle ECU, MID 187) de una excavadora **Volvo EC210B** (2002, motor Volvo **D6D EAE2**) con un **ESP32** (o Arduino Nano) y un potenciómetro/encoder, para poder **regular la potencia** de la máquina cuando trabaja sin V-ECU en modo de emergencia (Manual).
 
-> **Estado:** fase de investigación y diseño terminada; cableado de la máquina confirmado con documentación OEM; esquema de conexión del ESP32 listo. Siguiente paso: mediciones en la máquina (Fase 0) y firmware de la Fase 1.
+> **Estado (2026-10-19):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Plan, hardware y pruebas en [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) y [`docs/esquema_rpm_ESP32.png`](docs/esquema_rpm_ESP32.png).
 
 ## El problema
 

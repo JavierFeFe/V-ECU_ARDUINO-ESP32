@@ -4,6 +4,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Cambiado (alcance)
+- **El proyecto se centra, por ahora, solo en la gestión de las rpm del motor**; la regulación hidráulica (válvula power shift) se aplaza. Nuevo documento `docs/CONTROL_RPM.md` (dos vías: TSC1 por CAN y relé sobre el pin B4; regla de seguridad con el selector en Manual; plan de captura y pruebas) y esquema `docs/esquema_rpm_ESP32.svg/.png` con solo módulos premontados. README actualizado.
+
 ### Añadido
 - `docs/PINOUT_E-ECU.md`: tablas completas de los conectores B (máquina) y A (motor) de la E-ECU 03161983, con la función en la excavadora (circuito OEM EC160B–290B), la función de referencia en el camión D12 (Vectro II), colores de cable y la conexión pin a pin al ESP32 con el procedimiento de comprobación.
 - `docs/pinout_E-ECU_conector_B_ESP32.svg` / `.png`: diagrama del conector B de 36 pines con código de colores por función y el esquema de conexión al ESP32 (CAN, masa, lectura opcional de B4).
