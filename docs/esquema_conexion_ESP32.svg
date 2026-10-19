@@ -1,0 +1,310 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1250" viewBox="0 0 1600 1250" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <defs>
+    <style>
+      .box{fill:#fff;stroke:#333;stroke-width:1.6}
+      .mach{fill:#f3f3f3;stroke:#555;stroke-width:1.4;stroke-dasharray:6 3}
+      .h{font-weight:bold;font-size:14px;fill:#111}
+      .pin{font-size:11.5px;fill:#333}
+      .w24{stroke:#d62728;stroke-width:2.4;fill:none}
+      .w5{stroke:#ff7f0e;stroke-width:2;fill:none}
+      .gnd{stroke:#222;stroke-width:2;fill:none}
+      .canh{stroke:#e5c100;stroke-width:2.2;fill:none}
+      .canl{stroke:#2ca02c;stroke-width:2.2;fill:none}
+      .sig{stroke:#1f77b4;stroke-width:1.8;fill:none}
+      .pwr{stroke:#8c564b;stroke-width:2.4;fill:none}
+      .note{font-size:11.5px;fill:#444}
+      .warn{font-size:12px;fill:#b00020;font-weight:bold}
+      .net{font-size:11px;fill:#555;font-style:italic}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1250" fill="#ffffff"/>
+  <text x="20" y="30" class="h" font-size="20">Esquema de conexión — Regulador de bomba + bus J1939 para Volvo EC210B (ESP32 DevKit V1)</text>
+  <text x="20" y="50" class="note">Fase 1: driver de corriente de la válvula power shift con vuelta automática a la Resistor Box. Fase 2/3: bus J1939. Pines E-ECU (B1/B2/B4/B9–B12) y V-ECU (JA/JB) según boletín OEM Volvo "Update EC160B~460B" (circuito de control). Verificar siempre con polímetro.</text>
+  <text x="20" y="66" class="net">Los rótulos en cursiva (3V3, GND, SDA, SCL) son nombres de red: todos los puntos con el mismo nombre van unidos.</text>
+
+  <!-- Leyenda -->
+  <g transform="translate(1180,74)">
+    <rect x="0" y="0" width="400" height="92" class="box" rx="4"/>
+    <text x="10" y="17" class="h">Leyenda de colores</text>
+    <line x1="10" y1="32" x2="50" y2="32" class="w24"/><text x="56" y="36" class="pin">+24 V máquina</text>
+    <line x1="150" y1="32" x2="190" y2="32" class="w5"/><text x="196" y="36" class="pin">+5 V</text>
+    <line x1="250" y1="32" x2="290" y2="32" class="pwr"/><text x="296" y="36" class="pin">Potencia válvula</text>
+    <line x1="10" y1="52" x2="50" y2="52" class="gnd"/><text x="56" y="56" class="pin">Masa (común chasis)</text>
+    <line x1="150" y1="52" x2="190" y2="52" class="canh"/><text x="196" y="56" class="pin">CAN H</text>
+    <line x1="250" y1="52" x2="290" y2="52" class="canl"/><text x="296" y="56" class="pin">CAN L</text>
+    <line x1="10" y1="72" x2="50" y2="72" class="sig"/><text x="56" y="76" class="pin">Señal lógica 3,3 V</text>
+  </g>
+
+  <!-- MÁQUINA alimentación -->
+  <g transform="translate(20,90)">
+    <rect x="0" y="0" width="300" height="130" class="mach" rx="6"/>
+    <text x="10" y="18" class="h">MÁQUINA — Alimentación 24 V</text>
+    <text x="10" y="40" class="pin">Opción A: mazo V-ECU, conector JB</text>
+    <text x="10" y="56" class="pin">  JB7 / JB8 = +24 V (vía fusibles V-ECU)</text>
+    <text x="10" y="72" class="pin">  Masa: JA15 / JA63 (GND). ¡JB15/JB16 NO son masa!</text>
+    <text x="10" y="92" class="pin">Opción B: salida libre de la caja de fusibles</text>
+    <text x="10" y="108" class="pin">  (tras llave de contacto, 24 V)</text>
+    <circle cx="300" cy="50" r="4" fill="#d62728"/><text x="262" y="46" class="pin">+24V</text>
+    <circle cx="300" cy="115" r="4" fill="#222"/><text x="262" y="111" class="pin">GND</text>
+  </g>
+
+  <!-- Alimentación protegida -->
+  <g transform="translate(380,90)">
+    <rect x="0" y="0" width="420" height="130" class="box" rx="6"/>
+    <text x="10" y="18" class="h">ALIMENTACIÓN PROTEGIDA</text>
+    <rect x="15" y="40" width="50" height="18" class="box"/><text x="20" y="53" class="pin">F 3 A</text>
+    <rect x="80" y="36" width="90" height="26" class="box"/><text x="84" y="47" class="pin">Polaridad inv.</text><text x="84" y="58" class="pin">P-MOSFET / diodo</text>
+    <rect x="185" y="36" width="60" height="26" class="box"/><text x="190" y="47" class="pin">TVS</text><text x="190" y="58" class="pin">SMCJ33A</text>
+    <rect x="260" y="30" width="145" height="40" class="box"/><text x="265" y="45" class="pin">DC-DC 9–72 V → 5 V</text><text x="265" y="60" class="pin">Recom R-78HB5.0-0.5 / XL7015</text>
+    <line x1="0" y1="49" x2="15" y2="49" class="w24"/>
+    <line x1="65" y1="49" x2="80" y2="49" class="w24"/>
+    <line x1="170" y1="49" x2="185" y2="49" class="w24"/>
+    <line x1="245" y1="49" x2="260" y2="49" class="w24"/>
+    <line x1="405" y1="49" x2="420" y2="49" class="w5"/>
+    <text x="10" y="95" class="pin">Masa común con el chasis de la máquina</text>
+    <text x="10" y="112" class="pin">Cond. 100 µF/50 V a la entrada, 220 µF/10 V a la salida</text>
+    <text x="250" y="95" class="pin">Salida +5 V (≥1 A) → VIN del ESP32</text>
+    <line x1="0" y1="115" x2="420" y2="115" class="gnd"/>
+  </g>
+  <line x1="320" y1="140" x2="380" y2="139" class="w24"/>
+  <line x1="320" y1="205" x2="380" y2="205" class="gnd"/>
+
+  <!-- ESP32 -->
+  <g transform="translate(640,290)">
+    <rect x="0" y="0" width="270" height="400" class="box" rx="8"/>
+    <text x="10" y="20" class="h">ESP32 DevKit V1 (30 pines)</text>
+    <text x="10" y="36" class="note">CAN interno (TWAI) · WiFi para registro de datos</text>
+    <g class="pin">
+      <text x="10" y="70">VIN (5 V)</text>
+      <text x="10" y="100">GND</text>
+      <text x="10" y="130">3V3</text>
+      <text x="10" y="170">GPIO21  SDA</text>
+      <text x="10" y="195">GPIO22  SCL</text>
+      <text x="10" y="240">GPIO25  PWM válvula</text>
+      <text x="10" y="270">GPIO26  Relé seguridad</text>
+      <text x="10" y="320">GPIO2   LED estado</text>
+    </g>
+    <g class="pin" text-anchor="end">
+      <text x="260" y="70">GPIO5   CAN TX</text>
+      <text x="260" y="100">GPIO4   CAN RX</text>
+      <text x="260" y="170">GPIO32  Encoder A</text>
+      <text x="260" y="195">GPIO33  Encoder B</text>
+      <text x="260" y="220">GPIO27  Encoder SW</text>
+      <text x="260" y="320">GPIO34  ADC dial</text>
+      <text x="260" y="345">GPIO35  ADC Manual/alta</text>
+      <text x="260" y="370">GPIO39  ADC Auto/Manual</text>
+    </g>
+    <text x="10" y="385" class="note">No usar GPIO6–11 (flash). GPIO34/35/39 solo entrada.</text>
+    <circle cx="0" cy="66" r="3" fill="#ff7f0e"/><circle cx="0" cy="96" r="3" fill="#222"/><circle cx="0" cy="126" r="3" fill="#9467bd"/>
+    <circle cx="0" cy="166" r="3" fill="#1f77b4"/><circle cx="0" cy="191" r="3" fill="#1f77b4"/>
+    <circle cx="0" cy="236" r="3" fill="#1f77b4"/><circle cx="0" cy="266" r="3" fill="#1f77b4"/>
+    <circle cx="270" cy="66" r="3" fill="#1f77b4"/><circle cx="270" cy="96" r="3" fill="#1f77b4"/>
+    <circle cx="270" cy="166" r="3" fill="#1f77b4"/><circle cx="270" cy="191" r="3" fill="#1f77b4"/><circle cx="270" cy="216" r="3" fill="#1f77b4"/>
+    <circle cx="270" cy="316" r="3" fill="#1f77b4"/><circle cx="270" cy="341" r="3" fill="#1f77b4"/><circle cx="270" cy="366" r="3" fill="#1f77b4"/>
+  </g>
+  <!-- net labels at ESP32 left -->
+  <text x="596" y="420" class="net">3V3</text>
+  <text x="560" y="460" class="net">SDA</text>
+  <text x="560" y="485" class="net">SCL</text>
+  <line x1="640" y1="416" x2="615" y2="416" class="sig" stroke="#9467bd"/>
+  <line x1="640" y1="456" x2="590" y2="456" class="sig"/>
+  <line x1="640" y1="481" x2="590" y2="481" class="sig"/>
+  <!-- 5V and GND from PSU -->
+  <path d="M800 139 L830 139 L830 250 L610 250 L610 356 L640 356" class="w5"/>
+  <text x="836" y="135" class="pin">+5 V</text>
+  <path d="M580 205 L580 386 L640 386" class="gnd"/>
+  <text x="586" y="300" class="net">GND</text>
+
+  <!-- Transceptor CAN -->
+  <g transform="translate(1040,290)">
+    <rect x="0" y="0" width="230" height="150" class="box" rx="6"/>
+    <text x="10" y="20" class="h">Transceptor CAN 3,3 V</text>
+    <text x="10" y="36" class="note">SN65HVD230 (o TJA1051T/3)</text>
+    <g class="pin">
+      <text x="10" y="66">D (TXD) ← GPIO5</text>
+      <text x="10" y="96">R (RXD) → GPIO4</text>
+      <text x="10" y="118">VCC → <tspan font-style="italic">3V3</tspan>  ·  GND → <tspan font-style="italic">GND</tspan></text>
+      <text x="10" y="136">RS → GND (alta velocidad)</text>
+    </g>
+    <g class="pin" text-anchor="end">
+      <text x="222" y="66">CANH</text>
+      <text x="222" y="96">CANL</text>
+    </g>
+    <circle cx="230" cy="62" r="3" fill="#e5c100"/><circle cx="230" cy="92" r="3" fill="#2ca02c"/>
+  </g>
+  <line x1="910" y1="356" x2="1040" y2="356" class="sig"/>
+  <line x1="910" y1="386" x2="1040" y2="386" class="sig"/>
+  <text x="960" y="350" class="pin">TX</text><text x="960" y="400" class="pin">RX</text>
+  <g transform="translate(1320,290)">
+    <rect x="0" y="0" width="260" height="150" class="mach" rx="6"/>
+    <text x="10" y="20" class="h">MÁQUINA — Bus J1939 (250 kbit/s)</text>
+    <text x="10" y="42" class="pin">Punto de conexión (elegir uno):</text>
+    <text x="10" y="58" class="pin">• E-ECU conector B: B1 = CAN H, B2 = CAN L ✔</text>
+    <text x="10" y="74" class="pin">• Mazo V-ECU: JB14 = H, JB6 = L  y  JB13 = H, JB5 = L ✔</text>
+    <text x="10" y="90" class="pin">• Panel: 21C1 = H, 21C2 = L ✔</text>
+    <text x="10" y="112" class="warn">SIN resistencia de 120 Ω en el ESP32</text>
+    <text x="10" y="128" class="pin">(terminadores en E-ECU y panel). La V-ECU une los dos pares:</text>
+    <text x="10" y="142" class="pin">sin V-ECU, puentear JB13↔JB14 y JB5↔JB6 (medir 60 Ω).</text>
+  </g>
+  <line x1="1270" y1="352" x2="1320" y2="352" class="canh"/>
+  <line x1="1270" y1="382" x2="1320" y2="382" class="canl"/>
+
+  <!-- Encoder -->
+  <g transform="translate(1040,480)">
+    <rect x="0" y="0" width="230" height="130" class="box" rx="6"/>
+    <text x="10" y="20" class="h">Encoder rotativo KY-040</text>
+    <g class="pin">
+      <text x="10" y="46">CLK → GPIO32</text>
+      <text x="10" y="64">DT  → GPIO33</text>
+      <text x="10" y="82">SW  → GPIO27 (pull-up interno)</text>
+      <text x="10" y="100">+ → <tspan font-style="italic">3V3</tspan>  ·  GND → <tspan font-style="italic">GND</tspan></text>
+      <text x="10" y="118">100 nF en CLK/DT/SW a GND (antirrebote)</text>
+    </g>
+  </g>
+  <path d="M910 456 L1000 456 L1000 526 L1040 526" class="sig"/>
+  <path d="M910 481 L990 481 L990 544 L1040 544" class="sig"/>
+  <path d="M910 506 L980 506 L980 562 L1040 562" class="sig"/>
+
+  <!-- OLED -->
+  <g transform="translate(1040,640)">
+    <rect x="0" y="0" width="230" height="110" class="box" rx="6"/>
+    <text x="10" y="20" class="h">Pantalla OLED 0,96" SSD1306</text>
+    <g class="pin">
+      <text x="10" y="46">SDA → <tspan font-style="italic">SDA</tspan> (GPIO21) · SCL → <tspan font-style="italic">SCL</tspan> (GPIO22)</text>
+      <text x="10" y="64">VCC → <tspan font-style="italic">3V3</tspan> · GND → <tspan font-style="italic">GND</tspan> · dirección 0x3C</text>
+      <text x="10" y="82">Pull-ups 4,7 kΩ a 3V3 en SDA y SCL</text>
+      <text x="10" y="100">Muestra modo, mA consigna/medida y rpm (CAN)</text>
+    </g>
+  </g>
+
+  <!-- Entradas opcionales -->
+  <g transform="translate(1040,780)">
+    <rect x="0" y="0" width="540" height="150" class="box" rx="6"/>
+    <text x="10" y="20" class="h">ENTRADAS OPCIONALES (divisores a 3,3 V)</text>
+    <g class="pin">
+      <text x="10" y="44">Dial de régimen original (4 pines): 1 → +5 V · 3 → GND · 4 malla → GND</text>
+      <text x="10" y="60">   2 señal 0,5–4,5 V → R 10 kΩ / 10 kΩ → GPIO34   (0,25–2,25 V en el ADC)</text>
+      <text x="10" y="84">Estado "Manual/alta": línea del interruptor de emergencia hacia B4 de la E-ECU (24 V)</text>
+      <text x="10" y="100">   24 V → R 100 kΩ / 10 kΩ → GPIO35, Zener 3,3 V a GND  (≈2,2 V con 24 V)</text>
+      <text x="10" y="124">Posición del selector Auto/Manual (24 V): mismo divisor → GPIO39</text>
+      <text x="10" y="140">Nunca llevar 24 V ni 5 V directos a un GPIO del ESP32.</text>
+    </g>
+  </g>
+  <path d="M910 606 L950 606 L950 860 L1040 860" class="sig"/>
+  <path d="M910 631 L960 631 L960 880 L1040 880" class="sig"/>
+  <path d="M910 656 L970 656 L970 900 L1040 900" class="sig"/>
+  <text x="975" y="856" class="pin">34</text><text x="975" y="876" class="pin">35</text><text x="975" y="896" class="pin">39</text>
+
+  <!-- Notas -->
+  <g transform="translate(1040,950)">
+    <rect x="0" y="0" width="540" height="190" class="box" rx="6"/>
+    <text x="10" y="20" class="h">NOTAS DE MONTAJE Y SEGURIDAD</text>
+    <g class="note">
+      <text x="10" y="42">1. Masa única: GND del ESP32 al mismo punto de masa que la E-ECU (B9/B10) o JB15/16.</text>
+      <text x="10" y="60">2. CAN: primero en modo SOLO ESCUCHA. TSC1 solo con la V-ECU desconectada y selector en Auto.</text>
+      <text x="10" y="78">3. 0 mA en la válvula = bomba al máximo. K1 en reposo garantiza los 340 mA de fábrica.</text>
+      <text x="10" y="96">4. Watchdog 500 ms: si el lazo se detiene → PWM a 0 y K1 suelto.</text>
+      <text x="10" y="114">5. Caja IP65, prensaestopas; cable 1 mm² para la válvula, 0,5 mm² señales, CAN par trenzado.</text>
+      <text x="10" y="132">6. Antes de soldar en la máquina: desconectar V-ECU, E-ECU y panel (manual de servicio Volvo).</text>
+      <text x="10" y="150">7. Límites por software: 200–650 mA en la válvula; 800–2000 rpm en TSC1.</text>
+      <text x="10" y="168">8. Probar primero en banco con una resistencia de 18 Ω / 25 W en lugar de la válvula.</text>
+    </g>
+  </g>
+
+  <!-- DRIVER VÁLVULA -->
+  <g transform="translate(20,560)">
+    <rect x="0" y="0" width="520" height="620" class="box" rx="8"/>
+    <text x="10" y="20" class="h">DRIVER DE CORRIENTE — válvula power shift (Fase 1)</text>
+    <text x="10" y="36" class="note">Conmuta el lado de masa. Lazo PI de corriente en el ESP32 (PWM 1 kHz + dither 150 Hz).</text>
+
+    <!-- Válvula -->
+    <g transform="translate(20,60)">
+      <rect x="0" y="0" width="200" height="70" class="mach" rx="5"/>
+      <text x="8" y="16" class="h" font-size="12.5">MÁQUINA — Válvula proporcional</text>
+      <text x="8" y="32" class="pin">Kawasaki KDRDE5K, bobina ≈17,5 Ω</text>
+      <text x="8" y="48" class="pin">(+) = JA32 y term. 3 del selector (24 V en MANU)</text>
+      <text x="8" y="62" class="pin">(−) = term. 5: AUTO→JA5 (V-ECU) · MANU→6→Resistor Box</text>
+      <circle cx="200" cy="18" r="4" fill="#d62728"/>
+      <circle cx="200" cy="58" r="4" fill="#8c564b"/>
+    </g>
+    <text x="236" y="72" class="pin">+</text>
+    <text x="236" y="130" class="pin">−</text>
+    <!-- diodo -->
+    <line x1="220" y1="78" x2="270" y2="78" class="w24"/>
+    <line x1="220" y1="118" x2="270" y2="118" class="pwr"/>
+    <line x1="270" y1="78" x2="270" y2="84" class="w24"/>
+    <line x1="270" y1="112" x2="270" y2="118" class="pwr"/>
+    <polygon points="262,112 278,112 270,98" fill="#fff" stroke="#222" stroke-width="1.6"/>
+    <line x1="262" y1="98" x2="278" y2="98" stroke="#222" stroke-width="2"/>
+    <line x1="270" y1="84" x2="270" y2="98" stroke="#222" stroke-width="1.6"/>
+    <text x="286" y="92" class="pin">D1 libre circulación MBR5100 (100 V, 5 A)</text>
+    <text x="286" y="106" class="pin">cátodo (barra) al lado +24 V de la bobina</text>
+    <!-- retorno a relé -->
+    <path d="M270 118 L270 170 L120 170 L120 200" class="pwr"/>
+    <text x="130" y="165" class="pin">retorno válvula (−)</text>
+
+    <!-- Relé -->
+    <g transform="translate(40,200)">
+      <rect x="0" y="0" width="170" height="120" class="box" rx="5"/>
+      <text x="8" y="16" class="h" font-size="12.5">K1 Relé 24 V automoción</text>
+      <text x="8" y="30" class="pin">5 pines (30 / 87 / 87a / 85 / 86)</text>
+      <text x="8" y="50" class="pin">30  COM ← term. 6 del selector (retorno válvula)</text>
+      <text x="8" y="66" class="pin">87a NC  → Resistor Box</text>
+      <text x="8" y="82" class="pin">87  NO  → drenador Q1</text>
+      <text x="8" y="100" class="pin">86 bobina → +24 V · 85 → Q2</text>
+      <text x="8" y="114" class="pin">D2 1N4007 en paralelo con la bobina</text>
+    </g>
+    <!-- Resistor box -->
+    <g transform="translate(300,200)">
+      <rect x="0" y="0" width="170" height="50" class="mach" rx="5"/>
+      <text x="8" y="16" class="h" font-size="12">MÁQUINA — Resistor Box</text>
+      <text x="8" y="32" class="pin">≈60 Ω original (se conserva)</text>
+      <text x="8" y="46" class="pin">→ masa de la máquina</text>
+    </g>
+    <line x1="210" y1="225" x2="300" y2="225" class="pwr"/>
+    <!-- Q1 -->
+    <g transform="translate(300,300)">
+      <rect x="0" y="0" width="200" height="110" class="box" rx="5"/>
+      <text x="8" y="16" class="h" font-size="12.5">Q1 MOSFET nivel lógico</text>
+      <text x="8" y="30" class="pin">IRLZ44N / IRLB8721 (≥55 V)</text>
+      <text x="8" y="48" class="pin">Puerta ← GPIO25 vía R1 100 Ω</text>
+      <text x="8" y="62" class="pin">R2 10 kΩ puerta–masa</text>
+      <text x="8" y="78" class="pin">Drenador ← K1 pin 87</text>
+      <text x="8" y="94" class="pin">Fuente → shunt R3</text>
+      <text x="8" y="106" class="pin">Disipador pequeño (≈1 W)</text>
+    </g>
+    <path d="M210 290 L260 290 L260 355 L300 355" class="pwr"/>
+    <path d="M500 330 L540 330" class="sig"/>
+    <!-- Q2 -->
+    <g transform="translate(40,440)">
+      <rect x="0" y="0" width="200" height="70" class="box" rx="5"/>
+      <text x="8" y="16" class="h" font-size="12.5">Q2 driver del relé</text>
+      <text x="8" y="32" class="pin">BC337 / 2N2222 (o 2N7002)</text>
+      <text x="8" y="48" class="pin">Base ← GPIO26 vía R4 1 kΩ</text>
+      <text x="8" y="62" class="pin">Colector → K1 pin 85 · Emisor → GND</text>
+    </g>
+    <path d="M140 320 L140 440" class="sig"/>
+    <text x="146" y="385" class="pin">85</text>
+    <path d="M140 510 L140 590 L540 590" class="sig"/>
+    <!-- Shunt -->
+    <g transform="translate(300,440)">
+      <rect x="0" y="0" width="210" height="100" class="box" rx="5"/>
+      <text x="8" y="16" class="h" font-size="12.5">Medida de corriente</text>
+      <text x="8" y="32" class="pin">R3 shunt 0,1 Ω 2 W (0,6 A → 60 mV)</text>
+      <text x="8" y="48" class="pin">INA226 (I²C 0x40): IN+ ← fuente Q1</text>
+      <text x="8" y="62" class="pin">IN− ← GND · VCC → <tspan font-style="italic">3V3</tspan></text>
+      <text x="8" y="76" class="pin">SDA/SCL → <tspan font-style="italic">SDA</tspan>/<tspan font-style="italic">SCL</tspan></text>
+      <text x="8" y="92" class="pin">Alternativa: INA180A2 → GPIO36 (ADC)</text>
+    </g>
+    <path d="M385 410 L385 440" class="pwr"/>
+    <path d="M385 540 L385 570" class="gnd"/>
+    <text x="392" y="566" class="net">GND</text>
+    <text x="10" y="608" class="note">Sin alimentación o con fallo del ESP32 → K1 en reposo (87a) → la máquina queda como de fábrica: 340 mA.</text>
+  </g>
+  <!-- GPIO25 / GPIO26 to driver block edge -->
+  <path d="M640 526 L600 526 L600 890 L560 890" class="sig"/>
+  <text x="565" y="884" class="pin">GPIO25 → puerta Q1</text>
+  <path d="M640 556 L620 556 L620 1150 L560 1150" class="sig"/>
+  <text x="565" y="1144" class="pin">GPIO26 → base Q2</text>
+</svg>
