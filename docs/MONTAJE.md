@@ -58,7 +58,7 @@ PlatformIO: `board = esp32dev`, `upload_speed = 921600` (bajar a 115200 si falla
 | | + / GND | **3V3 / GND** | |
 | **Optoacoplador** (opcional) | OUT1 (estado de B4) / OUT2 (selector Auto/Manual) | **G35 / SVN (G39)** | entradas IN1 ← línea B4, IN2 ← terminal 2 del selector; VCC lado ESP32 = 3,3 V |
 | **Dial original** (opcional) | señal 0,5–4,5 V (JA39) | **G34** | divisor 10 k / 10 k |
-| **Relé de la placa** | — (interno) | **GPIO16** (probable, a confirmar) | ver §4 |
+| **Relé de la placa** | — (interno) | **GPIO16** (confirmado) | ver §4 |
 
 Pines que **no se usan**: G0, G2, G5, G12, G15 (pines de arranque), SD0–SD3, CLK, CMD (memoria flash), TX0/RX0 (programación).
 
@@ -77,7 +77,7 @@ Pines que **no se usan**: G0, G2, G5, G12, G15 (pines de arranque), SD0–SD3, C
 ## 5. Primeras pruebas (en la mesa, sin máquina)
 
 1. Alimentar la placa por el micro-USB o con 24 V en el borne. Conectar el programador y cargar un programa de prueba que:
-   - parpadee el relé por **GPIO16** (debe oírse el clic y medirse continuidad COM–NO); si no, probar otros GPIO hasta encontrar el del relé y anotarlo;
+   - parpadee el relé por **GPIO16** (debe oírse el clic y medirse continuidad COM–NO) — ✅ clic confirmado con `firmware/pruebas/rele`; falta medir COM–NO. El LED de la placa es el indicador del relé (sigue a GPIO16); no hay LED en GPIO2;
    - muestre en la OLED un texto y la posición del encoder.
 2. Con el módulo CAN conectado y el adaptador USB-CAN del PC unidos entre sí (con una resistencia de 120 Ω solo en el banco), comprobar que el ESP32 envía y recibe tramas a **250 kbit/s**.
 3. Ya en la máquina: conectar el CAN en **modo solo escucha** y verificar que llega EEC1 (`0x0CF00400`, rpm) con el motor en marcha. Seguir el plan de [`CONTROL_RPM.md`](CONTROL_RPM.md) §4.

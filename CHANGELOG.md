@@ -4,6 +4,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (pruebas de banco)
+- `firmware/pruebas/led` y `firmware/pruebas/rele`: proyectos PlatformIO de prueba. Programación por P4 con el programador USB-C (COM5) verificada: ESP32-D0WD-V3 rev 3.1, flash 4 MB. **Relé confirmado en GPIO16**; el LED de la placa es el indicador del relé (no hay LED en GPIO2).
+
 ### Añadido (hardware disponible)
 - `docs/HARDWARE_PLACA_ESP32_RELE.md`: evaluación de la placa ESP32-WROOM-32E con relé y entrada 24 V (LC Technology) que ya tiene el usuario: sirve como cerebro, convertidor y relé de la vía B; lista de comprobaciones (chip del convertidor, GPIO del relé, programación por P4) y qué módulos sobran de la lista de compra.
 - `docs/MONTAJE.md`: guía de montaje con el hardware real (preparación de la placa, programación con EN opcional explicado, conexión de módulos y a la máquina, primeras pruebas). `CONTROL_RPM.md` y `esquema_rpm_ESP32.svg/.png` actualizados a la placa ESP32_Relay X1 (CAN G17/G18, relé GPIO16 a confirmar, alimentación 24 V integrada).

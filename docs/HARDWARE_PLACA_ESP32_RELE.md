@@ -32,7 +32,7 @@ Cableado de la vía B con esta placa: **COM ← terminal 2 del interruptor de em
 |---|---|---|---|
 | 1 | Referencia exacta del chip del convertidor (SOIC-8 junto al borne de alimentación) | Leer la serigrafía con lupa | Si es **XL7005A** → entrada hasta 80 V, perfecto. Si fuera otro (p. ej. MP1584/LM2596) el máximo podría ser 28–40 V y haría falta protección |
 | 2 | Tensión de entrada admitida | Probar en banco con fuente de laboratorio a 24 V y luego 30 V; medir 5 V y 3,3 V | Confirmar que trabaja con los 27–28 V del alternador |
-| 3 | GPIO que gobierna el relé y la salida del LED | Seguir la pista del transistor J3Y hasta el módulo, o cargar un sketch que active pines uno a uno | En las placas LC de 1 relé suele ser **GPIO16**, pero hay variantes |
+| 3 | GPIO que gobierna el relé | ✅ **Confirmado: GPIO16** (sketch `firmware/pruebas/rele`: el relé hace clic al conmutar el pin). El LED de la placa es el **indicador del relé**: se enciende con él (mismo GPIO16). No hay LED en GPIO2 | — |
 | 4 | Lógica del relé | Medir con el multímetro COM–NO al poner el GPIO en alto | Para que "sin excitar" = contacto NC (interruptor original manda) |
 | 5 | Función del micro-USB y pines de P4 | Mirar el reverso de la placa (serigrafía) y medir continuidad con el módulo | Saber si se programa por USB o por USB-TTL |
 | 6 | GPIO libres en las filas laterales | Serigrafía del reverso | Reservar GPIO5/4 (CAN), 21/22 (I²C), 32/33/27 (encoder), 35/39 (opto). Evitar GPIO6–11 |
@@ -74,7 +74,7 @@ Otros: borne **VCC / GND** (alimentación de entrada), borne del relé **NC / CO
 
 | Función | GPIO | Pin de la placa | Notas |
 |---|---|---|---|
-| **Relé (vía B, línea B4)** | **GPIO16** (probable, a confirmar) | interno | Confirmar con un sketch de prueba; si no es el 16, buscar la pista desde el transistor del relé |
+| **Relé (vía B, línea B4)** | **GPIO16** (confirmado) | interno | Lógica (excitado con el pin en alto) pendiente de medir COM–NO, comprobación 4 |
 | CAN TX → módulo SN65HVD230 | **GPIO17** | tira superior | |
 | CAN RX ← módulo SN65HVD230 | **GPIO18** | tira superior | |
 | OLED SDA | **GPIO21** | tira superior | I²C |
