@@ -184,8 +184,8 @@ for k, y in enumerate(RK):
 
 # ================================================================ alimentación de la máquina
 a('<rect x="300" y="362" width="200" height="44" rx="8" fill="#ececec" stroke="#1f1f1f" stroke-width="1.5"/>')
-text(312, 381, "Masa de la máquina", size=13, weight="bold")
-text(312, 398, "chasis o JA15 / JA63", size=10.5, fill="#444")
+text(312, 380, "Masa: mismo punto que", size=12, weight="bold")
+text(312, 397, "la E-ECU (B9/B10 o perno)", size=10.5, fill="#444")
 wire([(500, 384), (627, 384)], C["gnd"])
 a('<rect x="300" y="430" width="200" height="50" rx="8" fill="#fde8e8" stroke="#d62828" stroke-width="1.5"/>')
 text(312, 450, "+24 V tras la llave", size=13, weight="bold", fill="#9b1c1c")
@@ -265,18 +265,18 @@ wire([(565, 728), (612, 728), (612, 755), (875, 755)], C["tx"])            # TX 
 wire([(565, 744), (594, 744), (594, 798), (875, 798)], C["rx"])            # RX → IO18
 
 # ================================================================ OLED (girada 90°: pines a la derecha)
-a('<rect x="330" y="878" width="230" height="110" rx="8" fill="#1d3557" stroke="#0d1b2a" stroke-width="2"/>')
-a('<rect x="346" y="890" width="150" height="86" rx="3" fill="#050a14" stroke="#5c6b80"/>')
-text(356, 906, "AUTO-RALENTI", size=10, fill="#7fdcff")
-text(356, 944, "1900", size=28, fill="#7fdcff", weight="bold")
-text(440, 944, "rpm", size=10, fill="#7fdcff")
-text(356, 968, "82C B4:ON CAN", size=10, fill="#7fdcff")
+a('<rect x="352" y="878" width="208" height="110" rx="8" fill="#1d3557" stroke="#0d1b2a" stroke-width="2"/>')
+a('<rect x="364" y="890" width="136" height="86" rx="3" fill="#050a14" stroke="#5c6b80"/>')
+text(372, 906, "AUTO-RALENTI", size=10, fill="#7fdcff")
+text(372, 944, "1900", size=28, fill="#7fdcff", weight="bold")
+text(456, 944, "rpm", size=10, fill="#7fdcff")
+text(372, 968, "82C B4:ON CAN", size=10, fill="#7fdcff")
 oled = [("GND", 895), ("VCC", 911), ("SCL", 927), ("SDA", 943)]
 for n, y in oled:
     col = {"GND": "#1f1f1f", "VCC": C["3v3"]}.get(n, "#d8b25a")
     pad(560, y, col)
     text(550, y + 4, n, size=9.5, fill="#ffffff", anchor="end")
-text(445, 1004, "OLED SSD1306 0,96\" I²C (0x3C)", size=13, anchor="middle", weight="bold")
+text(456, 1004, "OLED SSD1306 0,96\" I²C (0x3C)", size=13, anchor="middle", weight="bold")
 wire([(565, 927), (875, 927)], C["scl"])                                    # SCL → IO22
 wire([(565, 943), (600, 943), (600, 948.5), (939.5, 948.5), (939.5, 884), (949, 884)], C["sda"])  # SDA → IO21
 
@@ -287,7 +287,7 @@ a(f'<rect x="{CBX}" y="{CBY}" width="390" height="170" rx="14" fill="#b32424" st
 a(f'<rect x="{CBX + 14}" y="{CBY + 24}" width="362" height="122" rx="6" fill="#2a2a2a" stroke="#111"/>')
 CX = [CBX + 36 + 29 * i for i in range(12)]
 RY = [CBY + 48, CBY + 86, CBY + 124]
-special = {1: ("canh", "1"), 2: ("canl", "2"), 4: ("b4", "4")}
+special = {1: ("canh", "1"), 2: ("canl", "2"), 4: ("b4", "4"), 9: ("gnd", "9"), 10: ("gnd", "10")}
 for r, y in enumerate(RY):
     for i, x in enumerate(CX):
         n = r * 12 + i + 1
@@ -299,10 +299,12 @@ for r, y in enumerate(RY):
             a(f'<rect x="{x - 7}" y="{y - 7}" width="14" height="14" rx="2" fill="#555" stroke="#777"/>')
 for lab, y in [("1", RY[0]), ("13", RY[1]), ("25", RY[2])]:
     text(CBX + 20, y + 4, lab, size=9, fill="#ffffff", anchor="end")
-text(CBX + 195, CBY + 162, "B1 CAN H · B2 CAN L · B4 emergencia", size=11, fill="#ffffff", anchor="middle", weight="bold")
+text(CBX + 195, CBY + 162, "B1 CAN H · B2 CAN L · B4 emergencia · B9/B10 masa", size=11, fill="#ffffff", anchor="middle", weight="bold")
 text(CBX, CBY + 192, "Conector B de la E-ECU (rojo, lado máquina) — vista de frente", size=13, weight="bold")
 text(CBX, CBY + 210, "Filas: 1–12 arriba, 13–24 centro, 25–36 abajo (comprobar números moldeados).", size=10.5, fill="#555")
 text(CBX, CBY + 226, "B4 ya está cableado al terminal 3 del interruptor 26: no se toca.", size=10.5, fill=C["b4"])
+# GND del CAN Pal (borne G) → B10: referencia de masa común con la E-ECU
+wire([(357, 730), (335.5, 730), (335.5, RY[0]), (CX[9] + 10, RY[0])], C["gnd"])
 # H → B1, L → B2 (par trenzado)
 wire([(357, 690), (300, 690), (300, 1022), (CX[0] - 14, 1022), (CX[0] - 14, RY[0]), (CX[0] - 10, RY[0])], C["canh"])
 wire([(357, 770), (320, 770), (320, 1032), (CX[1] - 14.5, 1032), (CX[1] - 14.5, RY[0]), (CX[1] - 10, RY[0])], C["canl"])
@@ -360,7 +362,7 @@ notas = [
     "3. Alimentación de los módulos (3,3 V) desde la placa: cables naranja a 3V3 y negros a GND. Donde se cruzan, el cable de señal pasa por encima (no hay contacto).",
     "4. Los módulos están girados para simplificar el cableado; el orden de sus pines es el real, leído en el sentido del dibujo. Guiarse siempre por sus rótulos.",
     "5. CAN Pal: Termination en OFF en la máquina (ON solo en el banco con el USB-CAN). SLNT → IO4: el firmware lo deja en alto (silencio por hardware) salvo en el entorno TSC1.",
-    "6. Par trenzado < 1 m hasta B1/B2 (alternativa: JB14/JB6 del mazo de la V-ECU). Interruptor 26 en RALENTÍ y selector Auto/Manual en MANUAL.",
+    "6. Cable de 3 hilos < 1 m: H → B1, L → B2 (trenzados) y GND del CAN Pal → B10 (o B9). La masa de la placa, en el mismo punto. Interruptor 26 en RALENTÍ y selector en MANUAL.",
     "7. Programador solo para grabar: TX y RX cruzados, G0 → IO0; sin EN hay que pulsar el botón IO0 al dar tensión. No conectar sus 3.3V/5V. Puente de P4 (IO0–GND) solo para grabar.",
     "8. Optoacoplador opcional (IO35 / IO39) y dial original (IO34) no dibujados: ver MONTAJE.md §3.",
 ]

@@ -56,7 +56,8 @@ PlatformIO: `board = esp32dev`, `upload_speed = 921600` (bajar a 115200 si falla
 | | RX | **G18** | |
 | | SLNT | **G4** | alto = silencio (no puede transmitir); el firmware lo deja en alto salvo en el entorno TSC1 |
 | | Vcc / GND | **3V3 / GND** | |
-| | H / L (bornero) | → máquina: **B1 / B2** de la E-ECU (o JB14 / JB6 del mazo de la V-ECU) | **Interruptor de terminación en OFF**; par trenzado < 1 m. El borne GND central no se usa |
+| | H / L (bornero) | → máquina: **B1 / B2** de la E-ECU (o JB14 / JB6 del mazo de la V-ECU) | **Interruptor de terminación en OFF**; par trenzado < 1 m |
+| | GND (borne central) | → **B10 (o B9)**, masa de la E-ECU | Referencia de masa común del CAN: va en el mismo cable que H/L (3 hilos) |
 | **OLED SSD1306** | SDA / SCL | **G21 / G22** | dirección 0x3C |
 | | VCC / GND | **3V3 / GND** | |
 | **Encoder** | CLK / DT / SW | **G32 / G33 / G27** | pull-up interno en SW |
@@ -72,7 +73,7 @@ Pines que **no se usan**: G0, G2, G5, G12, G15 (pines de arranque), SD0–SD3, C
 | Borne de la placa | Va a | Notas |
 |---|---|---|
 | **VCC** | +24 V tras la llave de contacto (JB7/JB8 del mazo de la V-ECU o salida libre de la caja de fusibles) | **Fusible en línea de 3 A** |
-| **GND** | Masa de la máquina (JA15/JA63 o chasis junto a la E-ECU) | Masa única para la placa y el módulo CAN |
+| **GND** | Masa en el **mismo punto que la E-ECU**: B9/B10 o el perno de chasis junto a la E-ECU | Así la placa, el CAN Pal (su borne GND va a B10/B9) y la E-ECU comparten la misma referencia, sin diferencias de masa por el chasis. No alimentar otros equipos desde B9/B10 |
 | Relé **COM** | Terminal **2** del interruptor de emergencia 26 (+24 V de F24) | Faston o back-probe; no cortar cables |
 | Relé **NO** | Terminal **3** del interruptor de emergencia 26 (línea hacia **B4** de la E-ECU) | Relé excitado = 24 V en B4 = 1900 rpm; en reposo manda el interruptor original |
 | Relé **NC** | Sin conectar | |

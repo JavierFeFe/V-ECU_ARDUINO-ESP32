@@ -237,8 +237,8 @@
 <rect x="1390.0" y="962.0" width="30" height="16" rx="3" fill="#1f1f1f" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1405" y="974" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="bold" >GND</text>
 <rect x="300" y="362" width="200" height="44" rx="8" fill="#ececec" stroke="#1f1f1f" stroke-width="1.5"/>
-<text x="312" y="381" font-size="13" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Masa de la máquina</text>
-<text x="312" y="398" font-size="10.5" fill="#444" text-anchor="start" font-weight="normal" >chasis o JA15 / JA63</text>
+<text x="312" y="380" font-size="12" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Masa: mismo punto que</text>
+<text x="312" y="397" font-size="10.5" fill="#444" text-anchor="start" font-weight="normal" >la E-ECU (B9/B10 o perno)</text>
 <path d="M 500 384 L 627 384" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 500 384 L 627 384" fill="none" stroke="#1f1f1f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <rect x="300" y="430" width="200" height="50" rx="8" fill="#fde8e8" stroke="#d62828" stroke-width="1.5"/>
@@ -340,12 +340,12 @@
 <path d="M 565 728 L 612 728 L 612 755 L 875 755" fill="none" stroke="#0077b6" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 565 744 L 594 744 L 594 798 L 875 798" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 565 744 L 594 744 L 594 798 L 875 798" fill="none" stroke="#00a6a6" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
-<rect x="330" y="878" width="230" height="110" rx="8" fill="#1d3557" stroke="#0d1b2a" stroke-width="2"/>
-<rect x="346" y="890" width="150" height="86" rx="3" fill="#050a14" stroke="#5c6b80"/>
-<text x="356" y="906" font-size="10" fill="#7fdcff" text-anchor="start" font-weight="normal" >AUTO-RALENTI</text>
-<text x="356" y="944" font-size="28" fill="#7fdcff" text-anchor="start" font-weight="bold" >1900</text>
-<text x="440" y="944" font-size="10" fill="#7fdcff" text-anchor="start" font-weight="normal" >rpm</text>
-<text x="356" y="968" font-size="10" fill="#7fdcff" text-anchor="start" font-weight="normal" >82C B4:ON CAN</text>
+<rect x="352" y="878" width="208" height="110" rx="8" fill="#1d3557" stroke="#0d1b2a" stroke-width="2"/>
+<rect x="364" y="890" width="136" height="86" rx="3" fill="#050a14" stroke="#5c6b80"/>
+<text x="372" y="906" font-size="10" fill="#7fdcff" text-anchor="start" font-weight="normal" >AUTO-RALENTI</text>
+<text x="372" y="944" font-size="28" fill="#7fdcff" text-anchor="start" font-weight="bold" >1900</text>
+<text x="456" y="944" font-size="10" fill="#7fdcff" text-anchor="start" font-weight="normal" >rpm</text>
+<text x="372" y="968" font-size="10" fill="#7fdcff" text-anchor="start" font-weight="normal" >82C B4:ON CAN</text>
 <rect x="555" y="890" width="10" height="10" rx="1.5" fill="#1f1f1f" stroke="#7a5a10" stroke-width="1"/>
 <text x="550" y="899" font-size="9.5" fill="#ffffff" text-anchor="end" font-weight="normal" >GND</text>
 <rect x="555" y="906" width="10" height="10" rx="1.5" fill="#f77f00" stroke="#7a5a10" stroke-width="1"/>
@@ -354,7 +354,7 @@
 <text x="550" y="931" font-size="9.5" fill="#ffffff" text-anchor="end" font-weight="normal" >SCL</text>
 <rect x="555" y="938" width="10" height="10" rx="1.5" fill="#d8b25a" stroke="#7a5a10" stroke-width="1"/>
 <text x="550" y="947" font-size="9.5" fill="#ffffff" text-anchor="end" font-weight="normal" >SDA</text>
-<text x="445" y="1004" font-size="13" fill="#1b1b1b" text-anchor="middle" font-weight="bold" >OLED SSD1306 0,96" I²C (0x3C)</text>
+<text x="456" y="1004" font-size="13" fill="#1b1b1b" text-anchor="middle" font-weight="bold" >OLED SSD1306 0,96" I²C (0x3C)</text>
 <path d="M 565 927 L 875 927" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 565 927 L 875 927" fill="none" stroke="#e0459b" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 565 943 L 600 943 L 600 948.5 L 939.5 948.5 L 939.5 884 L 949 884" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
@@ -373,8 +373,10 @@
 <rect x="198" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
 <rect x="227" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
 <rect x="256" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="285" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="314" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
+<rect x="282" y="1098" width="20" height="20" rx="3" fill="#1f1f1f" stroke="#fff" stroke-width="1.5"/>
+<text x="292" y="1112" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >9</text>
+<rect x="311" y="1098" width="20" height="20" rx="3" fill="#1f1f1f" stroke="#fff" stroke-width="1.5"/>
+<text x="321" y="1112" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >10</text>
 <rect x="343" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
 <rect x="372" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
 <rect x="53" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
@@ -404,10 +406,12 @@
 <text x="44" y="1112" font-size="9" fill="#ffffff" text-anchor="end" font-weight="normal" >1</text>
 <text x="44" y="1150" font-size="9" fill="#ffffff" text-anchor="end" font-weight="normal" >13</text>
 <text x="44" y="1188" font-size="9" fill="#ffffff" text-anchor="end" font-weight="normal" >25</text>
-<text x="219" y="1222" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >B1 CAN H · B2 CAN L · B4 emergencia</text>
+<text x="219" y="1222" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >B1 CAN H · B2 CAN L · B4 emergencia · B9/B10 masa</text>
 <text x="24" y="1252" font-size="13" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Conector B de la E-ECU (rojo, lado máquina) — vista de frente</text>
 <text x="24" y="1270" font-size="10.5" fill="#555" text-anchor="start" font-weight="normal" >Filas: 1–12 arriba, 13–24 centro, 25–36 abajo (comprobar números moldeados).</text>
 <text x="24" y="1286" font-size="10.5" fill="#1d4ed8" text-anchor="start" font-weight="normal" >B4 ya está cableado al terminal 3 del interruptor 26: no se toca.</text>
+<path d="M 357 730 L 335.5 730 L 335.5 1108 L 331 1108" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 357 730 L 335.5 730 L 335.5 1108 L 331 1108" fill="none" stroke="#1f1f1f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 357 690 L 300 690 L 300 1022 L 46 1022 L 46 1108 L 50 1108" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 357 690 L 300 690 L 300 1022 L 46 1022 L 46 1108 L 50 1108" fill="none" stroke="#d4a017" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 357 770 L 320 770 L 320 1032 L 74.5 1032 L 74.5 1108 L 79 1108" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
@@ -487,7 +491,7 @@
 <text x="474" y="1156" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >3. Alimentación de los módulos (3,3 V) desde la placa: cables naranja a 3V3 y negros a GND. Donde se cruzan, el cable de señal pasa por encima (no hay contacto).</text>
 <text x="474" y="1176" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >4. Los módulos están girados para simplificar el cableado; el orden de sus pines es el real, leído en el sentido del dibujo. Guiarse siempre por sus rótulos.</text>
 <text x="474" y="1196" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >5. CAN Pal: Termination en OFF en la máquina (ON solo en el banco con el USB-CAN). SLNT → IO4: el firmware lo deja en alto (silencio por hardware) salvo en el entorno TSC1.</text>
-<text x="474" y="1216" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >6. Par trenzado &lt; 1 m hasta B1/B2 (alternativa: JB14/JB6 del mazo de la V-ECU). Interruptor 26 en RALENTÍ y selector Auto/Manual en MANUAL.</text>
+<text x="474" y="1216" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >6. Cable de 3 hilos &lt; 1 m: H → B1, L → B2 (trenzados) y GND del CAN Pal → B10 (o B9). La masa de la placa, en el mismo punto. Interruptor 26 en RALENTÍ y selector en MANUAL.</text>
 <text x="474" y="1236" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >7. Programador solo para grabar: TX y RX cruzados, G0 → IO0; sin EN hay que pulsar el botón IO0 al dar tensión. No conectar sus 3.3V/5V. Puente de P4 (IO0–GND) solo para grabar.</text>
 <text x="474" y="1256" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >8. Optoacoplador opcional (IO35 / IO39) y dial original (IO34) no dibujados: ver MONTAJE.md §3.</text>
 </g>

@@ -15,6 +15,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 - `tools/gen_esquema_montaje.py`: script que genera `docs/esquema_montaje_ESP32.svg` (el PNG se exporta con Chrome en modo headless).
 
 ### Cambiado
+- Masa común con la E-ECU: el borne GND del CAN Pal va a B10 (o B9) junto con CAN H/L (cable de 3 hilos), y la masa de la placa se toma en el mismo punto que la E-ECU. Actualizados el diagrama, `MONTAJE.md` y `CONTROL_RPM.md`.
 - Diagrama de montaje redibujado con la placa vista por delante (como en las fotos del fabricante), el número de GPIO de cada pin y el CAN Pal con su forma real.
 - `docs/LISTA_COMPRA.md` reducida al control de rpm: quitado lo que ya cubre la placa ESP32_Relay y el programador; pendiente solo módulo CAN, OLED, USB-CAN y material de instalación (≈ 130–180 €).
 - `README.md` y `firmware/README.md` actualizados con el estado del banco y el firmware.
