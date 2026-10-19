@@ -2,6 +2,10 @@
 
 Guía de conexión con el hardware que ya tenemos. Pinout de la placa y fotos: [`HARDWARE_PLACA_ESP32_RELE.md`](HARDWARE_PLACA_ESP32_RELE.md) · plan de pruebas: [`CONTROL_RPM.md`](CONTROL_RPM.md) · pinout de la E-ECU: [`PINOUT_E-ECU.md`](PINOUT_E-ECU.md) · esquema: [`esquema_rpm_ESP32.png`](esquema_rpm_ESP32.png).
 
+![Diagrama ilustrado de montaje](esquema_montaje_ESP32.png)
+
+Diagrama ilustrado de todas las conexiones (fuente editable: [`esquema_montaje_ESP32.svg`](esquema_montaje_ESP32.svg)): placa vista por el reverso con los rótulos de la serigrafía, programador, módulo CAN, OLED, encoder, conector B de la E-ECU, interruptor de emergencia 26 y alimentación.
+
 ## 0. Material
 
 | Disponible | Pendiente de comprar ([`LISTA_COMPRA.md`](LISTA_COMPRA.md)) |

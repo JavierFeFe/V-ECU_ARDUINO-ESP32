@@ -43,6 +43,7 @@ docs/
 ├── HARDWARE_PLACA_ESP32_RELE.md    ← hardware disponible (placa ESP32 con relé, programador, L298N, IBT-2, SSR) y pinout
 ├── CONTROL_RPM.md                  ← alcance actual: control de rpm (TSC1 por CAN y relé sobre B4), plan de pruebas
 ├── esquema_rpm_ESP32.svg/.png      ← esquema de la versión solo-rpm con módulos premontados
+├── esquema_montaje_ESP32.svg/.png  ← diagrama ilustrado de montaje: placa, módulos, conector B e interruptor 26
 ├── LISTA_COMPRA.md                 ← lo que falta comprar para el control de rpm (Amazon España)
 ├── esquema_conexion_ESP32.svg/.png ← esquema de conexión completo
 ├── anexos/ A…H                     ← informes de investigación con todas las fuentes y su fiabilidad
@@ -52,6 +53,12 @@ firmware/
 ├── esp32/                          ← firmware del control de rpm (PlatformIO, Arduino-ESP32 3.x)
 └── pruebas/                        ← pruebas de banco: led (GPIO2), rele (GPIO16, conmutación comentada)
 ```
+
+## Montaje
+
+![Diagrama ilustrado de montaje](docs/esquema_montaje_ESP32.png)
+
+Conexiones de la placa ESP32_Relay X1 con el programador, el módulo CAN, la OLED, el encoder, el conector B de la E-ECU y el interruptor de emergencia 26. Fuente editable: [`docs/esquema_montaje_ESP32.svg`](docs/esquema_montaje_ESP32.svg); pasos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
 
 ## Firmware
 
