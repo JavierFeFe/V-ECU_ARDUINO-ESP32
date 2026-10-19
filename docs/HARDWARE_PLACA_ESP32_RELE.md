@@ -68,3 +68,26 @@ Cableado de la vía B con esta placa: **COM ← terminal 2 del interruptor de em
 - Implica cambiar el cableado de la válvula: el L298N tiene que alimentarla él (OUT1 → válvula + / válvula − → GND o OUT2), por lo que el + que llega del selector en modo Manual debe quedar desconectado de la válvula mientras el L298N la controle, y el relé de seguridad tiene que devolver **ambos** hilos a la configuración de fábrica.
 
 Se deja anotado para retomarlo con la parte hidráulica.
+
+---
+
+# Otro módulo disponible: driver IBT-2 (2 × BTS7960B)
+
+![Módulo IBT-2](fotos/modulo_IBT2_BTS7960.jpg)
+
+**Qué es:** puente en H formado por dos medios puentes Infineon **BTS7960B** (hasta 43 A), con buffer SN74HC244 en las entradas lógicas, condensador de entrada y bornes B+/B−/M+/M−. Conector de control: VCC, GND, R_EN, L_EN, RPWM, LPWM, R_IS, L_IS (salidas de medida de corriente).
+
+**Para el alcance actual (rpm): no hace falta**, por la misma razón que el L298N.
+
+**Para la fase hidráulica:** eléctricamente es mejor que el L298N (MOSFET con muy poca caída, libre circulación activa sin diodos, PWM hasta 25 kHz, salida de medida de corriente), pero tiene una limitación seria en esta máquina:
+
+| Punto | IBT-2 (BTS7960B) | L298N |
+|---|---|---|
+| Tensión de trabajo | **5,5–27,5 V** (máximo absoluto 40 V) | hasta 46 V |
+| En la EC210B (24 V, **27–28 V** con el alternador cargando, picos mayores) | **en el límite o por encima** del rango de trabajo; necesitaría protección (TVS / limitador) | con margen |
+| Caída de tensión | despreciable | ≈ 2 V (aceptable) |
+| Medida de corriente | R_IS/L_IS, pero muy imprecisa a 200–650 mA (pensada para decenas de amperios): seguiría haciendo falta un INA226 | no tiene |
+| Lógica a 3,3 V del ESP32 | funciona alimentando su VCC a 3,3 V (a 5 V el SN74HC244 queda fuera de especificación con 3,3 V de entrada) | entradas compatibles con 3,3 V |
+| Tamaño para 0,7 A | muy sobredimensionado | adecuado |
+
+**Conclusión:** para una válvula de 0,7 A en una máquina de 24 V es preferible el **L298N** (por margen de tensión) o, mejor aún, el amplificador de válvula comercial. El IBT-2 solo tendría sentido alimentado a través de un limitador/estabilizador de tensión. Se deja anotado para la fase hidráulica.

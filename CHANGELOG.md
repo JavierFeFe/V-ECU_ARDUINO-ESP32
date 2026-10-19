@@ -6,6 +6,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ### Añadido (hardware disponible)
 - `docs/HARDWARE_PLACA_ESP32_RELE.md`: evaluación de la placa ESP32-WROOM-32E con relé y entrada 24 V (LC Technology) que ya tiene el usuario: sirve como cerebro, convertidor y relé de la vía B; lista de comprobaciones (chip del convertidor, GPIO del relé, programación por P4) y qué módulos sobran de la lista de compra.
+- Módulo IBT-2 (BTS7960) disponible: evaluado; no necesario para rpm y con poco margen de tensión (27,5 V) para la máquina de 24 V.
 - Módulo L298N disponible: evaluado en `docs/HARDWARE_PLACA_ESP32_RELE.md` (no necesario para rpm; posible etapa de potencia de la válvula en la fase hidráulica).
 - Encoder rotativo ya disponible: marcado en `docs/LISTA_COMPRA.md` (A6).
 - `docs/fotos/`: fotos de la E-ECU (etiquetas, placa LucasVarity, conectores) y de la placa ESP32.
