@@ -109,3 +109,28 @@ Se deja anotado para retomarlo con la parte hidráulica.
 - La entrada está pensada para 5 V (y suele dispararse a nivel bajo), así que tampoco encaja directamente con los 3,3 V del ESP32.
 
 Para la línea B4 se usa el **relé electromecánico** de la placa ESP32 (contacto real, aislado). Si alguna vez hiciera falta un relé de estado sólido para 24 V DC, tendría que ser un SSR **DC-DC** (salida MOSFET, p. ej. Omron G3VM / "SSR DC 3–32 V → 5–60 VDC").
+
+---
+
+# Programador USB disponible: adaptador USB-C → UART con auto-descarga para ESP32
+
+| Frontal | Reverso |
+|---|---|
+| ![Programador frontal](fotos/programador_USB_ESP32_frontal.jpg) | ![Programador reverso](fotos/programador_USB_ESP32_reverso.jpg) |
+
+**Qué es:** adaptador USB-C a UART con chip de WCH (familia CH340/CH343), regulador **AMS1117-3.3** y dos transistores que convierten **DTR/RTS** en las señales **EN** e **IO0**: es un programador de ESP32 con **auto-descarga** (no hace falta pulsar IO0). Pines (serigrafía del reverso): **5V · 3.3V · RXD · TXD · EN · G0 · GND**.
+
+**Sirve, y es mejor que los adaptadores de la lista** (sustituye al A10). Conexión al conector de programación de la placa ESP32 con relé:
+
+| Programador | Placa ESP32 (P4 / pines del módulo) |
+|---|---|
+| GND | GND |
+| TXD | RX0 (U0RXD, GPIO3) |
+| RXD | TX0 (U0TXD, GPIO1) |
+| EN | EN (reset) |
+| G0 | IO0 |
+| 3.3V / 5V | **no conectar** si la placa se alimenta por su micro-USB o su borne de 24 V |
+
+- Si P4 no saca EN e IO0, basta con GND/TXD/RXD y pulsar el botón **IO0** de la placa al encender.
+- Antes del primer uso, medir con el multímetro la tensión de reposo del pin TXD respecto a GND: debe ser **≈ 3,3 V** (si diera 5 V, no conectarlo al ESP32).
+- Para alimentar la placa solo desde el programador (pruebas en mesa sin 24 V) se puede usar su salida 3.3V, pero el AMS1117 del programador va justo para el ESP32 con WiFi y el relé; es preferible alimentar la placa por su micro-USB.

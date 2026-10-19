@@ -6,6 +6,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ### Añadido (hardware disponible)
 - `docs/HARDWARE_PLACA_ESP32_RELE.md`: evaluación de la placa ESP32-WROOM-32E con relé y entrada 24 V (LC Technology) que ya tiene el usuario: sirve como cerebro, convertidor y relé de la vía B; lista de comprobaciones (chip del convertidor, GPIO del relé, programación por P4) y qué módulos sobran de la lista de compra.
+- Programador USB-C con auto-descarga (WCH + AMS1117, pines 5V/3.3V/RXD/TXD/EN/G0/GND) disponible: sustituye al adaptador USB-TTL A10; conexión documentada.
 - Confirmado que el micro-USB de la placa ESP32 es solo de alimentación: añadido a la lista de compra el **adaptador USB-TTL 3,3 V** (A10, AZDelivery CP2102 HW-598 y alternativas en Amazon.es).
 - Módulo de 4 relés de estado sólido disponible: evaluado; **no sirve** (salida de alterna G3MB-202P, no corta en continua).
 - Módulo IBT-2 (BTS7960) disponible: evaluado; no necesario para rpm y con poco margen de tensión (27,5 V) para la máquina de 24 V.
