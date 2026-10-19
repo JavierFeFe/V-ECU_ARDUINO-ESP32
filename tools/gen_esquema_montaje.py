@@ -204,17 +204,16 @@ text(99, 522, "CH9102", size=9, fill="#aaaaaa", anchor="middle")
 text(145, 404, "Programador USB-C (COM5)", size=13, anchor="middle", weight="bold")
 prog = [("5V", 422), ("3.3V", 438), ("RXD", 470), ("TXD", 490), ("EN", 510), ("G0", 530), ("GND", 550)]
 for n, y in prog:
-    pad(250, y, "#9a9a9a" if n in ("5V", "3.3V", "EN") else "#d8b25a")
+    pad(250, y, "#9a9a9a" if n in ("5V", "3.3V", "EN", "G0") else "#d8b25a")
     text(238, y + 4, n, size=11, fill="#ffffff", anchor="end", weight="bold")
 for y in (422, 438):
     a(f'<line x1="258" y1="{y - 5}" x2="268" y2="{y + 5}" stroke="#d62828" stroke-width="2.5"/>')
     a(f'<line x1="258" y1="{y + 5}" x2="268" y2="{y - 5}" stroke="#d62828" stroke-width="2.5"/>')
 text(145, 592, "solo para grabar · 3.3V y 5V: no conectar", size=11, fill="#555", anchor="middle")
-text(145, 607, "EN opcional (→ EN de la tira derecha)", size=11, fill="#777", anchor="middle")
-# P4 → programador (TX↔RX cruzados; GND rodea a G0)
+text(145, 607, "EN y G0 sin conectar: grabar con el botón IO0", size=11, fill="#777", anchor="middle")
+# P4 → programador: solo GND y TX/RX cruzados (EN e IO0 sin cablear; se usa el botón IO0)
 wire([(1205, 537), (1205, 492), (300, 492), (300, 470), (255, 470)], C["ptx"])   # TX → RXD
 wire([(1175, 537), (1175, 504), (290, 504), (290, 490), (255, 490)], C["prx"])   # RX → TXD
-wire([(1085, 537), (1085, 528), (280, 528), (280, 530), (255, 530)], C["g0"])    # IO0 → G0
 wire([(1145, 537), (1145, 516), (265, 516), (265, 550), (255, 550)], C["gnd"])   # GND → GND
 
 # ================================================================ Adafruit CAN Pal (girado 90°: pines a la derecha)
@@ -363,7 +362,7 @@ notas = [
     "4. Los módulos están girados para simplificar el cableado; el orden de sus pines es el real, leído en el sentido del dibujo. Guiarse siempre por sus rótulos.",
     "5. CAN Pal: Termination en OFF en la máquina (ON solo en el banco con el USB-CAN). SLNT → IO4: el firmware lo deja en alto (silencio por hardware) salvo en el entorno TSC1.",
     "6. Cable de 3 hilos < 1 m: H → B1, L → B2 (trenzados) y GND del CAN Pal → B10 (o B9). La masa de la placa, en el mismo punto. Interruptor 26 en RALENTÍ y selector en MANUAL.",
-    "7. Programador solo para grabar: TX y RX cruzados, G0 → IO0; sin EN hay que pulsar el botón IO0 al dar tensión. No conectar sus 3.3V/5V. Puente de P4 (IO0–GND) solo para grabar.",
+    "7. Programador solo para grabar, 3 cables: GND y TX/RX cruzados (EN y G0 sin conectar). Mantener pulsado el botón IO0 al dar tensión. No conectar sus 3.3V/5V.",
     "8. Optoacoplador opcional (IO35 / IO39) y dial original (IO34) no dibujados: ver MONTAJE.md §3.",
 ]
 for i, t in enumerate(notas):

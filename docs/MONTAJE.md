@@ -19,7 +19,7 @@ Diagrama ilustrado de todas las conexiones (fuente editable: [`esquema_montaje_E
 
 1. **Soldar pines macho** en los taladros que se van a usar (las dos tiras dobles están sin soldar):
    - Tira superior: **G4, G17, G18, G21, G22**, **3V3** y un **GND**.
-   - Tira inferior: **G27, G32, G33**, **EN**, y si se usa el optoacoplador **G35, SVN (G39)**; opcional **G34** (dial original).
+   - Tira inferior: **G27, G32, G33** (EN solo si se quiere carga automática), y si se usa el optoacoplador **G35, SVN (G39)**; opcional **G34** (dial original).
 2. **Quitar el puente de P4.** En la foto frontal hay un jumper en dos pines de P4; casi seguro une **IO0 con GND**, lo que deja la placa siempre en modo carga. Comprobar con el multímetro qué dos pines une y retirarlo.
 3. **Comprobar el convertidor de entrada**: leer la referencia del chip SOIC-8 junto al borne VCC/GND (se espera **XL7005A**, 5–80 V). En banco, alimentar el borne a 24 V y luego a 30 V y medir 5 V y 3,3 V estables.
 
@@ -30,11 +30,13 @@ Diagrama ilustrado de todas las conexiones (fuente editable: [`esquema_montaje_E
 | **GND** | **GND** | P4 | Sí |
 | **TXD** | **RX** | P4 (cruzado) | Sí |
 | **RXD** | **TX** | P4 (cruzado) | Sí |
-| **G0** | **IO0** | P4 | Recomendado |
+| **G0** | **IO0** | P4 | Opcional (**no cableado** en nuestro montaje) |
 | **EN** | **EN** | tira inferior | **Opcional** (recomendado) |
 | 3.3V / 5V | — | — | **No conectar**: la placa se alimenta por su micro-USB o su borne VCC/GND |
 
-**¿Por qué EN es opcional?**
+**Montaje adoptado: solo 3 cables (GND, TXD→RX, RXD→TX); EN e IO0 sin cablear.** Para grabar se usa el botón **IO0** de la placa (ver procedimiento abajo).
+
+**¿Por qué EN e IO0 son opcionales?**
 
 | | Con EN (y G0) conectados | Sin EN |
 |---|---|---|
@@ -42,7 +44,13 @@ Diagrama ilustrado de todas las conexiones (fuente editable: [`esquema_montaje_E
 | Ver los mensajes del arranque | El PC puede reiniciar la placa | Hay que reiniciarla a mano |
 | Cables | 5 (uno de ellos en la tira inferior, hay que soldar EN) | 3 o 4, todos en P4 |
 
-Mínimo absoluto: **GND, TXD→RX, RXD→TX** (3 cables) usando el botón IO0. Recomendado durante el desarrollo: los 5, porque el programa se carga muchas veces.
+**Procedimiento de grabación (montaje con 3 cables):**
+1. Quitar la alimentación de la placa.
+2. Mantener pulsado el botón **IO0** y dar tensión (micro-USB o borne VCC); soltar el botón.
+3. Lanzar la carga (`python -m platformio run -d firmware/esp32 -e esp32dev -t upload`).
+4. Al terminar, quitar y volver a dar tensión para que arranque el programa.
+
+Si más adelante se quiere carga automática, basta con añadir los cables **G0 → IO0** (P4) y **EN → EN** (tira inferior).
 
 Antes del primer uso: con el programador enchufado al PC, medir **TXD respecto a GND ≈ 3,3 V** (si diera 5 V, no conectarlo al ESP32).
 

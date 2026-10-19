@@ -67,7 +67,7 @@ Los ajustes (segundos de ralentí, umbral de par, consigna) se guardan en la fla
 python -m platformio run -d firmware/esp32 -e esp32dev -t upload
 ```
 
-Sin EN cableado al programador: mantener **IO0** pulsado al dar tensión antes de grabar y, al terminar, quitar y volver a dar tensión. Monitor: `python -m platformio device monitor -d firmware/esp32`.
+El programador va conectado solo con GND, TX y RX (EN e IO0 sin cablear): mantener pulsado el **botón IO0** de la placa al dar tensión antes de grabar y, al terminar, quitar y volver a dar tensión. Monitor: `python -m platformio device monitor -d firmware/esp32`.
 
 ## Reglas de seguridad que cumple el firmware
 

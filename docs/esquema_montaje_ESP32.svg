@@ -266,7 +266,7 @@
 <text x="238" y="494" font-size="11" fill="#ffffff" text-anchor="end" font-weight="bold" >TXD</text>
 <rect x="245" y="505" width="10" height="10" rx="1.5" fill="#9a9a9a" stroke="#7a5a10" stroke-width="1"/>
 <text x="238" y="514" font-size="11" fill="#ffffff" text-anchor="end" font-weight="bold" >EN</text>
-<rect x="245" y="525" width="10" height="10" rx="1.5" fill="#d8b25a" stroke="#7a5a10" stroke-width="1"/>
+<rect x="245" y="525" width="10" height="10" rx="1.5" fill="#9a9a9a" stroke="#7a5a10" stroke-width="1"/>
 <text x="238" y="534" font-size="11" fill="#ffffff" text-anchor="end" font-weight="bold" >G0</text>
 <rect x="245" y="545" width="10" height="10" rx="1.5" fill="#d8b25a" stroke="#7a5a10" stroke-width="1"/>
 <text x="238" y="554" font-size="11" fill="#ffffff" text-anchor="end" font-weight="bold" >GND</text>
@@ -275,13 +275,11 @@
 <line x1="258" y1="433" x2="268" y2="443" stroke="#d62828" stroke-width="2.5"/>
 <line x1="258" y1="443" x2="268" y2="433" stroke="#d62828" stroke-width="2.5"/>
 <text x="145" y="592" font-size="11" fill="#555" text-anchor="middle" font-weight="normal" >solo para grabar · 3.3V y 5V: no conectar</text>
-<text x="145" y="607" font-size="11" fill="#777" text-anchor="middle" font-weight="normal" >EN opcional (→ EN de la tira derecha)</text>
+<text x="145" y="607" font-size="11" fill="#777" text-anchor="middle" font-weight="normal" >EN y G0 sin conectar: grabar con el botón IO0</text>
 <path d="M 1205 537 L 1205 492 L 300 492 L 300 470 L 255 470" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 1205 537 L 1205 492 L 300 492 L 300 470 L 255 470" fill="none" stroke="#4361ee" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 1175 537 L 1175 504 L 290 504 L 290 490 L 255 490" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 1175 537 L 1175 504 L 290 504 L 290 490 L 255 490" fill="none" stroke="#3aa6d0" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
-<path d="M 1085 537 L 1085 528 L 280 528 L 280 530 L 255 530" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
-<path d="M 1085 537 L 1085 528 L 280 528 L 280 530 L 255 530" fill="none" stroke="#8338ec" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 1145 537 L 1145 516 L 265 516 L 265 550 L 255 550" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 1145 537 L 1145 516 L 265 516 L 265 550 L 255 550" fill="none" stroke="#1f1f1f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <rect x="380" y="640" width="180" height="180" rx="12" fill="#1a1a1a" stroke="#000" stroke-width="2"/>
@@ -492,7 +490,7 @@
 <text x="474" y="1176" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >4. Los módulos están girados para simplificar el cableado; el orden de sus pines es el real, leído en el sentido del dibujo. Guiarse siempre por sus rótulos.</text>
 <text x="474" y="1196" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >5. CAN Pal: Termination en OFF en la máquina (ON solo en el banco con el USB-CAN). SLNT → IO4: el firmware lo deja en alto (silencio por hardware) salvo en el entorno TSC1.</text>
 <text x="474" y="1216" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >6. Cable de 3 hilos &lt; 1 m: H → B1, L → B2 (trenzados) y GND del CAN Pal → B10 (o B9). La masa de la placa, en el mismo punto. Interruptor 26 en RALENTÍ y selector en MANUAL.</text>
-<text x="474" y="1236" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >7. Programador solo para grabar: TX y RX cruzados, G0 → IO0; sin EN hay que pulsar el botón IO0 al dar tensión. No conectar sus 3.3V/5V. Puente de P4 (IO0–GND) solo para grabar.</text>
+<text x="474" y="1236" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >7. Programador solo para grabar, 3 cables: GND y TX/RX cruzados (EN y G0 sin conectar). Mantener pulsado el botón IO0 al dar tensión. No conectar sus 3.3V/5V.</text>
 <text x="474" y="1256" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >8. Optoacoplador opcional (IO35 / IO39) y dial original (IO34) no dibujados: ver MONTAJE.md §3.</text>
 </g>
 </svg>

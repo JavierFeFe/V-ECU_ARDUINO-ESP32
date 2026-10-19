@@ -77,7 +77,7 @@ Proyecto PlatformIO en [`firmware/esp32/`](firmware/esp32/) para la placa ESP32_
 python -m platformio run -d firmware/esp32 -e esp32dev -t upload
 ```
 
-La placa no tiene EN cableado: antes de grabar hay que mantener **IO0** pulsado al darle tensión, y al terminar quitar y volver a dar tensión.
+El programador va conectado solo con **GND, TX y RX** (EN e IO0 sin cablear): antes de grabar hay que mantener pulsado el **botón IO0** de la placa al darle tensión, y al terminar quitar y volver a dar tensión.
 
 ## Esquemas eléctricos
 

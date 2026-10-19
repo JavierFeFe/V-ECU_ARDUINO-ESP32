@@ -4,6 +4,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Cambiado (programación)
+- Montaje de programación documentado tal como está: programador conectado solo con **GND, TX y RX**; **EN e IO0 sin cablear**, se graba manteniendo pulsado el botón IO0 al dar tensión. Actualizados `MONTAJE.md` (procedimiento paso a paso), `HARDWARE_PLACA_ESP32_RELE.md`, `README.md`, `firmware/README.md` y el diagrama de montaje (se quita el cable G0 → IO0).
+
 ### Cambiado (documentación sincronizada con el firmware v0.1)
 - `README.md`, `docs/PINOUT_E-ECU.md`, `docs/CONTROL_RPM.md`, `docs/HARDWARE_PLACA_ESP32_RELE.md`, `docs/ESQUEMA_CONEXION.md`, `docs/INVESTIGACION_V-ECU_EC210B.md` y los esquemas `esquema_rpm_ESP32` y `pinout_E-ECU_conector_B_ESP32`: módulo CAN **CAN Pal** (G17/G18, SLNT en G4, terminación OFF, GND a B10), **relé confirmado en GPIO16**, placa ESP32_Relay X1 en lugar de ESP32 DevKit; el esquema de conexión original queda marcado como diseño de la fase hidráulica. Lista de pendientes actualizada.
 

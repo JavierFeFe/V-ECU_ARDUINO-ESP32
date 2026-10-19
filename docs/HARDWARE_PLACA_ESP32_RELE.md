@@ -47,8 +47,8 @@ Se programa con el **programador USB-C con auto-descarga** que ya tenemos (ver m
 | GND | GND | P4 |
 | TXD | **RX** | P4 |
 | RXD | **TX** | P4 |
-| G0 | **IO0** | P4 |
-| EN | **EN** | fila inferior de taladros — **opcional** (sin él, pulsar IO0 al encender y reiniciar a mano) |
+| G0 | **IO0** | P4 — opcional, **no cableado** en nuestro montaje |
+| EN | **EN** | fila inferior de taladros — opcional, **no cableado** en nuestro montaje |
 | 3.3V / 5V | — | **no conectar** con la placa alimentada por su micro-USB o su borne |
 
 - **Jumper de P4:** en la foto frontal hay un puente en dos pines de P4; casi seguro une **IO0 con GND** (modo carga fija). **Quitarlo** para que la placa arranque el programa y para que funcione la auto-descarga; comprobar con el multímetro qué dos pines une.
@@ -175,6 +175,6 @@ Para la línea B4 se usa el **relé electromecánico** de la placa ESP32 (contac
 | G0 | IO0 |
 | 3.3V / 5V | **no conectar** si la placa se alimenta por su micro-USB o su borne de 24 V |
 
-- **EN es opcional.** Con EN y G0 conectados la carga es automática; sin EN hay que mantener pulsado **IO0** al dar tensión y reiniciar a mano tras cargar. Detalle en [`MONTAJE.md`](MONTAJE.md) §2.
+- **Montaje adoptado: solo GND, TXD→RX y RXD→TX.** EN y G0 sin cablear: para grabar se mantiene pulsado el botón **IO0** al dar tensión y se reinicia a mano tras cargar. Con EN y G0 conectados la carga sería automática. Detalle en [`MONTAJE.md`](MONTAJE.md) §2.
 - Antes del primer uso, medir con el multímetro la tensión de reposo del pin TXD respecto a GND: debe ser **≈ 3,3 V** (si diera 5 V, no conectarlo al ESP32).
 - Para alimentar la placa solo desde el programador (pruebas en mesa sin 24 V) se puede usar su salida 3.3V, pero el AMS1117 del programador va justo para el ESP32 con WiFi y el relé; es preferible alimentar la placa por su micro-USB.
