@@ -12,7 +12,8 @@ Formato de los ficheros: el de candump -l, legible por SavvyCAN y python-can:
     (1729440000.123456) can0 0CF00400#F07D7D9C1E00FFFF
 Las notas que se escriben durante la captura quedan como líneas "# (t) texto".
 
-Dependencias: python -m pip install --user gs_usb pyusb libusb-package
+Dependencias: tools/requirements.txt (en Windows basta con
+    python -m pip install --user gs_usb pyusb libusb-package)
 """
 import argparse
 import datetime as dt
@@ -104,8 +105,10 @@ def abrir_adaptador():
     backend = libusb_package.get_libusb1_backend()
     devs = list(usb.core.find(find_all=True, backend=backend, custom_match=GsUsb.is_gs_usb_device))
     if not devs:
-        sys.exit("No se encuentra ningún adaptador candleLight/gs_usb. ¿Está enchufado? "
-                 "Si Windows no le asigna driver, instalar WinUSB con Zadig (ver docs/CAPTURA_CAN.md).")
+        sys.exit("No se encuentra ningún adaptador candleLight/gs_usb. ¿Está enchufado, con el "
+                 "interruptor de arranque en OFF? En Linux, instalar los permisos con "
+                 "tools/linux/instalar_permisos.sh; en Windows, el driver WinUSB con Zadig "
+                 "(ver docs/CAPTURA_CAN.md).")
     dev = GsUsb(devs[0])
     print(f"Adaptador: {dev}")
     if not dev.set_bitrate(BITRATE):

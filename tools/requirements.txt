@@ -1,0 +1,7 @@
+# Entorno de Python del proyecto: firmware (PlatformIO) y captura del bus (tools/captura_can.py).
+#   uv venv .venv && uv pip install --python .venv/bin/python -r tools/requirements.txt
+platformio
+gs_usb
+pyusb
+libusb-package
+python-can

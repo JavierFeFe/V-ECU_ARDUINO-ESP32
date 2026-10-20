@@ -1,0 +1,15 @@
+# Permisos USB para el portátil de pruebas (docs/CAPTURA_CAN.md, firmware/README.md).
+# TAG+="uaccess": acceso para el usuario con sesión abierta, sin sudo ni grupos.
+# Se instala con tools/linux/instalar_permisos.sh.
+
+# Adaptador CAN candleLight / gs_usb (DSD TECH SH-C30A, CANable)
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="606f", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="2323", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1cd2", ATTRS{idProduct}=="606f", TAG+="uaccess"
+
+# El mismo adaptador en modo DFU (interruptor de arranque en ON), para actualizar su firmware
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
+
+# Programador USB-C del ESP32 (chips WCH: CH340, CH343, CH9102) y adaptadores CP210x
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", TAG+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", TAG+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"

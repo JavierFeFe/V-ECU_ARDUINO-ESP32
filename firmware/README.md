@@ -69,6 +69,8 @@ python -m platformio run -d firmware/esp32 -e esp32dev -t upload
 
 El programador va conectado solo con GND, TX y RX (EN e IO0 sin cablear): mantener pulsado el **botón IO0** de la placa al dar tensión antes de grabar y, al terminar, quitar y volver a dar tensión. Monitor: `python -m platformio device monitor -d firmware/esp32`.
 
+El puerto se detecta solo (COMx en Windows, `/dev/ttyUSB0` o `/dev/ttyACM0` en Linux); si hay varios, añadir `--upload-port <puerto>`. En el portátil de pruebas con Linux, PlatformIO está en el entorno `.venv` del repositorio: activarlo antes (`source .venv/bin/activate.fish`) y, la primera vez, instalar los permisos del puerto serie con `sh tools/linux/instalar_permisos.sh` (ver [`../docs/CAPTURA_CAN.md`](../docs/CAPTURA_CAN.md) §2).
+
 ## Reglas de seguridad que cumple el firmware
 
 1. Arranque con el relé en reposo; el modo no se recuerda entre arranques.
