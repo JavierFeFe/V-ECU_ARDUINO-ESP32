@@ -20,8 +20,8 @@ Cubre la **Fase 1** (driver de corriente de la válvula power shift con vuelta a
 | Llave: START (R2) / ON (ACC) | Mazo V-ECU, conector JB | JB2 / JB9 | — | confirmado |
 | CAN H | E-ECU conector B (rojo) | **B1** | amarillo (Y) | confirmado |
 | CAN L | E-ECU conector B (rojo) | **B2** | verde (GN) | confirmado |
-| CAN, par 1 (hacia panel) | Mazo V-ECU, conector JB | **JB14 = H, JB6 = L** | — | confirmado (boletín) |
-| CAN, par 2 (desde E-ECU) | Mazo V-ECU, conector JB | **JB13 = H, JB5 = L** | — | confirmado (boletín) |
+| CAN (derivación del mismo par que B1/B2 y el panel) | Mazo V-ECU, conector JB | **JB14 = H, JB6 = L** | — | confirmado (boletín) |
+| Mallas J1587 / J1939 | Mazo V-ECU, conector JB | **JB13** (malla J1587) · **JB5** (malla J1939): **no son CAN** | — | corregido (boletín, 2026-10-20) |
 | CAN en el panel | Panel I-ECU 21C | 21C1 = H, 21C2 = L | — | confirmado |
 | J1587 A / B | Mazo V-ECU JB · E-ECU B | **JB12 = A, JB4 = B** · B25 = A, B26 = B | gris / naranja (E-ECU) | confirmado |
 | Interruptor de emergencia (estado alta/baja) | E-ECU conector B | **B4** ← terminal 3 del interruptor ← F24 | — | confirmado |
@@ -50,14 +50,14 @@ Cubre la **Fase 1** (driver de corriente de la válvula power shift con vuelta a
 
 ### 1.2 Aviso importante sobre el bus CAN
 
-La V-ECU recibe el bus en **dos pares** (JB13/JB5 desde la E-ECU y JB14/JB6 hacia el panel): actúa como **nodo de paso**. Con la V-ECU desenchufada, es probable que la E-ECU y el panel queden **separados** y que cada tramo tenga una sola terminación (120 Ω). Antes de conectar el ESP32:
+**Corrección (2026-10-20):** la V-ECU **no es un nodo de paso**. En el circuito OEM el par de la E-ECU (EB1 H / EB2 L) baja hasta **JB14 (H) / JB6 (L)** y en el mazo se empalma con el del panel (1 H / 2 L): las tres unidades cuelgan del mismo par. **JB13 y JB5 son las mallas** de los cables J1587 y J1939. Con la V-ECU desenchufada el bus E-ECU ↔ panel sigue unido y **no hay que puentear nada** (un puente JB13↔JB14 o JB5↔JB6 uniría CAN a las mallas). Antes de conectar el ESP32:
 
-1. Medir CAN H–L en el conector JB con la V-ECU desenchufada: si da ≈120 Ω en cada par, hay que **puentear JB13↔JB14 y JB5↔JB6** en el adaptador (o conectar el ESP32 a los dos pares) para que vuelva a medir ≈60 Ω.
-2. La máquina del proyecto (2002) tiene MDU en vez de I-ECU; comprobar si el MDU lleva terminación.
+1. Medir B1–B2 con la llave quitada: ≈60 Ω = dos terminaciones; ≈120 Ω = solo la de la E-ECU (117 Ω medidos en la E-ECU suelta).
+2. La máquina del proyecto (2002) tiene MDU en vez de I-ECU; si da ≈120 Ω, el MDU no termina el bus y la terminación del CAN Pal va en ON.
 
 **Pin B4** (dato de los camiones Volvo con la misma centralita): entrada de tensión "idle validation": **< 4 V = ralentí (800 rpm), > 8 V = régimen alto (1900 rpm)**. En la excavadora la alimenta el interruptor de emergencia a través del fusible F24. Es una entrada de dos estados, no analógica.
 
-**Terminación del bus:** las dos resistencias de 120 Ω están **dentro de la E-ECU y del panel** (R702 en el I-ECU según el esquema L120E). El ESP32 **no debe añadir** terminación. Con la V-ECU desconectada, la medida entre CAN H y CAN L (máquina apagada) debe seguir dando ≈60 Ω.
+**Terminación del bus:** las dos resistencias de 120 Ω están **dentro de la E-ECU y del panel** (R702 en el I-ECU según el esquema L120E). El ESP32 **no debe añadir** terminación si la medida entre CAN H y CAN L (máquina apagada) da ≈60 Ω; solo si da ≈120 Ω. La de la E-ECU está confirmada (117 Ω).
 
 ---
 

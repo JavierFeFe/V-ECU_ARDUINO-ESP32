@@ -42,7 +42,7 @@ Para la E-ECU, "Manual" no existe como tal: solo ve el pin B4 y lo que llega por
 Procedimiento paso a paso y script en [`CAPTURA_CAN.md`](CAPTURA_CAN.md) (`tools/captura_can.py`).
 
 1. Conectar el USB-CAN (o el ESP32 en `LISTEN_ONLY`) a B1/B2 a 250 kbit/s con el motor en marcha. Confirmar EEC1 (`0x0CF00400`, rpm), ET1, DM1 y anotar **todos** los IDs y periodos. Comprobar qué DTC publica la E-ECU sin V-ECU (SID 231 / PSID 201).
-2. Medir B1–B2 con la máquina apagada (≈60 Ω; si ≈120 Ω, puentear JB13↔JB14 y JB5↔JB6).
+2. Medir B1–B2 con la máquina apagada: ≈60 Ω = dos terminaciones; ≈120 Ω = solo la de la E-ECU (117 Ω medidos en la E-ECU suelta), el panel no termina el bus → terminación del SH-C30A o del CAN Pal en ON. **No puentear nada en el conector de la V-ECU**: E-ECU, panel y V-ECU van empalmados en el mismo par y JB13/JB5 son mallas ([`CAPTURA_CAN.md`](CAPTURA_CAN.md) §1).
 3. **Capturar una EC210B / EC240B / EC290B sana en Auto** (o una V-ECU prestada en esta máquina): mensajes con SA 0x11, periodo, bytes que cambian al mover el dial, mensajes de llave/arranque. Es la única forma de saber qué espera la E-ECU.
 
 ### Fase 2 — Prueba de TSC1

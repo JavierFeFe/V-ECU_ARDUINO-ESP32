@@ -49,8 +49,8 @@
 | Masa | JA15, JA63 (GND); JA14 (GND del dial) |
 | "VECU operating power" → selector Auto/Manual | JB15 (term. 1), JB16 (term. 2) |
 | Llave START (R2) / ON (ACC) | JB2 / JB9 |
-| J1939 par 1 (hacia panel) | **JB14 = H, JB6 = L** |
-| J1939 par 2 (desde E-ECU) | **JB13 = H, JB5 = L** |
+| J1939 (derivación del par E-ECU ↔ panel) | **JB14 = H, JB6 = L** |
+| Mallas de los cables J1587 / J1939 | JB13 / JB5 (no son CAN) |
 | J1587 | JB12 = A, JB4 = B |
 | Dial de régimen | JB11 (+24 V), **JA39 (0,5–4,5 V)**, JA14 (GND) |
 | Válvula power shift | **JA32 "Power shift Signal" (+)**, **JA5 "P/Shift Ground" (low-side PWM)** |
@@ -62,11 +62,11 @@
 | Auto-ralentí / P-Max / confirmación / buzzer stop | JA67 / JA44 / JA42 / JA16 |
 | Relé de batería / alternador "L" | JA61 / JA7 |
 
-Corrige la deducción anterior (JB13/JB14 = CAN): **CAN H = JB14 y JB13; CAN L = JB6 y JB5**. La V-ECU es **nodo de paso del bus**: con ella desenchufada, la E-ECU y el panel pueden quedar separados (medir; si hace falta, puentear JB13↔JB14 y JB5↔JB6).
+Corrige la deducción anterior (JB13/JB14 = CAN): **CAN H = JB14, CAN L = JB6**. **Revisado con el esquema a 300 ppp (2026-10-20):** JB13 y JB5 no son un segundo par CAN, sino las **mallas** de los cables J1587 y J1939 (elipses discontinuas). El par de la E-ECU (EB1/EB2) y el del panel (1/2) se empalman en el mazo y siguen hasta JB14/JB6: la V-ECU es una **derivación**, no un nodo de paso. Sin ella, la E-ECU y el panel siguen unidos; **no hay que puentear nada** (un puente JB13↔JB14 o JB5↔JB6 uniría CAN a las mallas).
 
 **4. Circuito del selector Auto/Manual (6 terminales) — CONFIRMADO:** AUTO cierra 1–2 y 4–5; MANU cierra 2–3 y 5–6. Terminal 1 = JB15; 2 = JB16 y señal "A/M position" al panel; 3 = válvula (+) y JA32; 4 = JA5; 5 = válvula (−); 6 = Resistor Box → masa. En AUTO la V-ECU regula la válvula por el **lado de masa (JA5)**; en MANU la válvula se alimenta a 24 V por el terminal 2–3 y retorna por 6 → Resistor Box (≈60 Ω → ≈340 mA). **Nuestro driver se intercala entre el terminal 6 y masa.** Tabla completa y esquema en [`ESQUEMA_CONEXION.md`](ESQUEMA_CONEXION.md).
 
-**5. Terminaciones del bus:** en la L120E (misma E-ECU) la resistencia R702 de 120 Ω está **dentro del panel I-ECU** y la otra en la E-ECU. El emulador **no** debe añadir terminación.
+**5. Terminaciones del bus:** en la L120E (misma E-ECU) la resistencia R702 de 120 Ω está **dentro del panel I-ECU** y la otra en la E-ECU (**confirmada: 117 Ω** entre B1 y B2 de la E-ECU suelta, 2026-10-20). El emulador **no** debe añadir terminación si B1–B2 da ≈60 Ω en la máquina; si da ≈120 Ω, el panel MDU de esta máquina no termina el bus y sí hay que añadirla.
 
 **6. Interruptor de emergencia (3 posiciones, 6 terminales):** F24 alimenta el terminal 2. STOP: 1–2 y 4–5; ralentí: 1–2 y 5–6; alto: **2–3** y 5–6 → el terminal 3 lleva +24 V a **B4**. El contacto 4–5 de STOP actúa sobre los relés R3/R4 (EMS power / EMS data record) para parar el motor.
 
@@ -162,9 +162,9 @@ Cada dato importante lleva la etiqueta: **[CONFIRMADO]**, **[INFERIDO]** (deduci
   - **SAE J1939 (CAN)**: "control link", control rápido entre ECUs.
   - **SAE J1708/J1587 (RS-485, 9600 bit/s)**: "information link", información y diagnóstico. También funciona como respaldo.
 - **J1939 a 250 kbit/s con identificadores de 29 bits**: confirmado en camiones Volvo y Volvo Penta; **inferido** para la EC210B. Hay que verificarlo con el analizador en modo solo escucha.
-- **Terminación 120 Ω × 2**: **no se encontró dónde están** en la EC210B. Medición recomendada: con todo apagado, medir entre CAN-H y CAN-L.
+- **Terminación 120 Ω × 2**: una está **dentro de la E-ECU** (medidos 117 Ω, 2026-10-20); la otra, según el esquema L120E, en el panel. Medición pendiente en la máquina: con todo apagado, entre CAN-H y CAN-L.
   - **≈60 Ω**: bus correcto.
-  - **≈120 Ω** con la V-ECU desconectada: la V-ECU llevaba un terminador y **el emulador debe llevar 120 Ω**.
+  - **≈120 Ω**: falta la segunda terminación (el panel MDU no la lleva o no está en el bus) y **el emulador debe llevar 120 Ω**.
 - **Qué intercambian V-ECU y E-ECU** (lámina ENG7-08, MEDIA; EC330B p.66, ALTA):
   - De V-ECU a E-ECU: señal de arranque y **"Engine speed (Request value)"**.
   - De E-ECU a V-ECU: régimen real y señal de error.
@@ -203,7 +203,7 @@ Cada dato importante lleva la etiqueta: **[CONFIRMADO]**, **[INFERIDO]** (deduci
 | Pin | Señal probable | Origen del dato |
 |---|---|---|
 | JB7, JB8, JB15, JB16 | +24 V (rojo) y masa (negro) | Foro + esquema EC210B-04-03 |
-| JB13 / JB14 | J1939 CAN-H / CAN-L | Esquema EC210B-04-03 (orden del texto) |
+| JB13 / JB14 | J1939 CAN-H / CAN-L — **superado**: CAN H = JB14, CAN L = JB6; JB13/JB5 son mallas (§3) | Esquema EC210B-04-03 (orden del texto) |
 | JB6 / JB12 | J1587 A / B | Ídem |
 | JA39 | Señal del dial de régimen (0,5–4,5 V) | Lámina EC210B-04-18 y fragmento |
 | JA56 | Salida de la válvula de control de caudal (X1) | Lista de códigos (BAJA) |
@@ -352,7 +352,7 @@ Detalle y fuentes en el [Anexo C](anexos/C_foros_averias_reparacion.md). Casi to
 1. Resistencia de la bobina power shift: se esperan ~17,5 Ω.
 2. **Corriente real en la válvula** en Manual con la emergencia en alta: se esperan ~340 mA. Si da 0 mA, hay una avería en la Resistor Box, F24 o el selector.
 3. Resistencia de la Resistor Box: se esperan ~60 Ω.
-4. Bus CAN, con todo apagado: resistencia CAN-H↔CAN-L. Identificar los pines B1/B2 en la E-ECU y JB13/JB14 en el mazo de la V-ECU.
+4. Bus CAN, con todo apagado: resistencia CAN-H↔CAN-L. Identificar los pines B1/B2 en la E-ECU y JB14/JB6 en el mazo de la V-ECU. ✅ Terminación de la E-ECU: 117 Ω.
 5. Tensión en el pin B4 de la E-ECU con el interruptor 26 en neutral y en alta.
 6. Tensiones de alimentación: con contacto y con el motor en marcha.
 7. Cableado del selector Auto/Manual: qué contactos conmutan entre la salida de la V-ECU y la Resistor Box.
@@ -414,7 +414,7 @@ Detalle y fuentes en el [Anexo C](anexos/C_foros_averias_reparacion.md). Casi to
 1. El pinout completo de la V-ECU (JA de 70 y JB de 16 pines), incluido **el pin de salida de la válvula power shift**.
 2. La marca y referencia de los conectores de la V-ECU y de la E-ECU, y el número exacto de vías de la E-ECU.
 3. **El mensaje exacto con que la V-ECU pide el régimen** (TSC1 u otro propietario), el resto de mensajes periódicos que espera la E-ECU y la velocidad del bus J1939 en la EC210B.
-4. La ubicación de las resistencias de terminación del bus.
+4. La ubicación de las resistencias de terminación del bus: la de la **E-ECU confirmada** (117 Ω); falta saber si el panel MDU lleva la otra.
 5. El tipo de señal en el pin B4 (emergencia) de la E-ECU.
 6. La resistencia real de la bobina y de la Resistor Box, y la frecuencia de PWM y dither que usa Volvo.
 7. El significado de "VCE56003584" y la generación (EMS1 o EMS2) y fabricante del hardware de la E-ECU.

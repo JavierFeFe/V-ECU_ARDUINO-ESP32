@@ -4,8 +4,23 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Corregido (bus J1939)
+- **La V-ECU no es un nodo de paso.** Revisado el circuito OEM a 300 ppp: E-ECU (EB1/EB2), panel (1/2) y V-ECU (**JB14 H / JB6 L**) van empalmados en el mismo par, y **JB13 / JB5 son las mallas** de los cables J1587 / J1939, no un segundo par CAN. Sin V-ECU el bus no se parte. Retirada en toda la documentación y los esquemas la instrucción de puentear JB13↔JB14 y JB5↔JB6 (habría unido CAN a las mallas).
+- **Medida en el taller (2026-10-20):** B1–B2 de la E-ECU suelta = **117 Ω**, terminación interna confirmada. En la máquina, B1–B2 ≈ 60 Ω → R120 / terminación del CAN Pal en OFF; ≈ 120 Ω → el panel MDU no termina el bus y van en ON.
+- `docs/CAPTURA_CAN.md`: medidas 0, 1 y 1b, regla del R120 según la medida y aviso de qué hacer si la E-ECU está sola en el bus (nadie confirma sus tramas).
+- Diagramas `esquema_captura_CAN` (topología redibujada con la V-ECU como derivación), `esquema_conexion_ESP32`, `esquema_modular_ESP32` y `esquema_rpm_ESP32` corregidos y exportados de nuevo; nota de corrección en los anexos A y G.
+
 ### Añadido (repositorio)
 - `.gitattributes`: finales de línea LF en todos los ficheros de texto (también al editar en Windows); imágenes y binarios sin conversión.
+
+### Añadido (portátil de pruebas con Linux)
+- `tools/requirements.txt`: entorno de Python del proyecto (`.venv`, creado con `uv`) con PlatformIO y las librerías de captura.
+- `tools/linux/70-vecu.rules` e `instalar_permisos.sh`: permisos USB sin sudo para el SH-C30A (candleLight, también en modo DFU) y el programador del ESP32 (WCH / CP210x). Instaladas en el portátil.
+- `docs/CAPTURA_CAN.md` §2 y `firmware/README.md`: preparación en Linux (Windows queda como alternativa).
+
+### Cambiado (portátil de pruebas con Linux)
+- `platformio.ini` (firmware y pruebas de banco): sin `COM5` fijo, el puerto se detecta solo en Windows y en Linux.
+- `tools/captura_can.py`: el aviso de adaptador no encontrado indica también la solución en Linux.
 
 ### Añadido (captura del bus)
 - `docs/esquema_captura_CAN.svg/.png` (generado con `tools/gen_esquema_captura.py`): diagrama de conexiones de la captura — portátil, SH-C30A con su forma real (USB-A directo, bornero CAN_H/GND/CAN_L, R120 y arranque en OFF), sondas a B1/B2/B9, medidas con el multímetro y topología del bus con sus dos terminaciones.

@@ -25,9 +25,9 @@ Sin V-ECU, la EC210B funciona en **Manual** con el interruptor de régimen de em
 
 - **E-ECU identificada:** Volvo **03161983 P03** (= 60100002 / 20577135), hardware **LucasVarity "Made in UK"**, dos conectores de 36 pines; misma familia que la EECU de los camiones Volvo D12 (Vectro II). Programada para la máquina **EC210 nº 10828** (23-10-2002).
 - **Pinout del conector B de la E-ECU:** B1 CAN H, B2 CAN L, B25/B26 J1708, B9/B10 masa, B11/B12 +24 V, **B4 entrada del interruptor de emergencia** (< 4 V ralentí, > 8 V alto), B31/B5 precalentamiento.
-- **Pinout de la V-ECU (JA 70 / JB 16):** CAN en **JB14/JB6** y **JB13/JB5** (nodo de paso), J1587 en JB12/JB4, +24 V en JB7/JB8, masa JA15/JA63, dial de régimen JB11/**JA39**/JA14, válvula power shift **JA32 (+) / JA5 (PWM lado masa)**, "VECU STATUS" JA34.
+- **Pinout de la V-ECU (JA 70 / JB 16):** CAN en **JB14 (H) / JB6 (L)** (derivación del bus; JB13/JB5 son las mallas, no CAN), J1587 en JB12/JB4, +24 V en JB7/JB8, masa JA15/JA63, dial de régimen JB11/**JA39**/JA14, válvula power shift **JA32 (+) / JA5 (PWM lado masa)**, "VECU STATUS" JA34.
 - **Selector Auto/Manual (6 terminales):** AUTO 1–2 y 4–5; MANU 2–3 y 5–6. Terminal 3 = válvula (+)/JA32; 4 = JA5; 5 = válvula (−); 6 = Resistor Box → masa. **El driver se intercala entre el terminal 6 y masa.**
-- **Bus J1939:** 250 kbit/s, E-ECU SA 0x00, V-ECU SA 0x11, panel SA 0x17; terminaciones dentro de la E-ECU y del panel.
+- **Bus J1939:** 250 kbit/s, E-ECU SA 0x00, V-ECU SA 0x11, panel SA 0x17; terminaciones dentro de la E-ECU (**medida: 117 Ω** con la E-ECU suelta) y del panel. E-ECU, panel y V-ECU están empalmados en el mismo par: **sin V-ECU el bus sigue unido**.
 - **Corrientes de la válvula por modo** (manual Volvo): P 215 · H 250 · G 290 · F 450 · I 555 mA · emergencia 340 mA. Más corriente = menos potencia de bomba; **0 mA = bomba al máximo**.
 - No hay inmovilizador ni emparejamiento V-ECU↔E-ECU; el "Code Lock" es opcional y actúa por CAN.
 
@@ -97,7 +97,7 @@ Diseño propio (fuente editable: `docs/esquema_conexion_ESP32.svg`). Bloques:
 - **Alimentación 24 V protegida**: fusible 3 A, protección contra polaridad invertida, TVS SMCJ33A y DC-DC de entrada ancha (9–72 V → 5 V) hasta el VIN del ESP32. Masa común con el chasis.
 - **Driver de corriente de la válvula power shift** (Fase 1): MOSFET IRLZ44N en el lado de masa, shunt de 0,1 Ω medido con INA226 (I²C), diodo de libre circulación MBR5100 sobre la bobina, PWM 1 kHz + dither 150 Hz y lazo PI en el ESP32.
 - **Relé de seguridad K1**: en reposo (NC) conecta la **Resistor Box original** (≈340 mA, como de fábrica); solo cuando el ESP32 arranca bien y el watchdog está armado conmuta al MOSFET. Un fallo del ESP32 devuelve la máquina al modo Manual de fábrica.
-- **Bus J1939**: transceptor SN65HVD230 (3,3 V) en GPIO5/GPIO4, conectado a B1/B2 de la E-ECU o a los pares JB14/JB6 · JB13/JB5 del mazo de la V-ECU. **Sin resistencia de 120 Ω**: ya están en la E-ECU y en el panel.
+- **Bus J1939**: transceptor SN65HVD230 (3,3 V) en GPIO5/GPIO4, conectado a B1/B2 de la E-ECU o a JB14/JB6 del mazo de la V-ECU. **Sin resistencia de 120 Ω**: ya están en la E-ECU y en el panel.
 - **Interfaz**: encoder KY-040 y OLED SSD1306; entradas opcionales con divisor para el dial original (0,5–4,5 V), el estado del interruptor de emergencia (B4) y el selector Auto/Manual.
 
 Tablas de pines (ESP32 y Arduino Nano), puntos de conexión y lista de materiales: [`docs/ESQUEMA_CONEXION.md`](docs/ESQUEMA_CONEXION.md).
@@ -108,7 +108,7 @@ Tablas de pines (ESP32 y Arduino Nano), puntos de conexión y lista de materiale
 
 La página más valiosa de toda la investigación: **pinout completo de la V-ECU** (conectores JA de 70 y JB de 16 pines), fusibles, relés R3/R4 del EMS, dial de régimen, válvulas y presostatos. Versión a 300 dpi: `docs/esquemas/ce_EC-B_UPDATE_p06_control_circuit_300dpi.png`. Lo que se extrae de ella:
 - +24 V de la V-ECU en **JB7/JB8**; masa en **JA15/JA63**; llave en JB2 (START) y JB9 (ON).
-- J1939 en **JB14 (H) / JB6 (L)** y **JB13 (H) / JB5 (L)**; J1587 en JB12 (A) / JB4 (B).
+- J1939 en **JB14 (H) / JB6 (L)**; J1587 en JB12 (A) / JB4 (B); **JB13 y JB5 son las mallas** de los cables J1587 y J1939.
 - Dial de régimen: JB11 (+24 V), **JA39 (señal 0,5–4,5 V)**, JA14 (masa).
 - Válvula power shift: **JA32 "Power shift Signal" (+)** y **JA5 "P/Shift Ground"** (PWM en el lado de masa).
 
@@ -123,7 +123,7 @@ El selector tiene 6 terminales: **AUTO cierra 1–2 y 4–5; MANU cierra 2–3 y
 
 ![Bus en la V-ECU](docs/esquemas/ce_EC-B_UPDATE_p06_zoom_bus_J1939_J1587_pines_VECU.png)
 
-Dos pares J1939 entran en la V-ECU: uno desde la E-ECU (EB1/EB2) y otro hacia el panel. La V-ECU es **nodo de paso**: con ella desenchufada, la E-ECU y el panel pueden quedar separados, cada uno con una sola terminación. Hay que medir CAN H–L con la V-ECU fuera y, si da 120 Ω, **puentear JB13↔JB14 y JB5↔JB6** en el adaptador.
+El par J1939 de la E-ECU (EB1 H / EB2 L) baja hasta **JB14 (H) / JB6 (L)** de la V-ECU, y en el mazo se empalma con el par del panel (pines 1 H / 2 L): es una **derivación en T**, no un nodo de paso. **Sin la V-ECU, la E-ECU y el panel siguen unidos.** JB13 y JB5 no son CAN: van a las **mallas** de los cables J1587 y J1939 (elipses discontinuas). **No puentear JB13↔JB14 ni JB5↔JB6**: uniría CAN H y CAN L a las mallas. Lo que hay que medir es B1–B2 con la E-ECU montada y la llave quitada: ≈60 Ω si el panel de esta máquina (MDU de 2002, anterior al I-ECU del esquema) lleva terminación, ≈120 Ω si no.
 
 #### 2c. Interruptor de régimen de emergencia
 

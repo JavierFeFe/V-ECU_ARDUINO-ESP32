@@ -37,9 +37,9 @@
     <text x="10" y="18" class="h">MÁQUINA — Bus J1939 (250 kbit/s)</text>
     <text x="10" y="40" class="pin">E-ECU conector B: B1 = CAN H (amarillo)</text>
     <text x="10" y="56" class="pin">                   B2 = CAN L (verde)</text>
-    <text x="10" y="74" class="pin">o mazo V-ECU: JB14/JB6 y JB13/JB5</text>
-    <text x="10" y="94" class="warn">Sin 120 Ω en el módulo CAN</text>
-    <text x="10" y="112" class="pin">Sin V-ECU: puentear JB13↔JB14 y JB5↔JB6</text>
+    <text x="10" y="74" class="pin">o mazo V-ECU: JB14 (H) / JB6 (L)</text>
+    <text x="10" y="94" class="warn">Sin 120 Ω si B1–B2 ≈ 60 Ω</text>
+    <text x="10" y="112" class="pin">JB13/JB5 son mallas: no puentear</text>
     <circle cx="260" cy="40" r="4" fill="#e5c100"/><circle cx="260" cy="56" r="4" fill="#2ca02c"/>
   </g>
   <g transform="translate(20,390)">

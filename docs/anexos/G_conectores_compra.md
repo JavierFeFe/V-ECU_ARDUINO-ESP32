@@ -2,6 +2,8 @@
 
 Fecha: 2026-10-19. Escala de fiabilidad de cada identificación: **CONFIRMADO** (hoja de datos del fabricante o documento Volvo/Kawasaki), **PROBABLE** (varias fuentes concordantes pero sin hoja de datos), **DESCONOCIDO** (no se ha podido identificar con fuentes; se propone alternativa). Las URL de vendedores son listados vivos: los precios son los vistos hoy (USD salvo que se indique) y cambian.
 
+> **Corrección posterior (2026-10-20):** las asignaciones de JB13/JB14/JB5 de este informe están superadas. Según el circuito OEM "Control Circuit (EC160B~EC460B)", el J1939 de la V-ECU es **JB14 (H) / JB6 (L)**, derivación del mismo par que une la E-ECU (B1/B2) con el panel; **JB13 y JB5 son las mallas** de los cables J1587 y J1939. Sin V-ECU el bus no se parte y no hay que puentear nada. Ver `docs/INVESTIGACION_V-ECU_EC210B.md` §3.
+
 Nota de alcance: eBay bloquea la lectura automatizada (403), por lo que los precios de eBay proceden de los extractos de búsqueda, no de la ficha completa. Scribd no entregó texto. Varias respuestas se apoyan en los hallazgos ya documentados en `research_familia_eecu.md` y `research_penta_tad.md` (misma carpeta), que se citan donde procede.
 
 ---

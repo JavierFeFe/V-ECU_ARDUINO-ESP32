@@ -3,6 +3,8 @@
 Investigación para sustituir o emular la V-ECU de una excavadora Volvo EC210B que dialoga con la E-ECU etiquetada "VOLVO VCE56003584 D6D EAE2 - S/N E00747373".
 Fecha: 2026-10-19.
 
+> **Corrección posterior (2026-10-20):** las asignaciones de JB13/JB14/JB5 de este informe están superadas. Según el circuito OEM "Control Circuit (EC160B~EC460B)", el J1939 de la V-ECU es **JB14 (H) / JB6 (L)**, derivación del mismo par que une la E-ECU (B1/B2) con el panel; **JB13 y JB5 son las mallas** de los cables J1587 y J1939. Sin V-ECU el bus no se parte y no hay que puentear nada. Ver `docs/INVESTIGACION_V-ECU_EC210B.md` §3.
+
 **Escala de fiabilidad**
 - **ALTA**: documento OEM de Volvo (manual del operador o material de formación de servicio de Volvo CE Korea) o norma.
 - **MEDIA**: documento OEM reconstruido por mí (texto extraído de un PDF subido a Scribd con fuente cifrada o con texto desordenado, que tuve que descifrar o reordenar), o un fabricante de componentes.

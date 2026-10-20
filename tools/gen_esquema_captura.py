@@ -71,7 +71,7 @@ term = [
 for i, (t, col) in enumerate(term):
     text(66, 150 + i * 26, t, size=12, fill=col, family="Consolas, monospace")
 a('<path d="M 20 360 L 440 360 L 470 400 L -10 400 Z" fill="#bdbdbd" stroke="#777" stroke-width="2"/>')
-text(230, 388, "Portátil (Windows + Python)", size=13, anchor="middle", weight="bold")
+text(230, 388, "Portátil (Linux o Windows + Python)", size=13, anchor="middle", weight="bold")
 a('<rect x="440" y="366" width="18" height="10" rx="2" fill="#666"/>')
 
 # ================================================================ SH-C30A (enchufado directo por USB-A)
@@ -88,7 +88,7 @@ a('<rect x="572" y="326" width="196" height="106" rx="6" fill="#1f8a43" stroke="
 a('<rect x="590" y="360" width="40" height="40" rx="2" fill="#222" stroke="#555"/>')
 text(610, 414, "STM32", size=9, fill="#d9f2df", anchor="middle")
 a('<rect x="648" y="374" width="26" height="16" rx="2" fill="#222"/>')
-# Interruptor de arranque (BOOT) en OFF y R120 en OFF
+# Interruptor de arranque (BOOT) en OFF; R120 según la medida 1
 for x, y in [(650, 334), (722, 334)]:
     a(f'<rect x="{x}" y="{y}" width="30" height="13" rx="2" fill="#eeeeee" stroke="#333"/>')
     a(f'<rect x="{x + 2}" y="{y + 2}" width="12" height="9" rx="1" fill="#333"/>')
@@ -103,8 +103,9 @@ text(640, 278, "DSD TECH SH-C30A (candleLight)", size=14, anchor="middle", weigh
 # Rótulos de los interruptores
 a('<line x1="665" y1="334" x2="625" y2="300" stroke="#a01c22" stroke-width="1.5"/>')
 text(470, 296, "arranque: OFF = trabajo (ON = DFU)", size=11, fill="#a01c22", weight="bold")
-a('<line x1="737" y1="334" x2="760" y2="300" stroke="#a01c22" stroke-width="1.5"/>')
-text(740, 296, "R120: OFF", size=11, fill="#a01c22", weight="bold")
+a('<line x1="737" y1="334" x2="775" y2="302" stroke="#a01c22" stroke-width="1.5"/>')
+text(772, 284, "R120: OFF si 60 Ω", size=11, fill="#a01c22", weight="bold")
+text(772, 298, "ON si 120 Ω", size=11, fill="#a01c22", weight="bold")
 text(640, 462, "se enchufa directo al portátil (o con un alargador USB)", size=11, fill="#666", anchor="middle")
 
 # ================================================================ E-ECU con conectores B (rojo) y A (negro)
@@ -181,11 +182,11 @@ def multimetro(x, y, lectura, modo):
 multimetro(50, 560, "60.2", "Ω")
 text(190, 580, "Medida 1 — llave QUITADA", size=14, weight="bold")
 text(190, 602, "Resistencia entre B1 y B2", size=13)
-text(190, 628, "≈ 60 Ω → correcto", size=13, fill="#2a9d4f", weight="bold")
-text(190, 650, "≈ 120 Ω → bus partido:", size=13, fill="#d62828", weight="bold")
-text(190, 670, "puentear JB13↔JB14", size=13, fill="#d62828")
-text(190, 690, "y JB5↔JB6 (conector", size=13, fill="#d62828")
-text(190, 710, "de la V-ECU)", size=13, fill="#d62828")
+text(190, 628, "≈ 60 Ω → R120 en OFF", size=13, fill="#2a9d4f", weight="bold")
+text(190, 650, "≈ 120 Ω → R120 en ON", size=13, fill="#d62828", weight="bold")
+text(190, 670, "(solo la terminación de", size=13, fill="#555")
+text(190, 690, "la E-ECU: 117 Ω medidos)", size=13, fill="#555")
+text(190, 710, "No puentear nada en la V-ECU", size=13, fill="#d62828")
 multimetro(420, 560, "2.61", "V⎓")
 text(560, 580, "Medida 2 — llave en", size=14, weight="bold")
 text(560, 598, "CONTACTO, motor parado", size=14, weight="bold")
@@ -196,7 +197,7 @@ text(46, 790, "Punta negra (COM) en B9 para las tensiones. Anotar ambas medidas 
 
 # ================================================================ topología del bus
 a('<rect x="810" y="510" width="960" height="300" rx="10" fill="#f7f7f7" stroke="#d0d0d0"/>')
-text(826, 536, "2 · Por qué R120 va en OFF: el bus ya tiene sus dos terminaciones", size=15, weight="bold")
+text(826, 536, "2 · Topología: E-ECU, panel y V-ECU en el mismo par (sin V-ECU sigue unido)", size=15, weight="bold")
 YH, YL = 650, 690
 
 
@@ -208,37 +209,34 @@ def nodo(x, y, w, h, titulo, sub, borde="#333", relleno="#ffffff", dash=None):
         text(x + w / 2, y + 38, sub, size=11, fill="#555", anchor="middle")
 
 
-def resistencia(x):
+def resistencia(x, rotulo="120 Ω"):
     a(f'<line x1="{x}" y1="{YH}" x2="{x}" y2="{YL}" stroke="#333" stroke-width="2"/>')
     a(f'<rect x="{x - 7}" y="{YH + 8}" width="14" height="24" rx="2" fill="#fff" stroke="#333" stroke-width="2"/>')
-    text(x + 12, YH + 25, "120 Ω", size=11, fill="#333")
+    text(x + 12, YH + 25, rotulo, size=11, fill="#333")
 
 
-# Tramo 1: E-ECU ↔ V-ECU (JB14/JB6); tramo 2: V-ECU (JB13/JB5) ↔ panel
-wire([(905, YH), (1180, YH)], C["canh"], halo=False)
-wire([(905, YL), (1180, YL)], C["canl"], halo=False)
-wire([(1360, YH), (1690, YH)], C["canh"], halo=False)
-wire([(1360, YL), (1690, YL)], C["canl"], halo=False)
+# Un solo par empalmado en el mazo: E-ECU (B1/B2) ↔ panel, con la V-ECU (JB14/JB6) como derivación.
+# JB13 / JB5 son las mallas de los cables J1587 / J1939 (circuito OEM EC160B~EC460B).
+wire([(905, YH), (1690, YH)], C["canh"], halo=False)
+wire([(905, YL), (1690, YL)], C["canl"], halo=False)
 nodo(830, 560, 150, 60, "E-ECU", "dirección 0x00")
-resistencia(905)
+resistencia(905, "117 Ω ✔")
 a(f'<line x1="905" y1="620" x2="905" y2="{YH}" stroke="#333" stroke-width="2"/>')
-nodo(1180, 560, 180, 60, "V-ECU (retirada)", "nodo de paso", borde="#999", relleno="#fafafa", dash="7 5")
-for x, lab in [(1180, "JB14/JB6"), (1360, "JB13/JB5")]:
-    text(x, YL + 22, lab, size=10, fill="#555", anchor="middle")
-a(f'<path d="M 1180 {YH} C 1240 {YH - 30}, 1300 {YH - 30}, 1360 {YH}" fill="none" stroke="{C["canh"]}" stroke-width="2.5" stroke-dasharray="6 5"/>')
-a(f'<path d="M 1180 {YL} C 1240 {YL + 30}, 1300 {YL + 30}, 1360 {YL}" fill="none" stroke="{C["canl"]}" stroke-width="2.5" stroke-dasharray="6 5"/>')
-text(1270, 740, "puentes solo si B1–B2 ≈ 120 Ω", size=11, fill="#d62828", anchor="middle", weight="bold")
-nodo(1600, 560, 150, 60, "Panel I-ECU", "dirección 0x17")
-resistencia(1690)
+nodo(1180, 560, 180, 60, "V-ECU (retirada)", "derivación · JB14 H / JB6 L", borde="#999", relleno="#fafafa", dash="7 5")
+a(f'<line x1="1264" y1="620" x2="1264" y2="{YH}" stroke="{C["canh"]}" stroke-width="2.5" stroke-dasharray="6 5"/>')
+a(f'<line x1="1276" y1="620" x2="1276" y2="{YL}" stroke="{C["canl"]}" stroke-width="2.5" stroke-dasharray="6 5"/>')
+text(1270, 718, "JB13 / JB5 = mallas, no CAN: no puentear", size=11, fill="#d62828", anchor="middle", weight="bold")
+nodo(1600, 560, 150, 60, "Panel (MDU)", "0x17 · ¿lleva 120 Ω?")
+resistencia(1690, "120 Ω ?")
 a(f'<line x1="1690" y1="620" x2="1690" y2="{YH}" stroke="#333" stroke-width="2"/>')
 # Derivaciones: SH-C30A (ahora) y ESP32 + CAN Pal (después)
 a(f'<line x1="1000" y1="{YH}" x2="1000" y2="750" stroke="{C["canh"]}" stroke-width="3"/>')
 a(f'<line x1="1012" y1="{YL}" x2="1012" y2="750" stroke="{C["canl"]}" stroke-width="3"/>')
-nodo(930, 750, 160, 50, "SH-C30A", "R120 OFF · solo escucha", borde="#1b3a6b")
+nodo(895, 750, 230, 50, "SH-C30A", "solo escucha · R120 según medida 1", borde="#1b3a6b")
 a(f'<line x1="1480" y1="{YH}" x2="1480" y2="750" stroke="{C["canh"]}" stroke-width="3" stroke-dasharray="6 5"/>')
 a(f'<line x1="1492" y1="{YL}" x2="1492" y2="750" stroke="{C["canl"]}" stroke-width="3" stroke-dasharray="6 5"/>')
-nodo(1400, 750, 180, 50, "ESP32 + CAN Pal", "más adelante · Termination OFF", borde="#999", dash="7 5")
-text(1290, 790, "derivaciones < 1 m, sin resistencia", size=11, fill="#555", anchor="middle")
+nodo(1385, 750, 210, 50, "ESP32 + CAN Pal", "más adelante · terminación como R120", borde="#999", dash="7 5")
+text(1255, 790, "derivaciones < 1 m", size=11, fill="#555", anchor="middle")
 
 # ================================================================ seguridad y pasos
 a('<rect x="30" y="830" width="1740" height="250" rx="10" fill="#fffbea" stroke="#e0c46c"/>')
@@ -247,7 +245,7 @@ izq = [
     "• Máquina estacionada, implementos apoyados, palanca de seguridad BLOQUEADA.",
     "• Selector Auto/Manual en MANUAL. Interruptor 26 en ralentí al empezar.",
     "• Conectar las sondas con la llave QUITADA; después dar contacto.",
-    "• SH-C30A: interruptor de arranque en OFF (ON = modo DFU) y R120 en OFF.",
+    "• SH-C30A: arranque en OFF (ON = modo DFU); R120 OFF con 60 Ω, ON con 120 Ω (medida 1).",
     "• El script se niega a grabar si el adaptador no confirma el modo solo escucha.",
     "• Comprobación previa sin máquina:  capturar --nombre prueba --duracion 5",
 ]

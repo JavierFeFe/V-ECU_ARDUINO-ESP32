@@ -41,6 +41,7 @@ Diagrama: [`pinout_E-ECU_conector_B_ESP32.svg`](pinout_E-ECU_conector_B_ESP32.sv
 
 Observaciones:
 - **No hay pin de llave/contacto.** La E-ECU se alimenta por el relé R3 y recibe la posición de la llave **por J1939 desde la V-ECU**. Es una de las cosas que un emulador completo de V-ECU tendría que enviar.
+- **Terminación interna confirmada:** B1–B2 en la E-ECU suelta = **117 Ω** (medido en el taller, 2026-10-20).
 - Sin V-ECU en el bus, la E-ECU registra **SID 231 / PSID 201** (pérdida de comunicación con la V-ECU) y usa la entrada B4 como "limp home".
 
 ## 2. Conector A (negro, lado motor) — solo para referencia, no se toca
@@ -80,13 +81,13 @@ Observaciones:
 | J1708 | B25 / B26 | no se conecta | Solo diagnóstico/VCADS; si hiciera falta, MAX3485 a 9600 baud |
 
 **Dónde pinchar el CAN, por orden de preferencia**
-1. **Mazo de la V-ECU (conector JB)**: JB14/JB6 y JB13/JB5 — es donde irá el ESP32 de todos modos (válvula, alimentación) y permite puentear los dos pares si la V-ECU retirada ha partido el bus.
+1. **Mazo de la V-ECU (conector JB)**: **JB14 (H) / JB6 (L)** — es donde irá el ESP32 de todos modos (válvula, alimentación). Es una derivación del mismo par que llega a B1/B2 y al panel. **JB13 y JB5 son las mallas** de los cables J1587 y J1939: no tocarlas ni puentearlas con CAN.
 2. **Conector B de la E-ECU (B1/B2)**: con un pigtail en "Y"; es el punto más cercano al motor y el único imprescindible si no se usa el mazo de la V-ECU.
 3. Panel 21C1/21C2.
 
 **Comprobaciones antes de conectar**
 1. Batería desconectada. Verificar colores (B1 amarillo, B2 verde) y numeración moldeada.
-2. Resistencia B1–B2: ≈60 Ω con el bus íntegro; ≈120 Ω si la V-ECU desenchufada ha dejado solo un terminador en este tramo → puentear JB13↔JB14 y JB5↔JB6.
+2. Resistencia B1–B2 con la E-ECU montada: ≈60 Ω con las dos terminaciones (E-ECU y panel); ≈120 Ω si el panel de esta máquina (MDU) no termina el bus → poner la terminación del CAN Pal (o del SH-C30A) en ON. Sin V-ECU el bus no se parte: no hay que puentear nada.
 3. Con contacto: tensión CAN H ≈2,5–3,5 V y CAN L ≈1,5–2,5 V respecto a masa (reposo ≈2,5 V).
 4. Firmware v0.1 (entorno `esp32dev`): TWAI en `LISTEN_ONLY` a 250 kbit/s y SLNT en alto: debe recibir EEC1 (ID `0x0CF00400`) cada 20 ms con el motor en marcha.
 5. Nunca transmitir con la V-ECU original conectada; nunca aplicar tensión a B4, B24 ni a pines de sensores.

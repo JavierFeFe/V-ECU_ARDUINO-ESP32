@@ -57,9 +57,9 @@
     <rect x="0" y="0" width="250" height="110" class="mach" rx="6"/>
     <text x="10" y="18" class="h">MÁQUINA — Bus J1939</text>
     <text x="10" y="38" class="pin">E-ECU B1 = CAN H (amarillo), B2 = CAN L (verde)</text>
-    <text x="10" y="54" class="pin">o mazo V-ECU JB14/JB6 · JB13/JB5</text>
-    <text x="10" y="74" class="warn">Sin 120 Ω en el módulo CAN</text>
-    <text x="10" y="94" class="pin">Si falta la V-ECU: puentear JB13↔JB14, JB5↔JB6</text>
+    <text x="10" y="54" class="pin">o mazo V-ECU JB14 (H) / JB6 (L)</text>
+    <text x="10" y="74" class="warn">Sin 120 Ω si B1–B2 ≈ 60 Ω</text>
+    <text x="10" y="94" class="pin">JB13/JB5 son mallas: no puentear</text>
     <circle cx="250" cy="38" r="4" fill="#e5c100"/><circle cx="250" cy="54" r="4" fill="#2ca02c"/>
   </g>
   <g transform="translate(20,710)">
