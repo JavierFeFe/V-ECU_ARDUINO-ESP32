@@ -1,0 +1,9 @@
+# Finales de línea LF en todos los ficheros de texto, en cualquier sistema
+* text=auto eol=lf
+
+# Binarios: sin conversión
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.bin binary

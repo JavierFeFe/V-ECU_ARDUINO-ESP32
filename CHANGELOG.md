@@ -4,6 +4,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (repositorio)
+- `.gitattributes`: finales de línea LF en todos los ficheros de texto (también al editar en Windows); imágenes y binarios sin conversión.
+
 ### Añadido (captura del bus)
 - `docs/esquema_captura_CAN.svg/.png` (generado con `tools/gen_esquema_captura.py`): diagrama de conexiones de la captura — portátil, SH-C30A con su forma real (USB-A directo, bornero CAN_H/GND/CAN_L, R120 y arranque en OFF), sondas a B1/B2/B9, medidas con el multímetro y topología del bus con sus dos terminaciones.
 - `docs/CAPTURA_CAN.md` y `tools/captura_can.py`: mediciones con el multímetro, captura del bus J1939 con el adaptador **DSD TECH SH-C30A** (comprado) en modo solo escucha verificado, notas durante la captura y análisis automático (IDs, periodos, EEC1 rpm/par, ET1, DM1 incluidas multitrama, TSC1).
