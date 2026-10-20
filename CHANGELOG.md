@@ -4,6 +4,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (captura del bus)
+- `docs/CAPTURA_CAN.md` y `tools/captura_can.py`: mediciones con el multímetro, captura del bus J1939 con el adaptador **DSD TECH SH-C30A** (comprado) en modo solo escucha verificado, notas durante la captura y análisis automático (IDs, periodos, EEC1 rpm/par, ET1, DM1 incluidas multitrama, TSC1).
+
 ### Cambiado (programación)
 - Montaje de programación documentado tal como está: programador conectado solo con **GND, TX y RX**; **EN e IO0 sin cablear**, se graba manteniendo pulsado el botón IO0 al dar tensión. Actualizados `MONTAJE.md` (procedimiento paso a paso), `HARDWARE_PLACA_ESP32_RELE.md`, `README.md`, `firmware/README.md` y el diagrama de montaje (se quita el cable G0 → IO0).
 

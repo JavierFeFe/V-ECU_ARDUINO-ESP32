@@ -54,7 +54,7 @@ Necesario para la **captura del bus** (Fase 1) antes de transmitir nada, y para 
 | # | Producto | ASIN | Precio | Notas |
 |---|---|---|---|---|
 | C1 | **CANable Pro aislado (ADM3053)** — recomendado | [B0CP29RZRP](https://www.amazon.es/dp/B0CP29RZRP) | ≈ 25–35 € | Firmware candleLight; SavvyCAN y python-can; aislamiento galvánico |
-| C2 | DSD TECH SH-C30A | [B0BQ5G3KLR](https://www.amazon.es/dp/B0BQ5G3KLR) | ≈ 25–30 € | Versión aislada SH-C31G [B0FHHCSZY8](https://www.amazon.es/dp/B0FHHCSZY8) |
+| C2 | ✅ **Comprado: DSD TECH SH-C30A** (candleLight, interruptor R120) — uso en [`CAPTURA_CAN.md`](CAPTURA_CAN.md) | [B0BQ5G3KLR](https://www.amazon.es/dp/B0BQ5G3KLR) | ≈ 25–30 € | Versión aislada SH-C31G [B0FHHCSZY8](https://www.amazon.es/dp/B0FHHCSZY8) |
 | C4 | CANable V2.0 | [B0DP9N6TB8](https://www.amazon.es/dp/B0DP9N6TB8) | ≈ 20–30 € | No aislado |
 
 Debe trabajar a **250 kbit/s**, en **modo escucha** (listen-only) y permitir desactivar su terminación de 120 Ω.

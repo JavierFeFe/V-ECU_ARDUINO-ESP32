@@ -42,6 +42,7 @@ docs/
 ├── MONTAJE.md                      ← guía de montaje con la placa ESP32_Relay X1: programación, módulos, máquina, pruebas
 ├── HARDWARE_PLACA_ESP32_RELE.md    ← hardware disponible (placa ESP32 con relé, programador, L298N, IBT-2, SSR) y pinout
 ├── CONTROL_RPM.md                  ← alcance actual: control de rpm (TSC1 por CAN y relé sobre B4), plan de pruebas
+├── CAPTURA_CAN.md                  ← cómo medir y capturar el bus de la máquina con el portátil y el SH-C30A
 ├── esquema_rpm_ESP32.svg/.png      ← esquema de la versión solo-rpm con módulos premontados
 ├── esquema_montaje_ESP32.svg/.png  ← diagrama ilustrado de montaje: placa, módulos, conector B e interruptor 26
 ├── LISTA_COMPRA.md                 ← lo que falta comprar para el control de rpm (Amazon España)
@@ -53,7 +54,8 @@ firmware/
 ├── esp32/                          ← firmware del control de rpm (PlatformIO, Arduino-ESP32 3.x)
 └── pruebas/                        ← pruebas de banco: led (GPIO2), rele (GPIO16, conmutación comentada)
 tools/
-└── gen_esquema_montaje.py          ← genera docs/esquema_montaje_ESP32.svg
+├── gen_esquema_montaje.py          ← genera docs/esquema_montaje_ESP32.svg
+└── captura_can.py                  ← captura (solo escucha) y análisis del bus J1939 con el portátil
 ```
 
 ## Montaje
