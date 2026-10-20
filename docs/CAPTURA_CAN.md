@@ -2,6 +2,10 @@
 
 Fase 1 de [`CONTROL_RPM.md`](CONTROL_RPM.md): **escuchar** el bus CAN de la máquina, sin transmitir nada, para saber qué publica la E-ECU, qué averías marca sin V-ECU y cuánto par da con y sin carga. Con esos datos se ajusta el auto-ralentí y se decide si se puede probar TSC1 (regulación continua de rpm).
 
+![Diagrama de conexiones de la captura](esquema_captura_CAN.png)
+
+Diagrama de conexiones (fuente: [`esquema_captura_CAN.svg`](esquema_captura_CAN.svg), generado con `tools/gen_esquema_captura.py`).
+
 ## Material
 
 - Portátil con Windows y Python 3.
