@@ -9,7 +9,7 @@ Diagrama de conexiones (fuente: [`esquema_captura_CAN.svg`](esquema_captura_CAN.
 ## Material
 
 - Portátil con Windows y Python 3.
-- Adaptador **DSD TECH SH-C30A** ([B0BQ5G3KLR](https://www.amazon.es/dp/B0BQ5G3KLR)): basado en CANable, firmware **candleLight** de fábrica, bornero CAN_H / CAN_L / GND, interruptor **R120** (terminación) e interruptor **Boot**.
+- Adaptador **DSD TECH SH-C30A** ([B0BQ5G3KLR](https://www.amazon.es/dp/B0BQ5G3KLR)): basado en CANable, firmware **candleLight** de fábrica. Se enchufa **directo por USB-A** al portátil (o con un alargador USB). Bornero de 3 tornillos, de arriba abajo **CAN_H · GND · CAN_L**; interruptor **R120** (terminación) e **interruptor de arranque** (ON = modo DFU para actualizar el firmware, **OFF = modo de trabajo**).
 - Tres sondas back-probe (B9 de la lista de compra) y multímetro.
 
 ## 0. Seguridad
@@ -31,7 +31,7 @@ Diagrama de conexiones (fuente: [`esquema_captura_CAN.svg`](esquema_captura_CAN.
 python -m pip install --user gs_usb pyusb libusb-package
 ```
 
-Enchufar el SH-C30A con el interruptor **Boot en OFF**. Con candleLight, Windows suele cargar el driver WinUSB solo. Si el script dice que no encuentra el adaptador, abrir **Zadig** (zadig.akeo.ie), elegir el dispositivo «candleLight USB to CAN adapter» e instalar **WinUSB**.
+Enchufar el SH-C30A con el **interruptor de arranque en OFF** (en ON arranca en modo DFU y no captura). Con candleLight, Windows suele cargar el driver WinUSB solo. Si el script dice que no encuentra el adaptador, abrir **Zadig** (zadig.akeo.ie), elegir el dispositivo «candleLight USB to CAN adapter» e instalar **WinUSB**.
 
 Comprobación sin máquina (debe decir «Modo SOLO ESCUCHA confirmado»):
 
@@ -43,9 +43,9 @@ python tools/captura_can.py capturar --nombre prueba --duracion 5
 
 | SH-C30A | Conector B de la E-ECU | Notas |
 |---|---|---|
-| CAN_H | **B1** (amarillo) | back-probe |
-| CAN_L | **B2** (verde) | back-probe |
-| GND | **B9** (o B10) | back-probe |
+| CAN_H (tornillo de arriba) | **B1** (amarillo) | back-probe |
+| GND (tornillo del medio) | **B9** (o B10) | back-probe |
+| CAN_L (tornillo de abajo) | **B2** (verde) | back-probe |
 | Interruptor **R120** | **OFF** | el bus ya tiene sus dos terminaciones (E-ECU y panel) |
 
 Alternativa: JB14 / JB6 en el mazo de la V-ECU. Conectar **antes** de dar contacto.

@@ -74,22 +74,38 @@ a('<path d="M 20 360 L 440 360 L 470 400 L -10 400 Z" fill="#bdbdbd" stroke="#77
 text(230, 388, "Portátil (Windows + Python)", size=13, anchor="middle", weight="bold")
 a('<rect x="440" y="366" width="18" height="10" rx="2" fill="#666"/>')
 
-# ================================================================ SH-C30A
-a('<rect x="560" y="250" width="230" height="170" rx="10" fill="#1b3a6b" stroke="#0d1f3a" stroke-width="2"/>')
-a('<rect x="544" y="300" width="26" height="40" rx="6" fill="#c0c0c0" stroke="#777"/>')
-a('<rect x="610" y="270" width="54" height="54" rx="3" fill="#222" stroke="#555"/>')
-text(637, 338, "STM32F072", size=9, fill="#c9d1e0", anchor="middle")
-interruptor(600, 352, "R120", "OFF")
-interruptor(600, 384, "BOOT", "OFF")
-a('<rect x="766" y="342" width="34" height="74" rx="3" fill="#2fa84f" stroke="#145c2a" stroke-width="1.5"/>')
-for n, y in [("CAN_H", 356), ("CAN_L", 379), ("GND", 402)]:
-    screw(783, y, 9)
-    text(760, y + 4, n, size=11, fill="#ffffff", anchor="end", weight="bold")
-text(675, 242, "DSD TECH SH-C30A (candleLight)", size=14, anchor="middle", weight="bold")
-text(675, 440, "comprobar los rótulos del bornero de tu unidad", size=11, fill="#666", anchor="middle")
-# USB
-wire([(458, 371), (500, 371), (500, 320), (544, 320)], C["usb"], width=6)
-text(500, 306, "USB", size=11, fill="#555", anchor="middle", weight="bold")
+# ================================================================ SH-C30A (enchufado directo por USB-A)
+# Conector USB-A metálico entrando en el lateral del portátil
+a('<rect x="452" y="346" width="74" height="40" rx="3" fill="#cfd3d6" stroke="#7d8287" stroke-width="2"/>')
+for yy in (356, 372):
+    a(f'<rect x="462" y="{yy}" width="14" height="6" fill="#7d8287"/>')
+# Carcasa roja translúcida en forma de "botella"
+a('<path d="M 526 336 L 560 336 Q 580 318 610 314 L 760 314 Q 800 314 800 340 L 800 418 '
+  'Q 800 444 760 444 L 610 444 Q 580 440 560 422 L 526 422 Z" fill="#e8484f" fill-opacity="0.85" '
+  'stroke="#a01c22" stroke-width="2.5"/>')
+# Placa verde interior
+a('<rect x="572" y="326" width="196" height="106" rx="6" fill="#1f8a43" stroke="#0f4a22"/>')
+a('<rect x="590" y="360" width="40" height="40" rx="2" fill="#222" stroke="#555"/>')
+text(610, 414, "STM32", size=9, fill="#d9f2df", anchor="middle")
+a('<rect x="648" y="374" width="26" height="16" rx="2" fill="#222"/>')
+# Interruptor de arranque (BOOT) en OFF y R120 en OFF
+for x, y in [(650, 334), (722, 334)]:
+    a(f'<rect x="{x}" y="{y}" width="30" height="13" rx="2" fill="#eeeeee" stroke="#333"/>')
+    a(f'<rect x="{x + 2}" y="{y + 2}" width="12" height="9" rx="1" fill="#333"/>')
+for cx in (608, 628, 648, 668):
+    a(f'<rect x="{cx - 3}" y="424" width="6" height="6" fill="#d8b25a"/>')
+# Bornero: CAN_H arriba, GND, CAN_L abajo
+a('<rect x="772" y="342" width="34" height="74" rx="3" fill="#2fa84f" stroke="#145c2a" stroke-width="1.5"/>')
+for n, y in [("CAN_H", 356), ("GND", 379), ("CAN_L", 402)]:
+    screw(789, y, 9)
+    text(766, y + 4, n, size=10.5, fill="#ffffff", anchor="end", weight="bold")
+text(640, 278, "DSD TECH SH-C30A (candleLight)", size=14, anchor="middle", weight="bold")
+# Rótulos de los interruptores
+a('<line x1="665" y1="334" x2="625" y2="300" stroke="#a01c22" stroke-width="1.5"/>')
+text(470, 296, "arranque: OFF = trabajo (ON = DFU)", size=11, fill="#a01c22", weight="bold")
+a('<line x1="737" y1="334" x2="760" y2="300" stroke="#a01c22" stroke-width="1.5"/>')
+text(740, 296, "R120: OFF", size=11, fill="#a01c22", weight="bold")
+text(640, 462, "se enchufa directo al portátil (o con un alargador USB)", size=11, fill="#666", anchor="middle")
 
 # ================================================================ E-ECU con conectores B (rojo) y A (negro)
 a('<rect x="900" y="110" width="860" height="330" rx="18" fill="#a7a9ac" stroke="#6d6f72" stroke-width="3"/>')
@@ -137,15 +153,15 @@ def sonda(x, color):
 
 
 # H → B1 (entra por la izquierda de la columna 1), L → B2, GND → B9; por debajo, sin cruces
-wire([(792, 356), (870, 356), (870, 400), (CX[0] - 14, 400), (CX[0] - 14, 390)], C["canh"])
-wire([(792, 379), (845, 379), (845, 420), (CX[1] - 14.5, 420), (CX[1] - 14.5, 390)], C["canl"])
-wire([(792, 402), (820, 402), (820, 440), (CX[8] + 14.5, 440), (CX[8] + 14.5, 390)], C["gnd"])
+wire([(798, 379), (880, 379), (880, 440), (CX[8] + 14.5, 440), (CX[8] + 14.5, 390)], C["gnd"])
+wire([(798, 402), (862, 402), (862, 420), (CX[1] - 14.5, 420), (CX[1] - 14.5, 390)], C["canl"])
+wire([(798, 356), (900, 356), (900, 400), (CX[0] - 14, 400), (CX[0] - 14, 390)], C["canh"])
 for x, col in [(CX[0] - 14, C["canh"]), (CX[1] - 14.5, C["canl"]), (CX[8] + 14.5, C["gnd"])]:
     sonda(x, col)
 for x, tx in [(CX[0] - 14, CX[0]), (CX[1] - 14.5, CX[1]), (CX[8] + 14.5, CX[8])]:
     a(f'<line x1="{x}" y1="{RY[0]}" x2="{tx - (8 if tx > x else -8)}" y2="{RY[0]}" stroke="#9a9a9a" stroke-width="2"/>')
 text(1110, 470, "sondas back-probe por detrás del conector, sin desconectarlo", size=12, fill="#444", anchor="middle")
-text(675, 470, "CAN_H → B1 · CAN_L → B2 · GND → B9", size=12, fill="#1b1b1b", anchor="middle", weight="bold")
+text(640, 484, "CAN_H → B1 · CAN_L → B2 · GND → B9", size=12, fill="#1b1b1b", anchor="middle", weight="bold")
 
 # ================================================================ medidas con el multímetro
 a('<rect x="30" y="510" width="760" height="300" rx="10" fill="#f7f7f7" stroke="#d0d0d0"/>')
@@ -231,7 +247,7 @@ izq = [
     "• Máquina estacionada, implementos apoyados, palanca de seguridad BLOQUEADA.",
     "• Selector Auto/Manual en MANUAL. Interruptor 26 en ralentí al empezar.",
     "• Conectar las sondas con la llave QUITADA; después dar contacto.",
-    "• SH-C30A: BOOT en OFF (modo trabajo) y R120 en OFF.",
+    "• SH-C30A: interruptor de arranque en OFF (ON = modo DFU) y R120 en OFF.",
     "• El script se niega a grabar si el adaptador no confirma el modo solo escucha.",
     "• Comprobación previa sin máquina:  capturar --nombre prueba --duracion 5",
 ]
