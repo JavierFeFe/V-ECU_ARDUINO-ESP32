@@ -292,6 +292,24 @@ class Placa:
                 self.enviar("estado", sondeo=True)
 
 
+
+# Imágenes de docs/ para el visor de diagramas (solo esa carpeta y docs/fotos, solo imágenes).
+TIPOS_IMG = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".svg": "image/svg+xml"}
+
+
+def leer_doc(ruta_url):
+    m = re.match(r"^/docs/((?:fotos/|esquemas/)?[\w\-.]+)$", ruta_url.split("?")[0])
+    if not m:
+        return None, None
+    ext = os.path.splitext(m[1])[1].lower()
+    ruta = os.path.realpath(os.path.join(RAIZ, "docs", m[1]))
+    if ext not in TIPOS_IMG or not ruta.startswith(os.path.realpath(os.path.join(RAIZ, "docs")) + os.sep) \
+            or not os.path.isfile(ruta):
+        return None, None
+    with open(ruta, "rb") as f:
+        return f.read(), TIPOS_IMG[ext]
+
+
 def puertos_disponibles():
     # Solo puertos USB (en Linux, ttyS0…ttyS31 son puertos internos que no llevan a nada).
     return [{"device": p.device, "desc": p.description or "", "conocido": p.vid in VIDS_CONOCIDOS}
@@ -323,6 +341,12 @@ def crear_manejador(placa):
                 self.responder(200, {"conexion": placa.conexion(), "estado": placa.estado})
             elif self.path == "/api/eventos":
                 self.eventos()
+            elif self.path.startswith("/docs/"):
+                datos, tipo = leer_doc(self.path)
+                if datos is None:
+                    self.responder(404, {"error": "no existe"})
+                else:
+                    self.responder(200, datos, tipo)
             else:
                 self.responder(404, {"error": "no existe"})
 

@@ -224,6 +224,8 @@ Abre `http://127.0.0.1:8766` con el bus en directo, **siempre en solo escucha**:
 
 Arriba del panel hay una **guía paso a paso** con todo este procedimiento (seguridad, comprobar el SH-C30A, medidas, conexión, contacto, las 6 capturas y el análisis): en cada paso dice qué hacer, **qué debería verse** en el multímetro y en el panel, y comprueba en directo lo que se puede (llegan tramas, aparece la E-ECU, rpm ≈ 800 / 1900…). Las medidas del multímetro se apuntan en la guía y quedan en el registro; la medida de E7–E8 decide sola la posición del DIP 2 que indica el paso de conexión.
 
+El botón **📐 Diagramas** de la cabecera muestra sin salir del panel los diagramas que hacen falta en la máquina: conexión de la captura, interruptores del SH-C30A, conector redondo (E7/E8) con sus fotos y conector B de la E-ECU.
+
 **Registro automático:** sin pulsar nada, cada sesión del panel se guarda en `registros/bus/<fecha>_<hora>/`: `bus_completo.log` (todas las tramas y notas de la sesión, mismo formato que las capturas: se analiza con `captura_can.py analizar` o se repasa con `--reproducir`), `motor.csv` (un valor por segundo: rpm, par, carga, refrigerante, aceite, batería, tramas/s y notas) y `eventos.log` (conexiones, nodos nuevos, averías que aparecen o desaparecen, TSC1 o V-ECU detectados, grabaciones, notas y un resumen cada 10 s). `--sin-registro` lo desactiva.
 
 Para probarlo sin máquina: `python tools/panel_bus.py --demo` (E-ECU simulada; graba en `capturas/demo/`). Para repasar una captura ya hecha: `python tools/panel_bus.py --reproducir capturas/<fichero>.log`.

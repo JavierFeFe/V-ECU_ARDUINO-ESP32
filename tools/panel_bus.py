@@ -481,10 +481,14 @@ class Bus:
                     self.error = None
                     self.sistema(f"Conectado: {self.fuente.descripcion}")
                 except FuenteError as ex:
+                    if str(ex) != self.error and self.registro:
+                        self.registro.evento(f"Sin adaptador: {ex}")
                     self.error, self.fatal = str(ex), ex.fatal
                     time.sleep(2)
                     continue
                 except Exception as ex:  # USB sin permisos, librería que falta…
+                    if f"No se pudo abrir el adaptador: {ex}" != self.error and self.registro:
+                        self.registro.evento(f"No se pudo abrir el adaptador: {ex}")
                     self.error = f"No se pudo abrir el adaptador: {ex}"
                     time.sleep(2)
                     continue
@@ -537,7 +541,7 @@ class Bus:
                 v = m.get(clave)
                 return "—" if v is None or not frescos.get(clave) else f"{v:.{dec}f}{suf}"
             self.registro.evento(
-                f"Resumen: {f('rpm', ' rpm')} · par {f('par', ' %')} · carga {f('carga', ' %')} · "
+                f"Resumen: rpm {f('rpm', '')} · par {f('par', ' %')} · carga {f('carga', ' %')} · "
                 f"refrig. {f('refrigerante', ' °C')} · aceite {f('aceiteKpa', ' kPa')} · batería {f('bateriaV', ' V', 1)} · "
                 f"{fps} tramas/s · nodos {', '.join(f'0x{x:02X}' for x in sorted(self.nodos)) or '—'}"
                 + (f" · {errores} errores de bus" if errores else "") + ("" if self.fuente else " · SIN ADAPTADOR"))
@@ -586,6 +590,24 @@ class Bus:
             }
 
 
+
+# Imágenes de docs/ para el visor de diagramas (solo esa carpeta y docs/fotos, solo imágenes).
+TIPOS_IMG = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".svg": "image/svg+xml"}
+
+
+def leer_doc(ruta_url):
+    m = re.match(r"^/docs/((?:fotos/|esquemas/)?[\w\-.]+)$", ruta_url.split("?")[0])
+    if not m:
+        return None, None
+    ext = os.path.splitext(m[1])[1].lower()
+    ruta = os.path.realpath(os.path.join(RAIZ, "docs", m[1]))
+    if ext not in TIPOS_IMG or not ruta.startswith(os.path.realpath(os.path.join(RAIZ, "docs")) + os.sep) \
+            or not os.path.isfile(ruta):
+        return None, None
+    with open(ruta, "rb") as f:
+        return f.read(), TIPOS_IMG[ext]
+
+
 def crear_manejador(bus):
     class Manejador(BaseHTTPRequestHandler):
         server_version = "PanelBus/1.0"
@@ -610,6 +632,12 @@ def crear_manejador(bus):
                 self.responder(200, PRUEBAS)
             elif self.path == "/api/eventos":
                 self.eventos()
+            elif self.path.startswith("/docs/"):
+                datos, tipo = leer_doc(self.path)
+                if datos is None:
+                    self.responder(404, {"error": "no existe"})
+                else:
+                    self.responder(200, datos, tipo)
             else:
                 self.responder(404, {"error": "no existe"})
 

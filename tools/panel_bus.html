@@ -154,6 +154,34 @@
     .banda { margin: 12px 16px 0; }
     .heroes, .datos { grid-template-columns: repeat(2, 1fr); }
   }
+
+  /* ---- visor de diagramas ---- */
+  .btn-diag { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--border); background: var(--panel);
+              color: var(--text); padding: 6px 12px; font-weight: 650; }
+  .btn-diag:hover { border-color: var(--accent); }
+  dialog.visor { width: min(1500px, 96vw); max-width: 96vw; height: 92vh; max-height: 92vh; padding: 0; border: 1px solid var(--border);
+                 border-radius: 12px; background: var(--panel); color: var(--text); }
+  dialog.visor[open] { display: flex; flex-direction: column; }
+  dialog.visor::backdrop { background: rgba(0,0,0,.55); }
+  .visor-cab { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .visor-cab strong { font-size: 15px; }
+  .visor-cab .sp { flex: 1; }
+  .visor-cab a, .visor-cab button { font: inherit; font-size: 13px; color: var(--text); background: var(--panel); border: 1px solid var(--border);
+                                    border-radius: 8px; padding: 5px 10px; cursor: pointer; text-decoration: none; font-weight: 600; }
+  .visor-cuerpo { flex: 1; display: grid; grid-template-columns: 220px 1fr; min-height: 0; }
+  .visor-lista { overflow: auto; border-right: 1px solid var(--border); padding: 8px; display: grid; gap: 8px; align-content: start; }
+  .visor-lista button { display: grid; gap: 5px; text-align: left; padding: 6px; border-radius: 9px; border: 2px solid transparent;
+                        background: var(--bg); color: var(--text); cursor: pointer; font: inherit; font-size: 12.5px; font-weight: 600; }
+  .visor-lista button.actual { border-color: var(--accent); }
+  .visor-lista img { width: 100%; height: 90px; object-fit: contain; background: #fff; border-radius: 6px; }
+  .visor-img { overflow: auto; display: grid; place-items: center; background: #fff; min-height: 0; }
+  .visor-img img { max-width: 100%; max-height: 100%; cursor: zoom-in; display: block; }
+  .visor-img.zoom { place-items: start; }
+  .visor-img.zoom img { max-width: none; max-height: none; cursor: zoom-out; }
+  .visor-pie { padding: 7px 14px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12.5px; }
+  @media (max-width: 760px) { .visor-cuerpo { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .visor-lista { grid-auto-flow: column; grid-auto-columns: 140px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .visor-lista img { height: 60px; } }
 </style>
 </head>
 <body>
@@ -166,6 +194,7 @@
   <span class="pill rec" id="pill-rec" hidden><span class="dot"></span><span id="pill-rec-txt">GRABANDO</span></span>
   <div class="grow"></div>
   <span class="sub" id="ritmo">— tramas/s</span>
+  <button class="btn-diag" id="btn-diagramas" title="Diagramas de conexión">📐 Diagramas</button>
   <span class="pill" id="pill"><span class="dot"></span><span id="pill-txt">Sin conexión</span></span>
 </header>
 <div class="banda demo" id="banda-demo" hidden>Datos simulados: no es la máquina. Las grabaciones van a <code>capturas/demo/</code>.</div>
@@ -275,6 +304,14 @@
 <dialog id="dlg">
   <header><strong id="dlg-titulo">Análisis</strong><span class="grow"></span><button class="peq" id="dlg-cerrar">Cerrar</button></header>
   <pre id="dlg-texto"></pre>
+</dialog>
+<dialog class="visor" id="visor" aria-labelledby="visor-titulo">
+  <div class="visor-cab"><strong id="visor-titulo">Diagramas</strong><span class="sp"></span>
+    <a id="visor-abrir" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
+    <button id="visor-cerrar">Cerrar (Esc)</button></div>
+  <div class="visor-cuerpo"><div class="visor-lista" id="visor-lista"></div>
+    <div class="visor-img" id="visor-img"><img id="visor-foto" alt=""></div></div>
+  <div class="visor-pie" id="visor-pie"></div>
 </dialog>
 <div id="toast" role="status"></div>
 
@@ -672,6 +709,39 @@ const ev = new EventSource("/api/eventos");
 ev.addEventListener("foto", (m) => pintar(JSON.parse(m.data)));
 ev.onerror = () => { $("pill").className = "pill"; $("pill-txt").textContent = "Panel detenido"; };
 cargarPruebas();
+const DIAGRAMAS = [
+  { f: "esquema_captura_CAN.png", t: "Conexión de la captura", d: "Portátil, SH-C30A y bus de la máquina" },
+  { f: "esquema_switches_SH-C30A.png", t: "Interruptores del SH-C30A", d: "DIP 1 arranque (siempre OFF) y DIP 2 R120; marca ON abajo" },
+  { f: "conector_MC02.png", t: "Conector redondo (E7 / E8)", d: "Cara de contactos del conector del mazo de la E-ECU: E7 CAN H, E8 CAN L" },
+  { f: "fotos/conector_MC02_frontal.jpg", t: "Foto: conector redondo de frente", d: "Referencia para localizar E7 y E8" },
+  { f: "fotos/conector_redondo_mazo_maquina.jpg", t: "Foto: conector redondo en la máquina", d: "Dónde está el conector en el mazo" },
+  { f: "pinout_E-ECU_conector_B_ESP32.png", t: "Conector B de la E-ECU", d: "Alternativa: B1 CAN H, B2 CAN L, B9/B10 masa, B4 emergencia" },
+];
+
+// ------------------------------------------------------------------ visor de diagramas (docs/)
+function abrirVisor(i = VISOR.i || 0) {
+  VISOR.i = i;
+  const d = DIAGRAMAS[i];
+  $("visor-lista").replaceChildren(...DIAGRAMAS.map((x, j) => {
+    const b = document.createElement("button"); b.className = j === i ? "actual" : "";
+    const im = document.createElement("img"); im.src = "/docs/" + x.f; im.alt = ""; im.loading = "lazy";
+    b.append(im, document.createTextNode(x.t)); b.onclick = () => abrirVisor(j); return b;
+  }));
+  $("visor-titulo").textContent = d.t;
+  $("visor-foto").src = "/docs/" + d.f; $("visor-foto").alt = d.t;
+  $("visor-abrir").href = "/docs/" + d.f;
+  $("visor-pie").textContent = d.d + " · clic en la imagen para ampliar · ← → para cambiar · docs/" + d.f;
+  $("visor-img").classList.remove("zoom");
+  if (!$("visor").open) $("visor").showModal();
+}
+const VISOR = { i: 0 };
+$("btn-diagramas").onclick = () => abrirVisor();
+$("visor-cerrar").onclick = () => $("visor").close();
+$("visor-foto").onclick = () => $("visor-img").classList.toggle("zoom");
+$("visor").addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") abrirVisor((VISOR.i + 1) % DIAGRAMAS.length);
+  if (e.key === "ArrowLeft") abrirVisor((VISOR.i - 1 + DIAGRAMAS.length) % DIAGRAMAS.length);
+});
 </script>
 </body>
 </html>
