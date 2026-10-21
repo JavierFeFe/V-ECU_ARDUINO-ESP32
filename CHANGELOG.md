@@ -18,6 +18,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ### Pruebas (2026-10-21)
 - Encoder soldado y conectado (G32/G33/G27): giro, elección de modo, edición de parámetro y pulsación larga → Reposo verificados con el panel.
+- Arranque de la placa sin pulso en el relé: COM–NO no se cierra en varios arranques seguidos (LED apagado, sin clic).
 - OLED SSD1306 conectada (IO21/IO22, 3V3): detectada al arrancar y pantallas verificadas (modo, selección `> MODO ?`, edición, `----` rpm sin CAN).
 - Panel: la lista de puertos solo muestra puertos USB (en Linux ocultaba el programador entre `ttyS0…ttyS31`).
 - Lección del banco: para reiniciar la placa, quitar solo su micro-USB, no el programador (el puerto cambia de nombre); los cables de datos del programador van **cruzados** (TXD → RX, RXD → TX).
