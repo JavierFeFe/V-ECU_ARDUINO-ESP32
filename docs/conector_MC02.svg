@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="960" viewBox="0 0 1500 960" font-family="Arial, Helvetica, sans-serif">
+<defs><radialGradient id="pin" cx="40%" cy="35%" r="70%"><stop offset="0%" stop-color="#fff"/><stop offset="60%" stop-color="#c8c8c8"/><stop offset="100%" stop-color="#7d7d7d"/></radialGradient><style>.h{font-weight:bold;font-size:15px;fill:#111}.t{font-size:12.5px;fill:#333}.n{font-size:11.5px;fill:#555}.box{fill:#fff;stroke:#333;stroke-width:1.5}</style></defs>
+<rect width="1500" height="960" fill="#fff"/>
+<text x="30" y="36" font-size="21" font-weight="bold" fill="#111">Conector redondo del mazo de la E-ECU (probable MC02) — cara de contactos</text>
+<text x="30" y="58" class="n">Dibujado a partir de docs/fotos/conector_MC02_frontal.jpg. Vista de frente, escuadra amarilla arriba. Numeración propia: <tspan font-weight="bold">E1 = cavidad exterior vacía</tspan>, sentido horario; I1 = interior más cercana a E1.</text>
+<rect x="50" y="95" width="660" height="70" rx="8" fill="#e8c200" stroke="#6b5800" stroke-width="2"/>
+<text x="380" y="138" text-anchor="middle" class="t" font-weight="bold">escuadra amarilla (arriba)</text>
+<circle cx="380" cy="440" r="265" fill="#151515" stroke="#000" stroke-width="4"/>
+<circle cx="380" cy="440" r="240" fill="#0a0a0a" stroke="#3a3a3a" stroke-width="3"/>
+<circle cx="380" cy="440" r="205" fill="#232323" stroke="#444" stroke-width="2"/>
+<rect x="221" y="512" width="54" height="54" rx="8" fill="#1b1b1b" stroke="#ff4d4d" stroke-width="4" transform="rotate(233 248 539)"/>
+<circle cx="248" cy="539" r="10" fill="#000" stroke="#555"/>
+<text x="201" y="580" text-anchor="middle" font-size="15" font-weight="bold" fill="#ff6b6b">E1</text>
+<rect x="190" y="390" width="54" height="54" rx="8" fill="#1b1b1b" stroke="#8a8a8a" stroke-width="2" transform="rotate(278 217 417)"/>
+<circle cx="217" cy="417" r="10" fill="url(#pin)" stroke="#333"/>
+<text x="158" y="414" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffd54a">E2</text>
+<rect x="258" y="278" width="54" height="54" rx="8" fill="#1b1b1b" stroke="#8a8a8a" stroke-width="2" transform="rotate(325 285 305)"/>
+<circle cx="285" cy="305" r="10" fill="url(#pin)" stroke="#333"/>
+<text x="252" y="262" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffd54a">E3</text>
+<rect x="387" y="252" width="54" height="54" rx="8" fill="#1b1b1b" stroke="#8a8a8a" stroke-width="2" transform="rotate(12 414 279)"/>
+<circle cx="414" cy="279" r="10" fill="url(#pin)" stroke="#333"/>
+<text x="427" y="226" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffd54a">E4</text>
+<rect x="490" y="321" width="54" height="54" rx="8" fill="#1b1b1b" stroke="#8a8a8a" stroke-width="2" transform="rotate(56 517 348)"/>
+<circle cx="517" cy="348" r="10" fill="url(#pin)" stroke="#333"/>
+<text x="566" y="320" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffd54a">E5</text>
+<rect x="515" y="442" width="54" height="54" rx="8" fill="#1b1b1b" stroke="#8a8a8a" stroke-width="2" transform="rotate(100 542 469)"/>
+<circle cx="542" cy="469" r="10" fill="url(#pin)" stroke="#333"/>
+<text x="601" y="484" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffd54a">E6</text>
+<rect x="450" y="546" width="54" height="54" rx="8" fill="#1b1b1b" stroke="#8a8a8a" stroke-width="2" transform="rotate(144 477 573)"/>
+<circle cx="477" cy="573" r="10" fill="url(#pin)" stroke="#333"/>
+<text x="512" y="626" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffd54a">E7</text>
+<circle cx="477" cy="573" r="17" fill="none" stroke="#e5c100" stroke-width="5"/>
+<line x1="477" y1="573" x2="575" y2="705" stroke="#e5c100" stroke-width="3"/>
+<rect x="517" y="691" width="116" height="26" rx="5" fill="#e5c100"/>
+<text x="575" y="710" text-anchor="middle" font-size="14" font-weight="bold" fill="#111">CAN H · B1</text>
+<rect x="324" y="575" width="54" height="54" rx="8" fill="#1b1b1b" stroke="#8a8a8a" stroke-width="2" transform="rotate(190 351 602)"/>
+<circle cx="351" cy="602" r="10" fill="url(#pin)" stroke="#333"/>
+<text x="341" y="666" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffd54a">E8</text>
+<circle cx="351" cy="602" r="17" fill="none" stroke="#2ca02c" stroke-width="5"/>
+<line x1="351" y1="602" x2="250" y2="705" stroke="#2ca02c" stroke-width="3"/>
+<rect x="192" y="691" width="116" height="26" rx="5" fill="#2ca02c"/>
+<text x="250" y="710" text-anchor="middle" font-size="14" font-weight="bold" fill="#111">CAN L · B2</text>
+<line x1="80" y1="661" x2="171" y2="598" stroke="#d62828" stroke-width="3"/>
+<text x="76" y="679" text-anchor="middle" font-size="13" font-weight="bold" fill="#d62828">REFERENCIA: E1 vacía</text>
+<circle cx="293" cy="455" r="30" fill="#0e0e0e" stroke="#777" stroke-width="2"/>
+<circle cx="293" cy="455" r="17" fill="#c9a227" opacity="0.75"/>
+<text x="249" y="460" text-anchor="middle" font-size="15" font-weight="bold" fill="#7fd4ff">I1</text>
+<circle cx="365" cy="353" r="30" fill="#0e0e0e" stroke="#777" stroke-width="2"/>
+<circle cx="365" cy="353" r="17" fill="url(#pin)" stroke="#333"/><line x1="356" y1="353" x2="374" y2="353" stroke="#555" stroke-width="2"/>
+<text x="365" y="313" text-anchor="middle" font-size="15" font-weight="bold" fill="#7fd4ff">I2</text>
+<circle cx="467" cy="425" r="30" fill="#0e0e0e" stroke="#777" stroke-width="2"/>
+<circle cx="467" cy="425" r="17" fill="url(#pin)" stroke="#333"/><line x1="458" y1="425" x2="476" y2="425" stroke="#555" stroke-width="2"/>
+<text x="511" y="430" text-anchor="middle" font-size="15" font-weight="bold" fill="#7fd4ff">I3</text>
+<circle cx="395" cy="527" r="30" fill="#0e0e0e" stroke="#777" stroke-width="2"/>
+<circle cx="395" cy="527" r="17" fill="#c9a227" opacity="0.75"/>
+<text x="395" y="575" text-anchor="middle" font-size="15" font-weight="bold" fill="#7fd4ff">I4</text>
+<circle cx="380" cy="440" r="34" fill="#d6283a" stroke="#7a0f1b" stroke-width="2.5"/><rect x="374" y="416" width="12" height="48" rx="5" fill="#7a0f1b"/>
+<g transform="translate(60,725)"><rect x="0" y="0" width="640" height="145" class="box" rx="6"/>
+<circle cx="24" cy="26" r="9" fill="url(#pin)" stroke="#333"/><text x="42" y="31" class="t">Contacto pequeño montado (anillo exterior E1–E8): 7 de 8</text>
+<circle cx="24" cy="54" r="12" fill="url(#pin)" stroke="#333"/><text x="42" y="59" class="t">Contacto grande montado, punta ranurada (anillo interior I1–I4): 2 de 4</text>
+<circle cx="24" cy="84" r="10" fill="#000" stroke="#ff4d4d" stroke-width="2"/><circle cx="345" cy="84" r="10" fill="#c9a227" opacity="0.75"/><text x="42" y="89" class="t">E1 vacía (referencia)</text><text x="362" y="89" class="t">Vacías con tapón/junta: I1, I4</text>
+<circle cx="24" cy="116" r="11" fill="#d6283a" stroke="#7a0f1b"/><text x="42" y="121" class="t">Centro: llave / tapón rojo con ranura (codificación, sin contacto)</text>
+</g>
+<g transform="translate(760,90)"><rect x="0" y="0" width="710" height="250" class="box" rx="6"/>
+<text x="14" y="26" class="h">Lo que muestra la foto</text>
+<text x="14" y="54" class="t">• 13 posiciones: centro (llave roja) + anillo interior de 4 contactos grandes + anillo exterior de 8 pequeños.</text>
+<text x="14" y="75" class="t">• Montados: <tspan font-weight="bold">9 contactos</tspan> (E2–E8 pequeños; I2, I3 grandes). Vacías: E1 (referencia), I1, I4.</text>
+<text x="14" y="96" class="t">• Lado del mazo de la E-ECU: contactos macho (pines). La pareja del lado máquina lleva hembras.</text>
+<text x="14" y="117" class="t">• Cada contacto pequeño va en un retén cuadrado; los grandes tienen la punta ranurada.</text>
+<text x="14" y="138" class="t">• Marca y serie <tspan font-weight="bold">sin identificar</tspan> (no se ven marcas en la foto).</text>
+<text x="14" y="159" class="t">• Medido (2026-10-21): <tspan font-weight="bold">E7 = CAN H (B1), E8 = CAN L (B2)</tspan>. B4 (emergencia) y</text>
+<text x="14" y="180" class="t">  B9/B10 (masa) <tspan font-weight="bold">no tienen continuidad con ningún contacto</tspan>: llegan por otro lado.</text>
+<text x="14" y="201" class="t">• El esquema SCH02-1 ponía la emergencia en MC02.1: no se cumple en esta máquina</text>
+<text x="14" y="222" class="t">  (o este conector no es MC02). Los otros 7 contactos siguen sin identificar.</text>
+</g>
+<g transform="translate(760,360)"><rect x="0" y="0" width="710" height="330" class="box" rx="6"/>
+<text x="14" y="26" class="h">Tabla para rellenar con el multímetro (llave quitada, E-ECU desenchufada)</text>
+<text x="14" y="56" class="t" font-weight="bold">Señal</text>
+<text x="140" y="56" class="t" font-weight="bold">Pin E-ECU</text>
+<text x="240" y="56" class="t" font-weight="bold">MC02 (esquema)</text>
+<text x="380" y="56" class="t" font-weight="bold">Posición aquí</text>
+<text x="500" y="56" class="t" font-weight="bold">Comprobación</text>
+<line x1="10" y1="64" x2="700" y2="64" stroke="#999"/>
+<rect x="10" y="70" width="690" height="30" fill="#fff6cc"/>
+<text x="14" y="90" class="t">CAN H</text>
+<text x="140" y="90" class="t">B1</text>
+<text x="240" y="90" class="t">MC02.2</text>
+<text x="380" y="90" class="t">E7 ✔</text>
+<text x="500" y="90" class="t">≈2,5 V con contacto</text>
+<rect x="10" y="104" width="690" height="30" fill="#e3f5e3"/>
+<text x="14" y="124" class="t">CAN L</text>
+<text x="140" y="124" class="t">B2</text>
+<text x="240" y="124" class="t">MC02.3</text>
+<text x="380" y="124" class="t">E8 ✔</text>
+<text x="500" y="124" class="t">H–L ≈117 Ω / 60 Ω</text>
+<rect x="10" y="138" width="690" height="30" fill="#e3eefc"/>
+<text x="14" y="158" class="t">Emergencia</text>
+<text x="140" y="158" class="t">B4</text>
+<text x="240" y="158" class="t">(MC02.1?)</text>
+<text x="380" y="158" class="t">no pasa</text>
+<text x="500" y="158" class="t">usar interruptor 26 / JA47</text>
+<rect x="10" y="172" width="690" height="30" fill="#fff"/>
+<text x="14" y="192" class="t">J1587 A</text>
+<text x="140" y="192" class="t">B25</text>
+<text x="240" y="192" class="t">MC02.4</text>
+<text x="380" y="192" class="t">E__ / I__</text>
+<text x="500" y="192" class="t">(opcional)</text>
+<rect x="10" y="206" width="690" height="30" fill="#fff"/>
+<text x="14" y="226" class="t">J1587 B</text>
+<text x="140" y="226" class="t">B26</text>
+<text x="240" y="226" class="t">MC02.5</text>
+<text x="380" y="226" class="t">E__ / I__</text>
+<text x="500" y="226" class="t">(opcional)</text>
+<rect x="10" y="240" width="690" height="30" fill="#fde8e8"/>
+<text x="14" y="260" class="t">Masa</text>
+<text x="140" y="260" class="t">B9/B10</text>
+<text x="240" y="260" class="t">—</text>
+<text x="380" y="260" class="t">no pasa</text>
+<text x="500" y="260" class="t">perno de chasis / batería −</text>
+<text x="14" y="306" class="n">Método: una punta en el pin de la clavija de la E-ECU (cara de contactos, desenchufada) y la otra en cada contacto de este conector.</text>
+</g>
+<g transform="translate(760,710)"><rect x="0" y="0" width="710" height="220" class="box" rx="6"/>
+<text x="14" y="26" class="h">Conexión del SH-C30A sin cortar cables</text>
+<text x="14" y="54" class="t">• Para la captura: <tspan font-weight="bold">E7 = CAN H, E8 = CAN L</tspan> (confirmados) y masa en un perno de chasis/motor</text>
+<text x="14" y="76" class="t">  junto a la E-ECU o en el negativo de batería (este conector no lleva masa, como indica el esquema).</text>
+<text x="14" y="98" class="t">• Con este conector desenchufado de su pareja se puede medir y escuchar en sus pines macho, pero la E-ECU</text>
+<text x="14" y="120" class="t">  queda separada de la cabina: vale para probar la E-ECU sola, no para capturar con la máquina completa.</text>
+<text x="14" y="142" class="t">• Con la máquina completa (enchufado): back-probe por la parte trasera de la pareja, o un</text>
+<text x="14" y="164" class="t">  <tspan font-weight="bold">adaptador en «Y»</tspan> con un conector macho + hembra de esta misma serie (identificar la marca).</text>
+<text x="14" y="186" class="t">• Alternativa sin depender de este conector: clavija libre de la V-ECU (JB14 / JB6), CAPTURA_CAN.md §3c.</text>
+</g>
+</svg>

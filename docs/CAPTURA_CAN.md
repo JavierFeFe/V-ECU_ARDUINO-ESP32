@@ -88,7 +88,7 @@ python tools/captura_can.py capturar --nombre prueba --duracion 5
 
 Alternativa: JB14 / JB6 en el mazo de la V-ECU. Conectar **antes** de dar contacto.
 
-### 3b. Punto de acceso en estudio: conector redondo del mazo de la E-ECU
+### 3b. Punto de acceso: conector redondo del mazo de la E-ECU
 
 ![Conector redondo del mazo](fotos/conector_redondo_mazo_maquina.jpg)
 
@@ -106,7 +106,27 @@ En la clavija del mazo de la E-ECU (carcasa negra con aletas, palanca de cierre 
 
 No hacen falta: J1708 (B25/B26), alimentación de la E-ECU (B11/B12, solo viva con el relé R3), B24 (programación de fábrica) ni los pines de sensores.
 
-**Identificación probable: conector MC02 ("mazo del EMS")** [INFERIDO, fiabilidad MEDIA]
+**Resultado de las mediciones (2026-10-21)** — continuidad entre la clavija de la E-ECU desenchufada y la cara del conector redondo:
+
+![Cara de contactos del conector redondo](conector_MC02.png)
+
+Foto: `fotos/conector_MC02_frontal.jpg`. Dibujo generado con `python tools/gen_conector_MC02.py docs/conector_MC02.svg`. Numeración propia: **E1 = cavidad exterior vacía** (referencia), E2…E8 en sentido horario mirando la cara de contactos con la escuadra amarilla arriba; I1…I4 en el anillo interior, I1 la más cercana a E1.
+
+| Señal | Pin E-ECU | Contacto del conector redondo | Estado |
+|---|---|---|---|
+| **CAN H** | B1 | **E7** (abajo a la derecha) | ✔ confirmado |
+| **CAN L** | B2 | **E8** (abajo, junto a E7) | ✔ confirmado |
+| Emergencia | B4 | — | ✘ sin continuidad con ningún contacto: llega por otro lado |
+| Masa | B9 / B10 | — | ✘ sin continuidad con ningún contacto: llega por otro lado |
+| J1587 A / B | B25 / B26 | sin medir | opcional |
+| Resto (E2–E6, I2, I3) | — | sin identificar | — |
+
+Consecuencias:
+- **CAN:** basta con este conector para CAN H/L (E7/E8).
+- **Masa del SH-C30A:** de un perno de masa del chasis o del motor junto a la E-ECU, o del negativo de batería (comprobar con contacto que CAN H y CAN L dan ≈ 2,5 V respecto a ese punto). Las masas B9/B10 de la E-ECU irán probablemente a un punto de masa del motor o del bastidor y no pasan por este conector.
+- **Vía B (B4):** no se puede tomar de aquí; se sigue usando el **interruptor de emergencia 26** (terminal 2 = +24 V del F24, terminal 3 = línea B4) o la clavija de la V-ECU (**JA47**).
+
+**Identificación probable: conector MC02 ("mazo del EMS")** [INFERIDO, fiabilidad BAJA tras las mediciones: CAN H/L sí pasan, pero la emergencia B4 que el esquema pone en MC02.1 no]
 
 El esquema Volvo **SCH02-1** de la EC160B–EC290B (`esquemas/ce_EC160B-290B_SCH02-1_zoom_conector_MC02_CAN_J1587_emergencia.png`) muestra que el bus y la señal de emergencia pasan por un conector **MC02** entre la E-ECU y la cabina, y la lista de conectores de la EC210B (Anexo A/F) describe **MC02** como «conectado al mazo del EMS» (el mazo de la E-ECU). El conector redondo de la foto sale justo de ese mazo, así que muy probablemente es **MC02**:
 
@@ -119,10 +139,10 @@ El esquema Volvo **SCH02-1** de la EC160B–EC290B (`esquemas/ce_EC160B-290B_SCH
 | **MC02.1** | azul/blanco (BL/W), C61 | **Emergencia (B4)**: viene del interruptor 26 (SW2704, posición alta) y también llega a la V-ECU (JA47) | JA47 | B4 |
 
 - Los pares CAN y J1587 llevan malla (JB13 y JB5 en la V-ECU son las mallas).
-- La **masa no aparece en MC02** en esa hoja: el GND del SH-C30A se sigue tomando en B9/B10 o en el perno de masa junto a la E-ECU.
-- El esquema es de máquinas con I-ECU (serie posterior a la nuestra) y puede tener más pines de los que se ven en esa hoja; **confirmarlo con el multímetro** antes de conectar nada.
+- La **masa no aparece en MC02** en esa hoja, y en la máquina tampoco pasa por el conector redondo (medido).
+- El esquema es de máquinas con I-ECU (serie posterior a la nuestra): en nuestra máquina **B4 no pasa por el conector redondo**, así que o bien este conector no es MC02 o el cableado de la emergencia es distinto en esta serie. La tabla queda como referencia; los pines de CAN medidos son E7/E8.
 
-**Comprobación en la máquina** (no hay datos de este conector en la documentación consultada más allá de esa hoja):
+**Comprobación en la máquina** (puntos 2 y 3 ya hechos para CAN H/L, B4 y masa; ver la tabla de mediciones):
 1. Fabricante y serie (posible Deutsch HD10/HD16 de 9 vías, como la toma J1939 de diagnóstico, o conector propio de Volvo): mirar marcas en la carcasa y las letras A, B, C… junto a cada contacto.
 2. Qué pines son **CAN H, CAN L y masa**, con la E-ECU **desenchufada** y la llave quitada:
    - Continuidad entre la cara de la clavija de la E-ECU (**B1, B2, B9/B10**) y cada contacto del conector redondo.
@@ -140,14 +160,14 @@ La clavija de la E-ECU no sirve como punto de conexión: los conectores A y B va
 | # | Dónde | Cómo | Ventajas | Inconvenientes |
 |---|---|---|---|---|
 | **1** | **Clavija del mazo de la V-ECU** (JA 70 / JB 16), que está libre porque la V-ECU no está montada | Pines macho de prueba del calibre correcto metidos por la **cara** de los contactos hembra, o una cabecera recuperada de una V-ECU averiada | No se corta ni se extrae nada; **están todas las señales**: CAN H **JB14**, CAN L **JB6**, emergencia/B4 **JA47** (mismo cable que MC02.1), +24 V **JB7/JB8**, masa **JA15/JA63** (mallas JB13/JB5). Es justo donde iba la V-ECU | Hay que identificar el tamaño de los contactos para no abrirlos; para el montaje definitivo hace falta una cabecera macho fija |
-| **2** | **Adaptador en "Y" en el conector redondo (MC02)** | Comprar la pareja macho + hembra del conector, hacer un latiguillo intermedio y sacar CAN H/L (y B4) de él | Reversible, profesional y limpio; se enchufa y desenchufa en segundos | Hay que identificar el conector (marca y serie) para comprar la pareja |
-| 3 | Conector redondo por detrás (back-probe) | Agujas finas por la junta trasera de MC02.2 y MC02.3 | Rápido para la **captura** de una sola vez | Puede dañar la junta estanca; no vale como montaje definitivo |
+| **2** | **Adaptador en "Y" en el conector redondo** | Comprar la pareja macho + hembra del conector, hacer un latiguillo intermedio y sacar CAN H/L (E7/E8) de él; masa de un perno de chasis (B4 no pasa por aquí) | Reversible, profesional y limpio; se enchufa y desenchufa en segundos | Hay que identificar el conector (marca y serie) para comprar la pareja |
+| 3 | Conector redondo por detrás (back-probe) | Agujas finas por la junta trasera de E7 (CAN H) y E8 (CAN L) | Rápido para la **captura** de una sola vez | Puede dañar la junta estanca; no vale como montaje definitivo |
 | 4 | Extraer contactos del conector redondo | Herramienta de extracción y contactos sueltos | Sin cortar | Riesgo de dañar contactos o retenciones; desaconsejado |
 
 **Recomendación:** opción 1 para la captura y para el montaje (el ESP32 ocupa el sitio de la V-ECU), y opción 2 si la clavija de la V-ECU resulta incómoda o sus contactos no admiten pines de prueba.
 
 Comprobaciones antes de usar la clavija de la V-ECU (llave quitada):
-1. Continuidad **JB14 ↔ B1** (o MC02.2), **JB6 ↔ B2** (o MC02.3) y **JA47 ↔ B4** (o MC02.1).
+1. Continuidad **JB14 ↔ B1** (o E7 del conector redondo), **JB6 ↔ B2** (o E8) y **JA47 ↔ B4**.
 2. Resistencia **JB14–JB6**: ≈ 117 Ω o ≈ 60 Ω con la E-ECU enchufada.
 3. Con contacto: **JB7/JB8 ≈ 24 V** respecto a **JA15/JA63**; JB14 y JB6 ≈ 2,5 V.
 

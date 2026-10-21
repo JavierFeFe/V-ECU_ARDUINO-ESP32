@@ -5,6 +5,11 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 ## [Unreleased]
 
 ### Añadido (punto de conexión)
+- `docs/conector_MC02.svg/.png` (`tools/gen_conector_MC02.py`) y `docs/fotos/conector_MC02_frontal.jpg`: dibujo de la cara de contactos del conector redondo del mazo de la E-ECU (13 posiciones, 9 contactos montados; numeración propia con E1 = cavidad exterior vacía como referencia).
+- Mediciones en la máquina (`docs/CAPTURA_CAN.md` §3b): **E7 = CAN H (B1)** y **E8 = CAN L (B2)** confirmados; **B4 (emergencia) y B9/B10 (masa) no pasan por este conector**. La masa del SH-C30A se toma de un perno de chasis/motor o del negativo de batería; la vía B sigue en el interruptor 26 o en JA47.
+
+### Corregido (punto de conexión)
+- La deducción «MC02.1 = emergencia B4» del esquema SCH02-1 no se cumple en esta máquina: identificación del conector redondo como MC02 rebajada a fiabilidad baja; §3b y §3c al día con E7/E8.
 - `docs/CAPTURA_CAN.md` §3: la masa del SH-C30A puede tomarse de cualquier masa buena junto a la E-ECU (perno de chasis/motor o negativo de batería) si B9/B10 no son accesibles; sigue siendo imprescindible junto a CAN H/L.
 - `docs/CAPTURA_CAN.md` §3c: la clavija de la E-ECU no sirve (A y B en la misma carcasa). Opciones sin cortar cables: **clavija libre del mazo de la V-ECU** (JB14 CAN H, JB6 CAN L, JA47 emergencia/B4, JB7/JB8 +24 V, JA15/JA63 masa) como opción recomendada, adaptador en "Y" en MC02, back-probe o extracción de contactos; con las comprobaciones previas.
 - Conector redondo identificado como probable **MC02** («mazo del EMS») a partir del esquema SCH02-1 de la EC160B–290B: MC02.2 CAN H, MC02.3 CAN L, MC02.4/5 J1587 A/B, MC02.1 línea de emergencia (B4); sin masa. Tabla en `docs/CAPTURA_CAN.md` §3b y ampliación del esquema en `docs/esquemas/`. Pendiente de confirmar con el multímetro.
