@@ -116,7 +116,7 @@ a('<path d="M 652 575 L 692 575" stroke="#999" stroke-width="3"/>')
 a('<rect x="790" y="732" width="62" height="40" rx="3" fill="#1b1b1b" stroke="#444"/>')
 text(821, 786, "AMS1117", size=10, fill="#d9f2df", anchor="middle")
 a('<rect x="622" y="748" width="58" height="40" rx="4" fill="#c0c0c0" stroke="#777" stroke-width="1.5"/>')
-text(628, 738, "micro-USB (solo 5 V)", size=10, fill="#d9f2df")
+text(628, 802, "micro-USB (solo 5 V)", size=10, fill="#d9f2df")
 a('<rect x="786" y="918" width="48" height="48" rx="4" fill="#d0d0d0" stroke="#666"/>')
 a('<circle cx="810" cy="942" r="13" fill="#222"/>')
 text(810, 986, "botón IO0", size=11, fill="#ffffff", anchor="middle", weight="bold")
@@ -164,16 +164,16 @@ text(1163, 1000, "antena", size=10, fill="#bbbbbb", anchor="middle")
 # Tiras de pines (2×10). Rango k: 0 arriba (junto a P4), 9 abajo (junto a la antena).
 RK = [583 + 43 * k for k in range(10)]
 # Tira izquierda (serigrafía "superior"): exterior = fila CLK…, interior = fila 3V3…
-IZQ_EXT = ["IO6", "IO8", "IO2", "IO4", "IO17", "IO18", "GND", "IO3", "IO22", "GND"]
-IZQ_INT = ["3V3", "IO7", "IO15", "IO0", "IO16", "IO5", "IO19", "IO21", "IO1", "IO23"]
+IZQ_EXT = ["3V3", "IO7", "IO15", "IO0", "IO16", "IO5", "IO19", "IO21", "IO1", "IO23"]
+IZQ_INT = ["IO6", "IO8", "IO2", "IO4", "IO17", "IO18", "GND", "IO3", "IO22", "GND"]
 # Tira derecha (serigrafía "inferior"): interior = fila GND…, exterior = fila 5V…
-DER_INT = ["GND", "IO11", "IO9", "IO12", "IO27", "IO25", "IO32", "IO34", "IO36", "3V3"]
-DER_EXT = ["5V", "IO10", "IO13", "IO14", "IO26", "IO33", "IO35", "IO39", "EN", "GND"]
+DER_INT = ["5V", "IO10", "IO13", "IO14", "IO26", "IO33", "IO35", "IO39", "EN", "GND"]
+DER_EXT = ["GND", "IO11", "IO9", "IO12", "IO27", "IO25", "IO32", "IO34", "IO36", "3V3"]
 XI_E, XI_I, XD_I, XD_E = 923, 956, 1340, 1373
-hl_ie = {3: C["slnt"], 4: C["tx"], 5: C["rx"], 6: C["gnd"], 8: C["scl"], 9: C["gnd"]}
-hl_ii = {0: C["3v3"], 7: C["sda"]}
-hl_di = {0: C["gnd"], 4: C["sw"], 6: C["clk"], 9: C["3v3"]}
-hl_de = {5: C["dt"], 9: C["gnd"]}
+hl_ie = {0: C["3v3"], 7: C["sda"]}
+hl_ii = {3: C["slnt"], 4: C["tx"], 5: C["rx"], 6: C["gnd"], 8: C["scl"], 9: C["gnd"]}
+hl_di = {5: C["dt"], 9: C["gnd"]}
+hl_de = {0: C["gnd"], 4: C["sw"], 6: C["clk"], 9: C["3v3"]}
 for k, y in enumerate(RK):
     for x in (XI_E, XI_I, XD_I, XD_E):
         hole(x, y, square=(k == 9 and x in (XI_E, XD_E)))
@@ -248,20 +248,19 @@ text(470, 854, "Termination: OFF en la máquina", size=11, fill="#2a9d4f", ancho
 def junction(x, y, color):
     a(f'<circle cx="{x}" cy="{y}" r="5" fill="{color}" stroke="#fff" stroke-width="1.5"/>')
 # CAN Pal y OLED: GND → GND (IO… fila exterior, rango 6); Vcc → 3V3 (fila interior, rango 0)
-wire([(565, 760), (578, 760), (578, 841), (876, 841)], C["gnd"])
-wire([(565, 895), (850, 895), (850, 841)], C["gnd"])
-junction(850, 841, C["gnd"])
-wire([(565, 776), (586, 776), (586, 560), (956, 560), (956, 576)], C["3v3"])
-wire([(565, 911), (586, 911), (586, 776)], C["3v3"])
+wire([(565, 760), (578, 760), (578, 819.5), (956, 819.5), (956, 834)], C["gnd"])          # CAN GND → GND (int. rango 6)
+wire([(565, 932), (580, 932), (580, 948.5), (956, 948.5), (956, 963)], C["gnd"])        # OLED GND → GND (int. rango 9)
+wire([(565, 776), (586, 776), (586, 560), (923, 560), (923, 576)], C["3v3"])            # Vcc → 3V3 (ext. rango 0)
+wire([(565, 916), (586, 916), (586, 776)], C["3v3"])
 junction(586, 776, C["3v3"])
 # Encoder: GND → GND (tira derecha, rango 0); + → 3V3 (tira derecha, rango 9)
-wire([(1495, 700), (1480, 700), (1480, 561), (1340, 561), (1340, 576)], C["gnd"])
-wire([(1495, 716), (1488, 716), (1488, 992), (1340, 992), (1340, 977)], C["3v3"])
+wire([(1495, 700), (1486, 700), (1486, 583), (1420, 583)], C["gnd"])
+wire([(1495, 716), (1492, 716), (1492, 970), (1420, 970)], C["3v3"])
 
 # CAN Pal → tira izquierda
-wire([(565, 712), (875, 712)], C["slnt"])                                   # SLNT → IO4
-wire([(565, 728), (612, 728), (612, 755), (875, 755)], C["tx"])            # TX → IO17
-wire([(565, 744), (594, 744), (594, 798), (875, 798)], C["rx"])            # RX → IO18
+wire([(565, 712), (600, 712), (600, 690.5), (956, 690.5), (956, 705)], C["slnt"])  # SLNT → IO4
+wire([(565, 728), (612, 728), (612, 733.5), (956, 733.5), (956, 748)], C["tx"])     # TX → IO17
+wire([(565, 744), (594, 744), (594, 776.5), (956, 776.5), (956, 791)], C["rx"])     # RX → IO18
 
 # ================================================================ OLED (girada 90°: pines a la derecha)
 a('<rect x="352" y="878" width="208" height="110" rx="8" fill="#1d3557" stroke="#0d1b2a" stroke-width="2"/>')
@@ -270,14 +269,14 @@ text(372, 906, "AUTO-RALENTI", size=10, fill="#7fdcff")
 text(372, 944, "1900", size=28, fill="#7fdcff", weight="bold")
 text(456, 944, "rpm", size=10, fill="#7fdcff")
 text(372, 968, "82C B4:ON CAN", size=10, fill="#7fdcff")
-oled = [("GND", 895), ("VCC", 911), ("SCL", 927), ("SDA", 943)]
+oled = [("SDA", 884), ("SCL", 900), ("VCC", 916), ("GND", 932)]
 for n, y in oled:
     col = {"GND": "#1f1f1f", "VCC": C["3v3"]}.get(n, "#d8b25a")
     pad(560, y, col)
     text(550, y + 4, n, size=9.5, fill="#ffffff", anchor="end")
 text(456, 1004, "OLED SSD1306 0,96\" I²C (0x3C)", size=13, anchor="middle", weight="bold")
-wire([(565, 927), (875, 927)], C["scl"])                                    # SCL → IO22
-wire([(565, 943), (600, 943), (600, 948.5), (939.5, 948.5), (939.5, 884), (949, 884)], C["sda"])  # SDA → IO21
+wire([(565, 884), (875, 884)], C["sda"])                                              # SDA → IO21 (ext. rango 7)
+wire([(565, 900), (610, 900), (610, 905.5), (956, 905.5), (956, 920)], C["scl"])        # SCL → IO22 (int. rango 8)
 
 # ================================================================ conector B de la E-ECU (abajo a la izquierda)
 CBX, CBY = 24, 1060
@@ -347,9 +346,9 @@ for n, y in enc:
     text(1510, y + 4, n, size=9.5, fill="#ffffff")
 text(1610, 672, "Encoder rotativo (KY-040)", size=13, anchor="middle", weight="bold")
 text(1610, 888, "pulsación larga = REPOSO", size=11, fill="#14532d", anchor="middle", weight="bold")
-wire([(1495, 733.5), (1356.5, 733.5), (1356.5, 755), (1347, 755)], C["sw"])            # SW → IO27
-wire([(1495, 750), (1440, 750), (1440, 798), (1420, 798)], C["dt"])                     # DT → IO33
-wire([(1495, 766), (1465, 766), (1465, 819.5), (1356.5, 819.5), (1356.5, 841), (1347, 841)], C["clk"])  # CLK → IO32
+wire([(1495, 733.5), (1440, 733.5), (1440, 755), (1420, 755)], C["sw"])                # SW → IO27 (ext. rango 4)
+wire([(1495, 750), (1465, 750), (1465, 776.5), (1356.5, 776.5), (1356.5, 798), (1347, 798)], C["dt"])  # DT → IO33 (int. rango 5)
+wire([(1495, 766), (1480, 766), (1480, 841), (1420, 841)], C["clk"])                     # CLK → IO32 (ext. rango 6)
 
 # ================================================================ notas
 nx, ny = 460, 1072
