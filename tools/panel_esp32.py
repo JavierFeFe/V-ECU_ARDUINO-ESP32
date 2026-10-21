@@ -254,8 +254,10 @@ class Placa:
 
 
 def puertos_disponibles():
+    # Solo puertos USB (en Linux, ttyS0…ttyS31 son puertos internos que no llevan a nada).
     return [{"device": p.device, "desc": p.description or "", "conocido": p.vid in VIDS_CONOCIDOS}
-            for p in sorted(list_ports.comports(), key=lambda p: p.device)]
+            for p in sorted(list_ports.comports(), key=lambda p: p.device)
+            if p.vid is not None or re.search(r"ttyACM|ttyUSB|cu\.usb", p.device)]
 
 
 def crear_manejador(placa):
