@@ -57,6 +57,8 @@ Antes de cada sesión, desde la carpeta del repositorio, activar el entorno (en 
 source .venv/bin/activate.fish
 ```
 
+Accesos en el escritorio para los dos paneles (**Panel bus J1939** y **Panel placa ESP32**; ya creados en el portátil): `sh tools/linux/instalar_accesos.sh`. Cada uno abre una ventana de terminal con el panel y el navegador; cerrar la ventana lo para.
+
 En Linux el kernel toma el SH-C30A como interfaz `can0` (driver `gs_usb`); el script lo libera solo al abrirlo, no hay que hacer nada.
 
 ### Windows (alternativa)
@@ -87,6 +89,18 @@ python tools/captura_can.py capturar --nombre prueba --duracion 5
 Alternativa: JB14 / JB6 en el mazo de la V-ECU. Conectar **antes** de dar contacto.
 
 ## 4. Capturas (un fichero por prueba)
+
+### Con el panel en el navegador (recomendado)
+
+```bash
+python tools/panel_bus.py
+```
+
+Abre `http://127.0.0.1:8766` con el bus en directo, **siempre en solo escucha**: rpm, par real, carga, temperaturas, presión de aceite, batería y horas; gráficas de rpm y par (la del par sirve para elegir el umbral del auto-ralentí); averías DM1 con sus lámparas; nodos presentes, con aviso si aparece la V-ECU (0x11), algún TSC1 o si la E-ECU está sola en el bus; y la tabla de mensajes con los bytes que cambian. Las **6 pruebas** de la tabla de abajo tienen su botón (nombre y duración ya puestos); las **notas** se marcan con un botón o escribiendo, y quedan en el fichero y en las gráficas. Al terminar, **Analizar** muestra el mismo informe que el paso 5. Los ficheros son idénticos a los de `captura_can.py`.
+
+Para probarlo sin máquina: `python tools/panel_bus.py --demo` (E-ECU simulada; graba en `capturas/demo/`). Para repasar una captura ya hecha: `python tools/panel_bus.py --reproducir capturas/<fichero>.log`.
+
+### Por línea de comandos
 
 Cada captura se guarda en `capturas/<fecha>_<hora>_<nombre>.log`. Mientras graba, escribir una nota y pulsar **Enter** marca el momento (p. ej. «interruptor en ALTA», «muevo el brazo»). Ctrl+C para terminar.
 

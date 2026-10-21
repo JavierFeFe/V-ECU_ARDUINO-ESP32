@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bus J1939</title>
+<style>
+  :root {
+    --bg: #f4f6f8; --panel: #ffffff; --text: #1b1f24; --muted: #5d6673; --faint: #8b939e; --border: #dde2e8;
+    --grid: #e9edf1; --accent: #1d5fd1; --accent-soft: #e6eefc; --ok: #1d8a4b; --ok-soft: #e3f4ea;
+    --warn: #a86400; --warn-soft: #fdf1df; --danger: #c62828; --danger-soft: #fde8e8;
+    --serie: #1d5fd1; --log-bg: #fbfcfd; --shadow: 0 1px 2px rgba(16, 24, 40, .06);
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "DejaVu Sans Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1216; --panel: #171b21; --text: #e6e9ee; --muted: #9aa4b2; --faint: #6b7480; --border: #2a313b;
+      --grid: #232a33; --accent: #6ea4ff; --accent-soft: #1b2a44; --ok: #4cc38a; --ok-soft: #15301f;
+      --warn: #f0b450; --warn-soft: #3a2a10; --danger: #ff6b6b; --danger-soft: #3d1a1a;
+      --serie: #6ea4ff; --log-bg: #12161b; --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif; }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 12px 20px;
+           background: var(--panel); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 3; }
+  h1 { font-size: 17px; margin: 0; }
+  .sub { color: var(--muted); font-size: 12.5px; }
+  .grow { flex: 1; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px;
+          font-weight: 650; font-size: 13px; background: var(--danger-soft); color: var(--danger); }
+  .pill.ok { background: var(--ok-soft); color: var(--ok); }
+  .pill.warn { background: var(--warn-soft); color: var(--warn); }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .rec { background: var(--danger); color: #fff; }
+  .rec .dot { animation: parpadeo 1s infinite; }
+  @keyframes parpadeo { 50% { opacity: .2; } }
+  .banda { margin: 12px 20px 0; padding: 10px 14px; border-radius: 10px; font-weight: 600; }
+  .banda.demo { background: var(--warn-soft); color: var(--warn); }
+  .banda.error { background: var(--danger-soft); color: var(--danger); }
+  main { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(340px, 1fr); gap: 16px; padding: 16px 20px 24px; }
+  .col { display: grid; gap: 16px; align-content: start; min-width: 0; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+          box-shadow: var(--shadow); min-width: 0; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin: 0 0 12px;
+             font-weight: 650; display: flex; align-items: center; gap: 10px; }
+  .card h2 .grow { flex: 1; }
+  .heroes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .hero { background: var(--bg); border-radius: 10px; padding: 10px 12px; }
+  .hero b { display: block; font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums; font-weight: 750; }
+  .hero span { color: var(--muted); font-size: 12px; }
+  .hero.viejo b { color: var(--faint); }
+  .datos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 14px; margin-top: 12px; }
+  .datos div { font-size: 13px; color: var(--muted); }
+  .datos b { display: block; color: var(--text); font-size: 16px; font-variant-numeric: tabular-nums; }
+  .graf { position: relative; }
+  .graf + .graf { margin-top: 6px; }
+  .graf h3 { margin: 0 0 2px; font-size: 12.5px; font-weight: 650; color: var(--muted); }
+  .graf svg { display: block; width: 100%; height: 130px; overflow: visible; }
+  .graf .eje { fill: var(--faint); font-size: 10.5px; font-variant-numeric: tabular-nums; }
+  .graf .rej { stroke: var(--grid); stroke-width: 1; }
+  .graf .linea { fill: none; stroke: var(--serie); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .graf .nota { stroke: var(--faint); stroke-width: 1; stroke-dasharray: 3 3; }
+  .graf .cruz { stroke: var(--muted); stroke-width: 1; }
+  .graf .punto { fill: var(--serie); stroke: var(--panel); stroke-width: 2; }
+  .tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--border);
+         border-radius: 8px; padding: 6px 9px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,.12);
+         white-space: nowrap; z-index: 2; }
+  .tip b { font-variant-numeric: tabular-nums; }
+  .ventana { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+  .ventana button { white-space: nowrap; }
+  button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--border); background: var(--panel);
+           color: var(--text); padding: 7px 11px; font-weight: 600; }
+  button:hover:not(:disabled) { border-color: var(--accent); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.peq { padding: 4px 9px; font-size: 12.5px; }
+  button.activo { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.grabar { background: var(--danger); border-color: var(--danger); color: #fff; }
+  input[type=text], input[type=number] { font: inherit; color: var(--text); background: var(--panel);
+         border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; min-width: 0; }
+  .pruebas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .prueba { text-align: left; padding: 8px 10px; }
+  .prueba small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+  .prueba.hecha { border-color: var(--ok); }
+  .prueba.hecha::after { content: " ✓"; color: var(--ok); }
+  .fila { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .fila input[type=text] { flex: 1; }
+  .progreso { height: 6px; background: var(--grid); border-radius: 3px; overflow: hidden; margin: 8px 0 4px; }
+  .progreso div { height: 100%; background: var(--danger); width: 0; transition: width .4s; }
+  .recbox { border: 1px solid var(--danger); background: var(--danger-soft); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; }
+  .recbox b { color: var(--danger); }
+  .notas-rapidas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .lista { list-style: none; margin: 10px 0 0; padding: 0; font-size: 13px; }
+  .lista li { display: flex; gap: 8px; align-items: center; padding: 5px 0; border-top: 1px solid var(--border); }
+  .lista li span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); font-size: 12px; }
+  .vacio { color: var(--muted); }
+  .dtc { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--border); }
+  .dtc:first-of-type { border-top: 0; }
+  .dtc b { font-family: var(--mono); }
+  .lamp { display: inline-flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 6px; }
+  .lamp span { font-size: 11.5px; padding: 2px 8px; border-radius: 999px; background: var(--bg); color: var(--faint); }
+  .lamp span.on { background: var(--warn-soft); color: var(--warn); font-weight: 650; }
+  .lamp span.on.rojo { background: var(--danger-soft); color: var(--danger); }
+  .aviso { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 8px 10px; font-size: 13px; margin-top: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { text-align: left; color: var(--muted); font-weight: 600; padding: 4px 6px; border-bottom: 1px solid var(--border);
+       position: sticky; top: 0; background: var(--panel); }
+  td { padding: 4px 6px; border-bottom: 1px solid var(--grid); vertical-align: top; font-variant-numeric: tabular-nums; }
+  td.m { font-family: var(--mono); white-space: nowrap; }
+  td .cb { color: var(--accent); font-weight: 700; }
+  tr.viejo td { color: var(--faint); }
+  .tabla { max-height: 420px; overflow: auto; }
+  dialog { border: 1px solid var(--border); border-radius: 12px; background: var(--panel); color: var(--text);
+           max-width: min(1000px, 94vw); width: 100%; padding: 0; }
+  dialog::backdrop { background: rgba(0,0,0,.45); }
+  dialog header { position: static; }
+  dialog pre { margin: 0; padding: 14px 18px; max-height: 70vh; overflow: auto; font: 12px/1.5 var(--mono); white-space: pre-wrap; }
+  #toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--danger); color: #fff;
+           padding: 9px 16px; border-radius: 9px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s;
+           max-width: calc(100% - 32px); z-index: 5; }
+  #toast.ver { opacity: 1; }
+  @media (max-width: 980px) {
+    main { grid-template-columns: 1fr; padding: 12px 16px 20px; }
+    header { padding: 10px 16px; }
+    .banda { margin: 12px 16px 0; }
+    .heroes, .datos { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Bus J1939 · EC210B</h1>
+    <div class="sub" id="fuente-desc">Conectando…</div>
+  </div>
+  <span class="pill ok" id="pill-escucha" title="El adaptador no transmite ni confirma tramas"><span class="dot"></span>SOLO ESCUCHA</span>
+  <span class="pill rec" id="pill-rec" hidden><span class="dot"></span><span id="pill-rec-txt">GRABANDO</span></span>
+  <div class="grow"></div>
+  <span class="sub" id="ritmo">— tramas/s</span>
+  <span class="pill" id="pill"><span class="dot"></span><span id="pill-txt">Sin conexión</span></span>
+</header>
+<div class="banda demo" id="banda-demo" hidden>Datos simulados: no es la máquina. Las grabaciones van a <code>capturas/demo/</code>.</div>
+<div class="banda error" id="banda-error" hidden></div>
+
+<main>
+  <div class="col">
+    <section class="card" aria-labelledby="t-motor">
+      <h2 id="t-motor">Motor · E-ECU (0x00)</h2>
+      <div class="heroes">
+        <div class="hero" id="h-rpm"><b>—</b><span>rpm</span></div>
+        <div class="hero" id="h-par"><b>—</b><span>par real</span></div>
+        <div class="hero" id="h-carga"><b>—</b><span>carga</span></div>
+        <div class="hero" id="h-ref"><b>—</b><span>refrigerante</span></div>
+      </div>
+      <div class="datos">
+        <div>Aceite<b id="d-aceite">—</b></div>
+        <div>Batería<b id="d-bat">—</b></div>
+        <div>Acelerador<b id="d-acel">—</b></div>
+        <div>Horas motor<b id="d-horas">—</b></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t-graf" style="position:relative">
+      <h2 id="t-graf">Evolución <span class="grow"></span>
+        <span class="ventana" role="group" aria-label="Ventana de tiempo">
+          <button class="peq" data-v="60">1 min</button><button class="peq activo" data-v="120">2 min</button>
+          <button class="peq" data-v="300">5 min</button><button class="peq" data-v="600">10 min</button>
+        </span>
+      </h2>
+      <div class="graf" id="g-rpm"><h3>rpm del motor (EEC1)</h3><svg></svg></div>
+      <div class="graf" id="g-par"><h3>Par real, % (EEC1) · marca el umbral del auto-ralentí</h3><svg></svg></div>
+      <div class="tip" id="tip" hidden></div>
+    </section>
+
+    <section class="card" aria-labelledby="t-dtc">
+      <h2 id="t-dtc">Averías activas (DM1)</h2>
+      <div id="averias"><div class="vacio">Sin DM1 recibidos todavía.</div></div>
+    </section>
+
+    <section class="card" aria-labelledby="t-ids">
+      <h2 id="t-ids">Mensajes en el bus <span class="grow"></span><span class="sub" id="ids-n"></span>
+        <button class="peq" id="btn-limpiar" title="Pone a cero contadores, tabla y gráficas">Reiniciar</button></h2>
+      <div class="tabla">
+        <table>
+          <thead><tr><th>ID</th><th>PGN</th><th>Mensaje</th><th>Origen</th><th>Nº</th><th>Periodo</th><th>Datos (en azul, bytes que cambian)</th></tr></thead>
+          <tbody id="ids"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="col">
+    <section class="card" aria-labelledby="t-grab">
+      <h2 id="t-grab">Grabar capturas</h2>
+      <div class="recbox" id="recbox" hidden>
+        <div class="fila"><b id="rec-nombre">—</b><span class="grow"></span><span id="rec-tiempo" class="sub"></span>
+          <button class="peq" id="btn-parar">Parar</button></div>
+        <div class="progreso"><div id="rec-barra"></div></div>
+        <div class="sub" id="rec-info"></div>
+      </div>
+      <div class="pruebas" id="pruebas"></div>
+      <div class="fila" style="margin-top:10px">
+        <input type="text" id="in-nombre" placeholder="Otra captura (nombre)" maxlength="40" aria-label="Nombre de la captura">
+        <input type="number" id="in-dur" placeholder="s" min="0" max="3600" style="width:72px" aria-label="Duración en segundos (vacío = hasta parar)">
+        <button class="grabar" id="btn-grabar">Grabar</button>
+      </div>
+      <p class="sub" style="margin:8px 0 0">Las capturas van a <code>capturas/</code> en el formato de <code>captura_can.py</code>.</p>
+    </section>
+
+    <section class="card" aria-labelledby="t-notas">
+      <h2 id="t-notas">Notas</h2>
+      <form class="fila" id="form-nota" autocomplete="off">
+        <input type="text" id="in-nota" placeholder="Qué pasa ahora (p. ej. interruptor en ALTA)" maxlength="120" aria-label="Nota">
+        <button type="submit">Marcar</button>
+      </form>
+      <div class="notas-rapidas" id="notas-rapidas"></div>
+      <ul class="lista" id="notas"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="t-nodos">
+      <h2 id="t-nodos">Nodos en el bus</h2>
+      <ul class="lista" id="nodos"><li class="vacio">—</li></ul>
+      <div class="aviso" id="aviso-vecu" hidden>Hay tramas con origen 0x11 (V-ECU): ¿está la V-ECU conectada?</div>
+      <div class="aviso" id="aviso-tsc1" hidden>Hay TSC1 (petición de régimen) en el bus: alguien está mandando el motor.</div>
+      <div class="aviso" id="aviso-solo" hidden>Solo transmite la E-ECU: si las tramas se repiten sin parar, nadie las confirma (ver CAPTURA_CAN.md §6).</div>
+    </section>
+
+    <section class="card" aria-labelledby="t-arch">
+      <h2 id="t-arch">Capturas de esta sesión</h2>
+      <ul class="lista" id="grabaciones"><li class="vacio">Ninguna todavía.</li></ul>
+      <ul class="lista" id="sistema"></ul>
+    </section>
+  </div>
+</main>
+
+<dialog id="dlg">
+  <header><strong id="dlg-titulo">Análisis</strong><span class="grow"></span><button class="peq" id="dlg-cerrar">Cerrar</button></header>
+  <pre id="dlg-texto"></pre>
+</dialog>
+<div id="toast" role="status"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const S = { foto: null, puntos: [], ventana: 120, hover: null, hechas: new Set() };
+const NOTAS_RAPIDAS = ["llave en contacto", "arranco", "interruptor en ALTA", "interruptor en RALENTÍ",
+                       "muevo brazo y cuchara", "paro de mover", "paro el motor"];
+const fmt = (v, d = 0) => (v == null || Number.isNaN(v) ? "—" : Number(v).toLocaleString("es", { maximumFractionDigits: d, minimumFractionDigits: d }));
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("ver");
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("ver"), 3500);
+}
+async function post(ruta, cuerpo = {}) {
+  try {
+    const r = await fetch(ruta, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cuerpo) });
+    const j = await r.json();
+    if (!j.ok) toast(j.error || "No se pudo");
+    return j;
+  } catch { toast("Sin conexión con el panel (¿está en marcha tools/panel_bus.py?)"); return { ok: false }; }
+}
+
+// ------------------------------------------------------------------ gráficas (dos, mismo eje de tiempo)
+const GRAF = [
+  { id: "g-rpm", i: 2, min: 0, max: 2200, suf: " rpm", dec: 0 },
+  { id: "g-par", i: 3, min: 0, max: 100, suf: " %", dec: 0 },
+];
+function escalaY(g, vals) {
+  let lo = g.min, hi = g.max;
+  for (const v of vals) if (v != null) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+  const paso = g.id === "g-rpm" ? 500 : 25;
+  return [Math.floor(lo / paso) * paso, Math.ceil(hi / paso) * paso, paso];
+}
+function dibujar() {
+  const ahora = S.foto ? S.foto.ahora : Date.now() / 1000;
+  const t0 = ahora - S.ventana;
+  const pts = S.puntos.filter((p) => p[1] >= t0);
+  const notas = (S.foto?.notas || []).filter((n) => n.t >= t0);
+  for (const g of GRAF) {
+    const svg = document.querySelector(`#${g.id} svg`);
+    const W = svg.clientWidth || 600, H = 130, L = 44, R = 8, T = 6, B = 18;
+    const [lo, hi, paso] = escalaY(g, pts.map((p) => p[g.i]));
+    const x = (t) => L + (t - t0) / S.ventana * (W - L - R);
+    const y = (v) => T + (1 - (v - lo) / (hi - lo || 1)) * (H - T - B);
+    let s = "";
+    for (let v = lo; v <= hi + 1e-9; v += paso) {
+      s += `<line class="rej" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>`;
+      s += `<text class="eje" x="${L - 6}" y="${y(v) + 3.5}" text-anchor="end">${fmt(v)}</text>`;
+    }
+    const marcas = S.ventana <= 120 ? 30 : S.ventana <= 300 ? 60 : 120;
+    for (let k = 0; k <= S.ventana; k += marcas) {
+      const xx = x(ahora - k);
+      s += `<text class="eje" x="${xx}" y="${H - 3}" text-anchor="${k === 0 ? "end" : "middle"}">${k === 0 ? "ahora" : "−" + (k >= 60 && k % 60 === 0 ? k / 60 + " min" : k + " s")}</text>`;
+    }
+    for (const n of notas) s += `<line class="nota" x1="${x(n.t)}" x2="${x(n.t)}" y1="${T}" y2="${H - B}"><title>${n.texto.replace(/</g, "&lt;")}</title></line>`;
+    let d = "", pluma = false;
+    for (const p of pts) {
+      const v = p[g.i];
+      if (v == null) { pluma = false; continue; }
+      d += (pluma ? "L" : "M") + x(p[1]).toFixed(1) + " " + y(v).toFixed(1);
+      pluma = true;
+    }
+    s += `<path class="linea" d="${d}"/>`;
+    if (S.hover != null) {
+      const p = cercano(pts, S.hover);
+      if (p) {
+        s += `<line class="cruz" x1="${x(p[1])}" x2="${x(p[1])}" y1="${T}" y2="${H - B}"/>`;
+        if (p[g.i] != null) s += `<circle class="punto" cx="${x(p[1])}" cy="${y(p[g.i])}" r="4.5"/>`;
+      }
+    }
+    svg.innerHTML = s;
+    g.x = x; g.L = L; g.R = R; g.W = W; g.t0 = t0;
+  }
+  tooltip(pts);
+}
+function cercano(pts, t) {
+  let mejor = null, dmin = Infinity;
+  for (const p of pts) { const d = Math.abs(p[1] - t); if (d < dmin) { dmin = d; mejor = p; } }
+  return mejor;
+}
+function tooltip(pts) {
+  const tip = $("tip");
+  if (S.hover == null) { tip.hidden = true; return; }
+  const p = cercano(pts, S.hover);
+  if (!p) { tip.hidden = true; return; }
+  const hora = new Date(p[1] * 1000).toLocaleTimeString("es");
+  const nota = (S.foto?.notas || []).find((n) => Math.abs(n.t - p[1]) < S.ventana / 150);
+  tip.innerHTML = `${hora}<br><b>${fmt(p[2])}</b> rpm · par <b>${fmt(p[3])}</b> %` + (nota ? `<br>📝 ${nota.texto.replace(/</g, "&lt;")}` : "");
+  const g = GRAF[0], card = $("t-graf").parentElement;
+  const xx = g.x(p[1]) + $("g-rpm").offsetLeft;
+  tip.hidden = false;
+  tip.style.left = Math.min(Math.max(xx + 12, 8), card.clientWidth - tip.offsetWidth - 8) + "px";
+  tip.style.top = $("g-rpm").offsetTop + 24 + "px";
+}
+for (const g of GRAF) {
+  const el = $(g.id);
+  el.addEventListener("mousemove", (e) => {
+    const r = el.querySelector("svg").getBoundingClientRect();
+    const frac = (e.clientX - r.left - g.L) / (r.width - g.L - g.R);
+    S.hover = frac < 0 || frac > 1 ? null : g.t0 + frac * S.ventana;
+    dibujar();
+  });
+  el.addEventListener("mouseleave", () => { S.hover = null; dibujar(); });
+}
+document.querySelectorAll("[data-v]").forEach((b) => b.addEventListener("click", () => {
+  S.ventana = +b.dataset.v;
+  document.querySelectorAll("[data-v]").forEach((x) => x.classList.toggle("activo", x === b));
+  dibujar();
+}));
+addEventListener("resize", dibujar);
+
+// ------------------------------------------------------------------ pintar la foto
+function hero(id, v, suf, fresco, dec = 0) {
+  const el = $(id); el.querySelector("b").textContent = v == null ? "—" : fmt(v, dec) + suf;
+  el.classList.toggle("viejo", !fresco);
+}
+function pintar(f) {
+  S.foto = f;
+  S.puntos.push(...f.puntos);
+  if (S.puntos.length > 3000) S.puntos.splice(0, S.puntos.length - 3000);
+  const fu = f.fuente;
+  $("fuente-desc").textContent = fu.descripcion || "Sin adaptador";
+  $("pill").className = "pill " + (fu.conectado ? (f.bus.tramasS > 0 ? "ok" : "warn") : "");
+  $("pill-txt").textContent = !fu.conectado ? "Sin conexión" : f.bus.tramasS > 0 ? "Recibiendo" : "Conectado, sin tramas";
+  $("ritmo").textContent = `${fmt(f.bus.tramasS)} tramas/s · carga ≈ ${fmt(f.bus.carga, 1)} % · ${fmt(f.bus.total)} en total` +
+    (fu.erroresBus ? ` · ${fmt(fu.erroresBus)} errores` : "");
+  $("banda-demo").hidden = !fu.demo;
+  $("banda-error").hidden = !fu.error;
+  $("banda-error").textContent = fu.error || "";
+
+  const m = f.motor, fr = f.frescos;
+  hero("h-rpm", m.rpm, "", fr.rpm); hero("h-par", m.par, " %", fr.rpm); hero("h-carga", m.carga, " %", fr.carga);
+  hero("h-ref", m.refrigerante, " °C", fr.refrigerante);
+  $("d-aceite").textContent = m.aceiteKpa == null ? "—" : `${fmt(m.aceiteKpa)} kPa`;
+  $("d-bat").textContent = m.bateriaV == null ? "—" : `${fmt(m.bateriaV, 1)} V`;
+  $("d-acel").textContent = m.acelerador == null ? "—" : `${fmt(m.acelerador)} %`;
+  $("d-horas").textContent = m.horas == null ? "—" : `${fmt(m.horas, 1)} h`;
+
+  // averías
+  const av = $("averias");
+  if (!f.averias.length) av.innerHTML = '<div class="vacio">Sin DM1 recibidos todavía.</div>';
+  else {
+    av.replaceChildren(...f.averias.map((a) => {
+      const box = document.createElement("div");
+      const l = a.lamparas;
+      box.innerHTML = `<div><strong>${a.sa} ${a.nombre}</strong> <span class="sub">· hace ${fmt(a.edad, 1)} s</span></div>
+        <div class="lamp"><span class="${l.MIL ? "on rojo" : ""}">MIL</span><span class="${l.parada ? "on rojo" : ""}">Parada</span>
+        <span class="${l.aviso ? "on" : ""}">Aviso</span><span class="${l.proteccion ? "on" : ""}">Protección</span></div>`;
+      if (!a.dtc.length) box.insertAdjacentHTML("beforeend", '<div class="vacio">Sin averías activas.</div>');
+      for (const d of a.dtc) box.insertAdjacentHTML("beforeend", `<div class="dtc"><b>SPN ${d.spn}</b><span>FMI ${d.fmi}</span><span class="sub">${d.oc} veces</span></div>`);
+      return box;
+    }));
+  }
+
+  // nodos
+  $("nodos").replaceChildren(...(f.nodos.length ? f.nodos : [null]).map((n) => {
+    const li = document.createElement("li");
+    if (!n) { li.className = "vacio"; li.textContent = "Ninguno todavía."; return li; }
+    li.innerHTML = `<strong>${n.sa}</strong><span>${n.nombre || "desconocido"}</span><span class="sub" style="flex:none">${fmt(n.n)} tramas</span>`;
+    return li;
+  }));
+  $("aviso-vecu").hidden = !f.bus.vecu;
+  $("aviso-tsc1").hidden = !f.bus.tsc1;
+  $("aviso-solo").hidden = !(f.nodos.length === 1 && f.nodos[0].sa === "0x00" && f.bus.total > 200);
+
+  // tabla de mensajes
+  $("ids-n").textContent = `${f.ids.length} identificadores`;
+  $("ids").replaceChildren(...f.ids.map((r) => {
+    const tr = document.createElement("tr");
+    if (r.edad > 5) tr.className = "viejo";
+    const bytes = r.datos.split(" ").map((b, i) => (r.cambian >> i) & 1 ? `<span class="cb">${b}</span>` : b).join(" ");
+    tr.innerHTML = `<td class="m">${r.id}</td><td>${r.pgn ?? "—"}</td><td>${r.nombre || ""}</td><td>${r.origen || ""}</td>` +
+      `<td>${fmt(r.n)}</td><td>${r.per ? fmt(r.per) + " ms" : "—"}</td><td class="m">${bytes}</td>`;
+    return tr;
+  }));
+
+  // grabación
+  const g = f.grabacion;
+  $("recbox").hidden = !g; $("pill-rec").hidden = !g;
+  $("btn-grabar").disabled = !!g || !fu.conectado;
+  document.querySelectorAll(".prueba").forEach((b) => (b.disabled = !!g || !fu.conectado));
+  if (g) {
+    $("rec-nombre").textContent = "● " + g.nombre;
+    $("rec-tiempo").textContent = g.duracion ? `${g.segundos} / ${g.duracion} s` : `${g.segundos} s`;
+    $("rec-barra").style.width = g.duracion ? Math.min(100, g.segundos / g.duracion * 100) + "%" : "100%";
+    $("rec-info").textContent = `${fmt(g.tramas)} tramas · ${g.ruta}`;
+    $("pill-rec-txt").textContent = `GRABANDO ${g.nombre}`;
+  }
+  for (const a of f.grabaciones) S.hechas.add(a.nombre);
+  document.querySelectorAll(".prueba").forEach((b) => b.classList.toggle("hecha", S.hechas.has(b.dataset.nombre)));
+  $("grabaciones").replaceChildren(...(f.grabaciones.length ? [...f.grabaciones].reverse() : [null]).map((a) => {
+    const li = document.createElement("li");
+    if (!a) { li.className = "vacio"; li.textContent = "Ninguna todavía."; return li; }
+    li.innerHTML = `<span title="${a.ruta}">${a.ruta}</span><span class="sub" style="flex:none">${fmt(a.tramas)} · ${a.segundos} s</span>`;
+    const b = document.createElement("button"); b.className = "peq"; b.textContent = "Analizar";
+    b.onclick = () => analizar(a.ruta); li.append(b); return li;
+  }));
+  $("sistema").replaceChildren(...f.sistema.slice(-4).reverse().map((s) => {
+    const li = document.createElement("li"); li.className = "sub"; li.textContent = `${s.t} · ${s.texto}`; return li;
+  }));
+  $("notas").replaceChildren(...f.notas.slice(-6).reverse().map((n) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span style="flex:none" class="sub">${new Date(n.t * 1000).toLocaleTimeString("es")}</span>`;
+    const x = document.createElement("span"); x.style.fontFamily = "inherit"; x.textContent = n.texto; li.append(x); return li;
+  }));
+  dibujar();
+}
+
+// ------------------------------------------------------------------ acciones
+async function cargarPruebas() {
+  const r = await fetch("/api/pruebas"); const lista = await r.json();
+  $("pruebas").replaceChildren(...lista.map((p) => {
+    const b = document.createElement("button"); b.className = "prueba"; b.dataset.nombre = p.nombre;
+    b.innerHTML = `${p.nombre} · ${p.duracion} s<small>${p.que}</small>`;
+    b.onclick = () => post("/api/grabar", { nombre: p.nombre, duracion: p.duracion });
+    return b;
+  }));
+}
+$("btn-grabar").onclick = () => {
+  const nombre = $("in-nombre").value.trim();
+  if (!nombre) return toast("Pon un nombre a la captura");
+  post("/api/grabar", { nombre, duracion: +$("in-dur").value || 0 });
+};
+$("btn-parar").onclick = () => post("/api/parar");
+$("btn-limpiar").onclick = () => { S.puntos = []; post("/api/limpiar"); };
+$("form-nota").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const v = $("in-nota").value.trim(); if (!v) return;
+  if ((await post("/api/nota", { texto: v })).ok) $("in-nota").value = "";
+});
+$("notas-rapidas").replaceChildren(...NOTAS_RAPIDAS.map((t) => {
+  const b = document.createElement("button"); b.className = "peq"; b.textContent = t;
+  b.onclick = () => post("/api/nota", { texto: t }); return b;
+}));
+async function analizar(ruta) {
+  const j = await post("/api/analizar", { ruta });
+  if (!j.ok) return;
+  $("dlg-titulo").textContent = "Análisis · " + ruta; $("dlg-texto").textContent = j.texto; $("dlg").showModal();
+}
+$("dlg-cerrar").onclick = () => $("dlg").close();
+
+const ev = new EventSource("/api/eventos");
+ev.addEventListener("foto", (m) => pintar(JSON.parse(m.data)));
+ev.onerror = () => { $("pill").className = "pill"; $("pill-txt").textContent = "Panel detenido"; };
+cargarPruebas();
+</script>
+</body>
+</html>

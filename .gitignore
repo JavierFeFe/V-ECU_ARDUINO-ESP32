@@ -13,6 +13,7 @@ build/
 
 # Entorno de Python del proyecto (uv venv .venv)
 .venv/
+__pycache__/
 
 # Editores y sistema
 .vscode/
