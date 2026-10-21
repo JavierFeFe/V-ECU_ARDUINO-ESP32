@@ -4,6 +4,10 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (SH-C30A)
+- `docs/esquema_switches_SH-C30A.svg/.png` (`tools/gen_switches_shc30a.py`): cómo poner el **DIP de 2 interruptores** del SH-C30A para cada caso (captura con 60 Ω o 120 Ω, banco, actualizar firmware). Asignación sacada del esquema oficial: **1 = arranque (BOOT0, ON = DFU)**, **2 = terminación R120**. Diagrama de captura y `CAPTURA_CAN.md` actualizados con el DIP.
+- Diagrama de montaje: aviso junto a los cables del programador de que **TX → RXD y RX → TXD van cruzados a propósito** (es lo correcto).
+
 ### Corregido
 - Diagrama de montaje: en las dos tiras de pines de la placa estaban **intercambiadas la fila interior y la exterior**. Corregido en `tools/gen_esquema_montaje.py` con el cableado rehecho (IO4/IO17/IO18/IO22 y GND en la fila interior de la tira izquierda; IO27/IO32, 3V3 y GND en la exterior de la derecha).
 - Revisión del diagrama de montaje: comentarios del generador al día con las filas corregidas, rótulo «AMS1117» legible, programador rotulado como `ttyACM0 / COMx`; en `docs/HARDWARE_PLACA_ESP32_RELE.md`, qué fila de cada tira es la interior y cuál la exterior.

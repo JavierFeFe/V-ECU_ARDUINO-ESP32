@@ -21,11 +21,14 @@
 <rect x="572" y="326" width="196" height="106" rx="6" fill="#1f8a43" stroke="#0f4a22"/>
 <rect x="590" y="360" width="40" height="40" rx="2" fill="#222" stroke="#555"/>
 <text x="610" y="414" font-size="9" fill="#d9f2df" text-anchor="middle" font-weight="normal" >STM32</text>
-<rect x="648" y="374" width="26" height="16" rx="2" fill="#222"/>
-<rect x="650" y="334" width="30" height="13" rx="2" fill="#eeeeee" stroke="#333"/>
-<rect x="652" y="336" width="12" height="9" rx="1" fill="#333"/>
-<rect x="722" y="334" width="30" height="13" rx="2" fill="#eeeeee" stroke="#333"/>
-<rect x="724" y="336" width="12" height="9" rx="1" fill="#333"/>
+<rect x="666" y="332" width="44" height="30" rx="2" fill="#1b1b1b" stroke="#000"/>
+<rect x="671" y="336" width="14" height="22" rx="1" fill="#444"/>
+<rect x="673" y="347" width="10" height="9" rx="1" fill="#eeeeee"/>
+<text x="678" y="372" font-size="9" fill="#ffffff" text-anchor="middle" font-weight="bold" >1</text>
+<rect x="691" y="336" width="14" height="22" rx="1" fill="#444"/>
+<rect x="693" y="347" width="10" height="9" rx="1" fill="#eeeeee"/>
+<text x="698" y="372" font-size="9" fill="#ffffff" text-anchor="middle" font-weight="bold" >2</text>
+<text x="668" y="330" font-size="8" fill="#ffffff" text-anchor="start" font-weight="normal" >ON↑</text>
 <rect x="605" y="424" width="6" height="6" fill="#d8b25a"/>
 <rect x="625" y="424" width="6" height="6" fill="#d8b25a"/>
 <rect x="645" y="424" width="6" height="6" fill="#d8b25a"/>
@@ -40,12 +43,10 @@
 <circle cx="789" cy="402" r="9" fill="#d9d9d9" stroke="#555" stroke-width="1.5"/>
 <line x1="784" y1="402" x2="794" y2="402" stroke="#555" stroke-width="2.2"/>
 <text x="766" y="406" font-size="10.5" fill="#ffffff" text-anchor="end" font-weight="bold" >CAN_L</text>
-<text x="640" y="278" font-size="14" fill="#1b1b1b" text-anchor="middle" font-weight="bold" >DSD TECH SH-C30A (candleLight)</text>
-<line x1="665" y1="334" x2="625" y2="300" stroke="#a01c22" stroke-width="1.5"/>
-<text x="470" y="296" font-size="11" fill="#a01c22" text-anchor="start" font-weight="bold" >arranque: OFF = trabajo (ON = DFU)</text>
-<line x1="737" y1="334" x2="775" y2="302" stroke="#a01c22" stroke-width="1.5"/>
-<text x="772" y="284" font-size="11" fill="#a01c22" text-anchor="start" font-weight="bold" >R120: OFF si 60 Ω</text>
-<text x="772" y="298" font-size="11" fill="#a01c22" text-anchor="start" font-weight="bold" >ON si 120 Ω</text>
+<text x="640" y="262" font-size="14" fill="#1b1b1b" text-anchor="middle" font-weight="bold" >DSD TECH SH-C30A (candleLight)</text>
+<line x1="688" y1="332" x2="690" y2="303" stroke="#a01c22" stroke-width="1.5"/>
+<text x="610" y="285" font-size="11" fill="#a01c22" text-anchor="start" font-weight="bold" >DIP 1 (arranque): OFF</text>
+<text x="610" y="299" font-size="11" fill="#a01c22" text-anchor="start" font-weight="bold" >DIP 2 (R120): según medida 1</text>
 <text x="640" y="462" font-size="11" fill="#666" text-anchor="middle" font-weight="normal" >se enchufa directo al portátil (o con un alargador USB)</text>
 <rect x="900" y="110" width="860" height="330" rx="18" fill="#a7a9ac" stroke="#6d6f72" stroke-width="3"/>
 <circle cx="930" cy="130" r="9" fill="#8a8c8f" stroke="#5a5c5e"/>
@@ -170,8 +171,8 @@
 <circle cx="132" cy="732" r="7" fill="#d62828"/>
 <text x="190" y="580" font-size="14" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Medida 1 — llave QUITADA</text>
 <text x="190" y="602" font-size="13" fill="#1b1b1b" text-anchor="start" font-weight="normal" >Resistencia entre B1 y B2</text>
-<text x="190" y="628" font-size="13" fill="#2a9d4f" text-anchor="start" font-weight="bold" >≈ 60 Ω → R120 en OFF</text>
-<text x="190" y="650" font-size="13" fill="#d62828" text-anchor="start" font-weight="bold" >≈ 120 Ω → R120 en ON</text>
+<text x="190" y="628" font-size="13" fill="#2a9d4f" text-anchor="start" font-weight="bold" >≈ 60 Ω → DIP 2 (R120) OFF</text>
+<text x="190" y="650" font-size="13" fill="#d62828" text-anchor="start" font-weight="bold" >≈ 120 Ω → DIP 2 (R120) ON</text>
 <text x="190" y="670" font-size="13" fill="#555" text-anchor="start" font-weight="normal" >(solo la terminación de</text>
 <text x="190" y="690" font-size="13" fill="#555" text-anchor="start" font-weight="normal" >la E-ECU: 117 Ω medidos)</text>
 <text x="190" y="710" font-size="13" fill="#d62828" text-anchor="start" font-weight="normal" >No puentear nada en la V-ECU</text>
@@ -228,7 +229,7 @@
 <text x="46" y="886" font-size="13" fill="#3a3a3a" text-anchor="start" font-weight="normal" >• Máquina estacionada, implementos apoyados, palanca de seguridad BLOQUEADA.</text>
 <text x="46" y="912" font-size="13" fill="#3a3a3a" text-anchor="start" font-weight="normal" >• Selector Auto/Manual en MANUAL. Interruptor 26 en ralentí al empezar.</text>
 <text x="46" y="938" font-size="13" fill="#3a3a3a" text-anchor="start" font-weight="normal" >• Conectar las sondas con la llave QUITADA; después dar contacto.</text>
-<text x="46" y="964" font-size="13" fill="#3a3a3a" text-anchor="start" font-weight="normal" >• SH-C30A: arranque en OFF (ON = modo DFU); R120 OFF con 60 Ω, ON con 120 Ω (medida 1).</text>
+<text x="46" y="964" font-size="13" fill="#3a3a3a" text-anchor="start" font-weight="normal" >• SH-C30A, DIP: 1 (arranque) en OFF; 2 (R120) OFF con 60 Ω, ON con 120 Ω (medida 1).</text>
 <text x="46" y="990" font-size="13" fill="#3a3a3a" text-anchor="start" font-weight="normal" >• El script se niega a grabar si el adaptador no confirma el modo solo escucha.</text>
 <text x="46" y="1016" font-size="13" fill="#3a3a3a" text-anchor="start" font-weight="normal" >• Comprobación previa sin máquina:  capturar --nombre prueba --duracion 5</text>
 <text x="930" y="886" font-size="13" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Capturas (python tools/captura_can.py capturar --nombre …):</text>

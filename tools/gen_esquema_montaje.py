@@ -215,6 +215,12 @@ text(145, 607, "EN y G0 sin conectar: grabar con el botón IO0", size=11, fill="
 wire([(1205, 537), (1205, 492), (300, 492), (300, 470), (255, 470)], C["ptx"])   # TX → RXD
 wire([(1175, 537), (1175, 504), (290, 504), (290, 490), (255, 490)], C["prx"])   # RX → TXD
 wire([(1145, 537), (1145, 516), (265, 516), (265, 550), (255, 550)], C["gnd"])   # GND → GND
+# Aviso: TX y RX van cruzados a propósito
+a('<line x1="420" y1="532" x2="420" y2="508" stroke="#b45309" stroke-width="1.5"/>')
+a('<circle cx="420" cy="498" r="13" fill="none" stroke="#b45309" stroke-width="2"/>')
+a('<rect x="306" y="532" width="272" height="48" rx="6" fill="#fff7e0" stroke="#b45309" stroke-width="1.5"/>')
+text(442, 551, "TX → RXD y RX → TXD: cruzados a propósito", size=11, fill="#7a3e00", anchor="middle", weight="bold")
+text(442, 569, "Es lo correcto: lo que uno envía, el otro lo recibe.", size=10.5, fill="#7a3e00", anchor="middle")
 
 # ================================================================ Adafruit CAN Pal (girado 90°: pines a la derecha)
 a('<rect x="380" y="640" width="180" height="180" rx="12" fill="#1a1a1a" stroke="#000" stroke-width="2"/>')

@@ -282,6 +282,11 @@
 <path d="M 1175 537 L 1175 504 L 290 504 L 290 490 L 255 490" fill="none" stroke="#3aa6d0" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 1145 537 L 1145 516 L 265 516 L 265 550 L 255 550" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 1145 537 L 1145 516 L 265 516 L 265 550 L 255 550" fill="none" stroke="#1f1f1f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="420" y1="532" x2="420" y2="508" stroke="#b45309" stroke-width="1.5"/>
+<circle cx="420" cy="498" r="13" fill="none" stroke="#b45309" stroke-width="2"/>
+<rect x="306" y="532" width="272" height="48" rx="6" fill="#fff7e0" stroke="#b45309" stroke-width="1.5"/>
+<text x="442" y="551" font-size="11" fill="#7a3e00" text-anchor="middle" font-weight="bold" >TX → RXD y RX → TXD: cruzados a propósito</text>
+<text x="442" y="569" font-size="10.5" fill="#7a3e00" text-anchor="middle" font-weight="normal" >Es lo correcto: lo que uno envía, el otro lo recibe.</text>
 <rect x="380" y="640" width="180" height="180" rx="12" fill="#1a1a1a" stroke="#000" stroke-width="2"/>
 <circle cx="398" cy="658" r="8" fill="#ffffff" stroke="#c8a35a" stroke-width="3"/>
 <circle cx="398" cy="802" r="8" fill="#ffffff" stroke="#c8a35a" stroke-width="3"/>

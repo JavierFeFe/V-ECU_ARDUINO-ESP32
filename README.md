@@ -46,6 +46,7 @@ docs/
 ├── CONTROL_RPM.md                  ← alcance actual: control de rpm (TSC1 por CAN y relé sobre B4), plan de pruebas
 ├── CAPTURA_CAN.md                  ← cómo medir y capturar el bus de la máquina con el portátil y el SH-C30A
 ├── esquema_captura_CAN.svg/.png    ← diagrama de conexiones de la captura (portátil, SH-C30A, conector B, bus)
+├── esquema_switches_SH-C30A.svg/.png ← cómo poner el DIP del SH-C30A (arranque y R120) en cada caso
 ├── esquema_rpm_ESP32.svg/.png      ← esquema de la versión solo-rpm con módulos premontados
 ├── esquema_montaje_ESP32.svg/.png  ← diagrama ilustrado de montaje: placa, módulos, conector B e interruptor 26
 ├── LISTA_COMPRA.md                 ← lo que falta comprar para el control de rpm (Amazon España)
@@ -59,6 +60,7 @@ firmware/
 tools/
 ├── gen_esquema_montaje.py          ← genera docs/esquema_montaje_ESP32.svg
 ├── gen_esquema_captura.py          ← genera docs/esquema_captura_CAN.svg
+├── gen_switches_shc30a.py          ← genera docs/esquema_switches_SH-C30A.svg
 ├── captura_can.py                  ← captura (solo escucha) y análisis del bus J1939 con el portátil
 ├── panel_esp32.py / .html          ← panel en el navegador para la placa: modos, relé, ajustes y log
 ├── linux/                          ← reglas udev e instalador de permisos USB (portátil de pruebas)

@@ -87,11 +87,13 @@ a('<path d="M 526 336 L 560 336 Q 580 318 610 314 L 760 314 Q 800 314 800 340 L 
 a('<rect x="572" y="326" width="196" height="106" rx="6" fill="#1f8a43" stroke="#0f4a22"/>')
 a('<rect x="590" y="360" width="40" height="40" rx="2" fill="#222" stroke="#555"/>')
 text(610, 414, "STM32", size=9, fill="#d9f2df", anchor="middle")
-a('<rect x="648" y="374" width="26" height="16" rx="2" fill="#222"/>')
-# Interruptor de arranque (BOOT) en OFF; R120 según la medida 1
-for x, y in [(650, 334), (722, 334)]:
-    a(f'<rect x="{x}" y="{y}" width="30" height="13" rx="2" fill="#eeeeee" stroke="#333"/>')
-    a(f'<rect x="{x + 2}" y="{y + 2}" width="12" height="9" rx="1" fill="#333"/>')
+# DIP SW1 de 2 posiciones junto al bornero: 1 = arranque (BOOT0), 2 = R120
+a('<rect x="666" y="332" width="44" height="30" rx="2" fill="#1b1b1b" stroke="#000"/>')
+for n, x in [("1", 671), ("2", 691)]:
+    a(f'<rect x="{x}" y="336" width="14" height="22" rx="1" fill="#444"/>')
+    a(f'<rect x="{x + 2}" y="347" width="10" height="9" rx="1" fill="#eeeeee"/>')   # palanca abajo = OFF
+    text(x + 7, 372, n, size=9, fill="#ffffff", anchor="middle", weight="bold")
+text(668, 330, "ON↑", size=8, fill="#ffffff")
 for cx in (608, 628, 648, 668):
     a(f'<rect x="{cx - 3}" y="424" width="6" height="6" fill="#d8b25a"/>')
 # Bornero: CAN_H arriba, GND, CAN_L abajo
@@ -99,13 +101,11 @@ a('<rect x="772" y="342" width="34" height="74" rx="3" fill="#2fa84f" stroke="#1
 for n, y in [("CAN_H", 356), ("GND", 379), ("CAN_L", 402)]:
     screw(789, y, 9)
     text(766, y + 4, n, size=10.5, fill="#ffffff", anchor="end", weight="bold")
-text(640, 278, "DSD TECH SH-C30A (candleLight)", size=14, anchor="middle", weight="bold")
-# Rótulos de los interruptores
-a('<line x1="665" y1="334" x2="625" y2="300" stroke="#a01c22" stroke-width="1.5"/>')
-text(470, 296, "arranque: OFF = trabajo (ON = DFU)", size=11, fill="#a01c22", weight="bold")
-a('<line x1="737" y1="334" x2="775" y2="302" stroke="#a01c22" stroke-width="1.5"/>')
-text(772, 284, "R120: OFF si 60 Ω", size=11, fill="#a01c22", weight="bold")
-text(772, 298, "ON si 120 Ω", size=11, fill="#a01c22", weight="bold")
+text(640, 262, "DSD TECH SH-C30A (candleLight)", size=14, anchor="middle", weight="bold")
+# Rótulo del DIP
+a('<line x1="688" y1="332" x2="690" y2="303" stroke="#a01c22" stroke-width="1.5"/>')
+text(610, 285, "DIP 1 (arranque): OFF", size=11, fill="#a01c22", weight="bold")
+text(610, 299, "DIP 2 (R120): según medida 1", size=11, fill="#a01c22", weight="bold")
 text(640, 462, "se enchufa directo al portátil (o con un alargador USB)", size=11, fill="#666", anchor="middle")
 
 # ================================================================ E-ECU con conectores B (rojo) y A (negro)
@@ -182,8 +182,8 @@ def multimetro(x, y, lectura, modo):
 multimetro(50, 560, "60.2", "Ω")
 text(190, 580, "Medida 1 — llave QUITADA", size=14, weight="bold")
 text(190, 602, "Resistencia entre B1 y B2", size=13)
-text(190, 628, "≈ 60 Ω → R120 en OFF", size=13, fill="#2a9d4f", weight="bold")
-text(190, 650, "≈ 120 Ω → R120 en ON", size=13, fill="#d62828", weight="bold")
+text(190, 628, "≈ 60 Ω → DIP 2 (R120) OFF", size=13, fill="#2a9d4f", weight="bold")
+text(190, 650, "≈ 120 Ω → DIP 2 (R120) ON", size=13, fill="#d62828", weight="bold")
 text(190, 670, "(solo la terminación de", size=13, fill="#555")
 text(190, 690, "la E-ECU: 117 Ω medidos)", size=13, fill="#555")
 text(190, 710, "No puentear nada en la V-ECU", size=13, fill="#d62828")
@@ -245,7 +245,7 @@ izq = [
     "• Máquina estacionada, implementos apoyados, palanca de seguridad BLOQUEADA.",
     "• Selector Auto/Manual en MANUAL. Interruptor 26 en ralentí al empezar.",
     "• Conectar las sondas con la llave QUITADA; después dar contacto.",
-    "• SH-C30A: arranque en OFF (ON = modo DFU); R120 OFF con 60 Ω, ON con 120 Ω (medida 1).",
+    "• SH-C30A, DIP: 1 (arranque) en OFF; 2 (R120) OFF con 60 Ω, ON con 120 Ω (medida 1).",
     "• El script se niega a grabar si el adaptador no confirma el modo solo escucha.",
     "• Comprobación previa sin máquina:  capturar --nombre prueba --duracion 5",
 ]
