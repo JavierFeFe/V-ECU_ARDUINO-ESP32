@@ -4,6 +4,13 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (panel)
+- `tools/panel_esp32.py` + `panel_esp32.html`: panel en el navegador (127.0.0.1:8765) con todas las funciones de la consola serie: modos y relé, ajustes (ralentí, par, consigna TSC1), datos del motor y del bus CAN, log filtrable y descargable, comandos libres y <kbd>Esc</kbd> = Reposo. Abre el puerto en exclusiva y reencuentra el programador si cambia de nombre. Probado con la placa real (2026-10-21). Documentado en `firmware/README.md`.
+
+### Pruebas (2026-10-20)
+- E-ECU suelta en el taller: B1–B2 = 117 Ω, B9–B10 y B11–B12 en continuidad, B11–B9 sin cortocircuito (`docs/PINOUT_E-ECU.md`).
+- Placa en la mesa desde el portátil Linux: relé COM–NO / COM–NC verificados en Reposo y Alto; Auto-ralentí sin CAN se mantiene en alto; arranque siempre en Reposo tras quitar tensión (`docs/MONTAJE.md` §5).
+
 ### Corregido (bus J1939)
 - **La V-ECU no es un nodo de paso.** Revisado el circuito OEM a 300 ppp: E-ECU (EB1/EB2), panel (1/2) y V-ECU (**JB14 H / JB6 L**) van empalmados en el mismo par, y **JB13 / JB5 son las mallas** de los cables J1587 / J1939, no un segundo par CAN. Sin V-ECU el bus no se parte. Retirada en toda la documentación y los esquemas la instrucción de puentear JB13↔JB14 y JB5↔JB6 (habría unido CAN a las mallas).
 - **Medida en el taller (2026-10-20):** B1–B2 de la E-ECU suelta = **117 Ω**, terminación interna confirmada. En la máquina, B1–B2 ≈ 60 Ω → R120 / terminación del CAN Pal en OFF; ≈ 120 Ω → el panel MDU no termina el bus y van en ON.

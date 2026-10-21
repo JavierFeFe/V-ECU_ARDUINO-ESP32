@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel V-ECU</title>
+<style>
+  :root {
+    --bg: #f4f6f8; --panel: #ffffff; --text: #1b1f24; --muted: #5d6673; --border: #dde2e8;
+    --accent: #1d5fd1; --accent-soft: #e6eefc; --ok: #1d8a4b; --ok-soft: #e3f4ea;
+    --warn: #a86400; --warn-soft: #fdf1df; --danger: #c62828; --danger-soft: #fde8e8;
+    --led-off: #c6ccd4; --log-bg: #fbfcfd; --shadow: 0 1px 2px rgba(16, 24, 40, .06);
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "DejaVu Sans Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1216; --panel: #171b21; --text: #e6e9ee; --muted: #9aa4b2; --border: #2a313b;
+      --accent: #6ea4ff; --accent-soft: #1b2a44; --ok: #4cc38a; --ok-soft: #15301f;
+      --warn: #f0b450; --warn-soft: #3a2a10; --danger: #ff6b6b; --danger-soft: #3d1a1a;
+      --led-off: #3a424d; --log-bg: #12161b; --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif; }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 14px 20px;
+           background: var(--panel); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 2; }
+  h1 { font-size: 17px; margin: 0; letter-spacing: .2px; }
+  .sub { color: var(--muted); font-size: 12.5px; }
+  .grow { flex: 1; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px;
+          background: var(--danger-soft); color: var(--danger); font-weight: 600; font-size: 13px; }
+  .pill.on { background: var(--ok-soft); color: var(--ok); }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  select, input[type=number], input[type=text] { font: inherit; color: var(--text); background: var(--panel);
+          border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; min-width: 0; }
+  input[type=text] { font-family: var(--mono); }
+  main { display: grid; grid-template-columns: minmax(320px, 440px) 1fr; gap: 16px; padding: 16px 20px 24px;
+         align-items: start; }
+  .col { display: grid; gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+          box-shadow: var(--shadow); }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted);
+             margin: 0 0 12px; font-weight: 650; }
+  .modo { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .led { width: 22px; height: 22px; border-radius: 50%; background: var(--led-off); flex: none;
+         box-shadow: inset 0 0 0 2px rgba(0,0,0,.08); transition: background .15s; }
+  .led.on { background: #e53935; box-shadow: 0 0 0 4px var(--danger-soft), 0 0 14px #e53935; }
+  .modo-nombre { font-size: 26px; font-weight: 750; line-height: 1.1; }
+  .modo-det { color: var(--muted); font-size: 13px; }
+  .seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--border);
+           background: var(--panel); color: var(--text); padding: 8px 10px; font-weight: 600; }
+  button:hover:not(:disabled) { border-color: var(--accent); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.activo { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.reposo.activo { background: var(--ok); border-color: var(--ok); }
+  button.prim { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.peq { padding: 5px 9px; font-size: 12.5px; }
+  .fila { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .rele { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); justify-content: space-between; }
+  .switch { position: relative; width: 50px; height: 28px; flex: none; }
+  .switch input { opacity: 0; width: 100%; height: 100%; margin: 0; position: absolute; cursor: pointer; z-index: 1; }
+  .switch span { position: absolute; inset: 0; background: var(--led-off); border-radius: 999px; transition: .15s; }
+  .switch span::after { content: ""; position: absolute; left: 3px; top: 3px; width: 22px; height: 22px;
+                        border-radius: 50%; background: #fff; transition: .15s; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+  .switch input:checked + span { background: #e53935; }
+  .switch input:checked + span::after { transform: translateX(22px); }
+  .switch input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .nota { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+  .aviso { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 8px 10px;
+           font-size: 12.5px; margin-top: 10px; }
+  .ajuste { display: grid; grid-template-columns: 1fr 92px auto; gap: 8px; align-items: center; padding: 7px 0; }
+  .ajuste + .ajuste { border-top: 1px solid var(--border); }
+  .ajuste label { font-weight: 600; }
+  .ajuste small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+  .datos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .dato { background: var(--bg); border-radius: 9px; padding: 9px 11px; }
+  .dato b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .dato span { color: var(--muted); font-size: 12px; }
+  .vacio { color: var(--muted); padding: 10px 0 2px; }
+  .lista { display: grid; grid-template-columns: auto 1fr; gap: 5px 14px; margin: 0; font-size: 13.5px; }
+  .lista dt { color: var(--muted); }
+  .lista dd { margin: 0; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .ok { color: var(--ok); } .mal { color: var(--danger); } .med { color: var(--warn); }
+  .log-card { display: flex; flex-direction: column; height: calc(100vh - 104px); min-height: 420px;
+              position: sticky; top: 84px; }
+  .log-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 10px; }
+  .log-bar label { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); }
+  #log { flex: 1; overflow: auto; background: var(--log-bg); border: 1px solid var(--border); border-radius: 9px;
+         padding: 8px 10px; font: 12.5px/1.55 var(--mono); white-space: pre-wrap; word-break: break-word; }
+  #log .l { display: flex; gap: 10px; }
+  #log .t { color: var(--muted); flex: none; }
+  #log .enviado { color: var(--accent); font-weight: 650; }
+  #log .control { color: var(--ok); font-weight: 600; }
+  #log .error { color: var(--danger); font-weight: 600; }
+  #log .sistema { color: var(--muted); font-style: italic; }
+  #log .arranque { color: var(--warn); }
+  #log .estado, #log .sondeo { color: var(--muted); }
+  .cmd { display: flex; gap: 8px; margin-top: 10px; }
+  .cmd input { flex: 1; }
+  kbd { font: 11.5px var(--mono); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px;
+        padding: 0 5px; background: var(--bg); }
+  #toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--danger);
+           color: #fff; padding: 9px 16px; border-radius: 9px; font-weight: 600; opacity: 0; pointer-events: none;
+           transition: opacity .2s; max-width: calc(100% - 32px); z-index: 5; }
+  #toast.ver { opacity: 1; }
+  @media (max-width: 860px) {
+    main { grid-template-columns: 1fr; padding: 12px 16px 20px; }
+    header { padding: 12px 16px; }
+    .log-card { position: static; height: 70vh; }
+    .seg { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Panel V-ECU</h1>
+    <div class="sub">Placa ESP32_Relay X1 · control de rpm del D6D · <kbd>Esc</kbd> = REPOSO</div>
+  </div>
+  <div class="grow"></div>
+  <span class="pill" id="pill"><span class="dot"></span><span id="pill-txt">Conectando…</span></span>
+  <label class="sub" for="puerto">Puerto</label>
+  <select id="puerto" aria-label="Puerto serie"></select>
+</header>
+
+<main>
+  <div class="col">
+    <section class="card" aria-labelledby="t-modo">
+      <h2 id="t-modo">Modo y relé</h2>
+      <div class="modo">
+        <div class="led" id="led" title="Relé"></div>
+        <div>
+          <div class="modo-nombre" id="modo-nombre">—</div>
+          <div class="modo-det" id="modo-det">Esperando datos de la placa…</div>
+        </div>
+      </div>
+      <div class="seg" role="group" aria-label="Modo">
+        <button class="reposo" data-modo="reposo" data-nombre="REPOSO">Reposo</button>
+        <button data-modo="alto" data-nombre="ALTO">Alto</button>
+        <button data-modo="auto" data-nombre="AUTO-RALENTI">Auto-ralentí</button>
+        <button data-modo="tsc1" data-nombre="TSC1" id="btn-tsc1">TSC1</button>
+      </div>
+      <div class="fila rele">
+        <div>
+          <strong>Relé (línea B4)</strong>
+          <div class="nota" style="margin:0">Activar = modo ALTO · desactivar = modo REPOSO</div>
+        </div>
+        <label class="switch"><input type="checkbox" id="sw-rele" role="switch" aria-label="Relé"><span></span></label>
+      </div>
+      <div class="aviso" id="aviso-tsc1" hidden>TSC1 no está disponible en este firmware (CAN en solo escucha). Hay que grabar el entorno <code>esp32dev_tsc1</code>.</div>
+    </section>
+
+    <section class="card" aria-labelledby="t-aj">
+      <h2 id="t-aj">Ajustes <span style="text-transform:none;letter-spacing:0;font-weight:400">· se guardan en la flash</span></h2>
+      <div class="ajuste">
+        <label for="in-ralenti">Ralentí tras<small>s sin par antes de bajar a 800 rpm · actual <span id="cur-ralenti">—</span></small></label>
+        <input type="number" id="in-ralenti" min="3" max="120" step="1">
+        <button class="peq" data-ajuste="ralenti">Aplicar</button>
+      </div>
+      <div class="ajuste">
+        <label for="in-par">Par de trabajo<small>% mínimo que cuenta como actividad · actual <span id="cur-par">—</span></small></label>
+        <input type="number" id="in-par" min="0" max="100" step="1">
+        <button class="peq" data-ajuste="par">Aplicar</button>
+      </div>
+      <div class="ajuste">
+        <label for="in-rpm">Consigna TSC1<small>rpm (800–2000) · actual <span id="cur-rpm">—</span></small></label>
+        <input type="number" id="in-rpm" min="800" max="2000" step="50">
+        <button class="peq" data-ajuste="rpm">Aplicar</button>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t-motor">
+      <h2 id="t-motor">Motor (J1939)</h2>
+      <div id="motor-vacio" class="vacio">Sin datos del motor (no llega EEC1). Normal en la mesa.</div>
+      <div class="datos" id="motor" hidden>
+        <div class="dato"><b id="m-rpm">—</b><span>rpm</span></div>
+        <div class="dato"><b id="m-par">—</b><span>par real</span></div>
+        <div class="dato"><b id="m-ref">—</b><span>refrigerante</span></div>
+        <div class="dato"><b id="m-dtc">—</b><span id="m-dtc-det">averías activas</span></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t-can">
+      <h2 id="t-can">Bus CAN y placa</h2>
+      <dl class="lista">
+        <dt>Bus</dt><dd id="c-bus">—</dd>
+        <dt>Modo CAN</dt><dd id="c-modo">—</dd>
+        <dt>Tramas recibidas</dt><dd id="c-rx">—</dd>
+        <dt>TSC1 enviados</dt><dd id="c-tsc1">—</dd>
+        <dt>Pantalla OLED</dt><dd id="c-oled">—</dd>
+        <dt>Memoria libre</dt><dd id="c-mem">—</dd>
+        <dt>Último estado</dt><dd id="c-ult">—</dd>
+      </dl>
+    </section>
+  </div>
+
+  <section class="card log-card" aria-labelledby="t-log">
+    <h2 id="t-log">Log de la placa</h2>
+    <div class="log-bar">
+      <label><input type="checkbox" id="ck-sondeo"> Estado cada segundo</label>
+      <label><input type="checkbox" id="ck-seguir" checked> Seguir al final</label>
+      <div class="grow"></div>
+      <button class="peq" id="btn-logfw" title="Comando log del firmware">Log firmware: —</button>
+      <button class="peq" data-cmd="estado">Estado</button>
+      <button class="peq" data-cmd="ayuda">Ayuda</button>
+      <button class="peq" id="btn-limpiar">Limpiar</button>
+      <button class="peq" id="btn-guardar">Guardar .txt</button>
+    </div>
+    <div id="log" role="log" aria-live="off"></div>
+    <form class="cmd" id="form-cmd" autocomplete="off">
+      <input type="text" id="in-cmd" placeholder="Comando (p. ej. modo alto, ralenti 15)…" aria-label="Comando" maxlength="60">
+      <button class="prim" type="submit">Enviar</button>
+    </form>
+  </section>
+</main>
+<div id="toast" role="status"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const S = { conectado: false, estado: {}, lineas: [], historial: [], hIdx: -1, editado: {} };
+const MAX_LINEAS = 3000;
+const NOMBRES = { "REPOSO": "Reposo", "ALTO": "Alto", "AUTO-RALENTI": "Auto-ralentí", "TSC1": "TSC1" };
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("ver");
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("ver"), 3500);
+}
+
+async function post(ruta, cuerpo) {
+  try {
+    const r = await fetch(ruta, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cuerpo) });
+    const j = await r.json();
+    if (!j.ok) toast(j.error || "No se pudo enviar");
+    return j.ok;
+  } catch { toast("Sin conexión con el panel (¿está en marcha tools/panel_esp32.py?)"); return false; }
+}
+const cmd = (c) => post("/api/comando", { cmd: c });
+
+// ------------------------------------------------------------------ log
+function pintarLinea(item) {
+  const div = document.createElement("div");
+  div.className = "l " + item.tipo;
+  if (item.tipo === "sondeo" && !$("ck-sondeo").checked) div.hidden = true;
+  const t = document.createElement("span"); t.className = "t"; t.textContent = item.t;
+  const x = document.createElement("span"); x.className = item.tipo;
+  x.textContent = item.tipo === "enviado" ? "› " + item.texto : item.texto;
+  div.append(t, x);
+  return div;
+}
+function anadirLinea(item) {
+  S.lineas.push(item);
+  const log = $("log");
+  log.append(pintarLinea(item));
+  while (S.lineas.length > MAX_LINEAS) { S.lineas.shift(); log.firstChild.remove(); }
+  if ($("ck-seguir").checked) log.scrollTop = log.scrollHeight;
+}
+$("ck-sondeo").addEventListener("change", (e) => {
+  document.querySelectorAll("#log .l.sondeo").forEach((d) => (d.hidden = !e.target.checked));
+  if ($("ck-seguir").checked) $("log").scrollTop = $("log").scrollHeight;
+});
+$("btn-limpiar").onclick = () => { S.lineas = []; $("log").replaceChildren(); };
+$("btn-guardar").onclick = () => {
+  const txt = S.lineas.map((l) => `${l.t}  ${l.tipo === "enviado" ? "> " : ""}${l.texto}`).join("\n") + "\n";
+  const a = document.createElement("a");
+  const f = new Date().toISOString().replace(/[-:]/g, "").replace("T", "_").slice(0, 15);
+  a.href = URL.createObjectURL(new Blob([txt], { type: "text/plain" }));
+  a.download = `panel_vecu_${f}.txt`; a.click(); URL.revokeObjectURL(a.href);
+};
+
+// ------------------------------------------------------------------ estado
+function txt(id, v) { $(id).textContent = v; }
+function pintarEstado(e) {
+  S.estado = e;
+  const modo = e.modo;
+  txt("modo-nombre", modo ? (NOMBRES[modo] || modo) + (e.ralentiNivel ? ` (${e.ralentiNivel})` : "") : "—");
+  $("led").classList.toggle("on", !!e.rele);
+  let det = "Esperando datos de la placa…";
+  if (modo === "REPOSO") det = "Relé libre: manda el interruptor de emergencia 26";
+  else if (modo === "ALTO") det = "Relé excitado: 24 V en B4 → 1900 rpm";
+  else if (modo === "AUTO-RALENTI") det = e.ralentiNivel === 800 ? "Sin par: bajado a 800 rpm" : "1900 rpm mientras haya par (sin datos CAN se queda en alto)";
+  else if (modo === "TSC1") det = `Consigna por CAN: ${e.rpmConsigna} rpm`;
+  txt("modo-det", det);
+  document.querySelectorAll(".seg button").forEach((b) => b.classList.toggle("activo", b.dataset.nombre === modo));
+  if (!S.relePendiente) $("sw-rele").checked = !!e.rele;
+  const sinTsc1 = e.tsc1Disponible === false;
+  $("btn-tsc1").disabled = !S.conectado || sinTsc1;
+  $("btn-tsc1").title = sinTsc1 ? "Firmware sin TSC1 (entorno esp32dev_tsc1)" : "";
+  $("aviso-tsc1").hidden = !(sinTsc1 && S.avisoTsc1);
+
+  for (const [id, clave, suf] of [["ralenti", "ralentiS", " s"], ["par", "parPct", " %"], ["rpm", "rpmConsigna", " rpm"]]) {
+    txt("cur-" + id, e[clave] != null ? e[clave] + suf : "—");
+    const inp = $("in-" + id);
+    if (e[clave] != null && !S.editado[id] && document.activeElement !== inp) inp.value = e[clave];
+  }
+
+  const m = e.motor;
+  $("motor").hidden = !m; $("motor-vacio").hidden = !!m;
+  if (m) {
+    txt("m-rpm", Math.round(m.rpm)); txt("m-par", m.parPct + " %"); txt("m-ref", m.refrigeranteC + " °C");
+    txt("m-dtc", m.numDtc);
+    txt("m-dtc-det", m.numDtc ? `averías · SPN ${m.spn} FMI ${m.fmi}` : "averías activas");
+  }
+  const c = e.can;
+  if (c) {
+    $("c-bus").innerHTML = ""; const b = document.createElement("span");
+    b.textContent = c.bus; b.className = c.bus === "OK" ? "ok" : "mal"; $("c-bus").append(b);
+    txt("c-modo", c.soloEscucha ? "solo escucha (no transmite)" : "TX habilitado");
+    $("c-modo").className = c.soloEscucha ? "ok" : "med";
+    txt("c-rx", c.tramasRx.toLocaleString("es")); txt("c-tsc1", c.tsc1Enviados.toLocaleString("es"));
+    txt("c-oled", c.oled ? "conectada" : "no detectada");
+    txt("c-mem", Math.round(c.libreB / 1024) + " KiB");
+  }
+  txt("c-ult", e.ultimoEstado || "—");
+  $("btn-logfw").textContent = "Log firmware: " + (e.logFirmware == null ? "—" : e.logFirmware ? "on" : "off");
+}
+
+function pintarConexion(c) {
+  S.conectado = c.conectado;
+  $("pill").classList.toggle("on", c.conectado);
+  txt("pill-txt", c.conectado ? `Conectado · ${c.puerto}` : (c.error ? "Sin conexión" : "Buscando placa…"));
+  $("pill").title = c.error || "";
+  const sel = $("puerto"), actual = c.fijo || "";
+  const opciones = [["", "Automático" + (!c.fijo && c.puerto ? ` (${c.puerto})` : "")]]
+    .concat(c.puertos.map((p) => [p.device, `${p.device}${p.desc && p.desc !== "n/a" ? " · " + p.desc : ""}`]));
+  const firma = JSON.stringify(opciones) + actual;
+  if (sel.dataset.firma !== firma && document.activeElement !== sel) {
+    sel.replaceChildren(...opciones.map(([v, t]) => { const o = new Option(t, v); o.selected = v === actual; return o; }));
+    sel.dataset.firma = firma;
+  }
+  document.querySelectorAll("button[data-modo], button[data-ajuste], button[data-cmd], #btn-logfw, #form-cmd button")
+    .forEach((b) => (b.disabled = !c.conectado));
+  $("sw-rele").disabled = !c.conectado;
+  if (S.estado) pintarEstado(S.estado);
+}
+
+// ------------------------------------------------------------------ acciones
+document.querySelectorAll("button[data-modo]").forEach((b) => b.addEventListener("click", () => {
+  if (b.dataset.modo === "tsc1") S.avisoTsc1 = true;
+  cmd("modo " + b.dataset.modo);
+}));
+document.querySelectorAll("button[data-cmd]").forEach((b) => b.addEventListener("click", () => cmd(b.dataset.cmd)));
+$("btn-logfw").onclick = () => cmd("log");
+$("sw-rele").addEventListener("change", async (e) => {
+  S.relePendiente = true;
+  await cmd(e.target.checked ? "modo alto" : "modo reposo");
+  setTimeout(() => { S.relePendiente = false; pintarEstado(S.estado); }, 1300);
+});
+const LIMITES = { ralenti: [3, 120], par: [0, 100], rpm: [800, 2000] };
+document.querySelectorAll("button[data-ajuste]").forEach((b) => b.addEventListener("click", () => {
+  const id = b.dataset.ajuste, v = Math.round(Number($("in-" + id).value)), [lo, hi] = LIMITES[id];
+  if (!Number.isFinite(v) || v < lo || v > hi) return toast(`Valor fuera de rango (${lo}–${hi})`);
+  S.editado[id] = false;
+  cmd(`${id} ${v}`);
+}));
+["ralenti", "par", "rpm"].forEach((id) => {
+  $("in-" + id).addEventListener("input", () => (S.editado[id] = true));
+  $("in-" + id).addEventListener("keydown", (e) => { if (e.key === "Enter") document.querySelector(`[data-ajuste=${id}]`).click(); });
+});
+$("form-cmd").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const v = $("in-cmd").value.trim(); if (!v) return;
+  if (await cmd(v)) { S.historial.push(v); S.hIdx = S.historial.length; $("in-cmd").value = ""; }
+});
+$("in-cmd").addEventListener("keydown", (e) => {
+  if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+  e.preventDefault();
+  S.hIdx = Math.max(0, Math.min(S.historial.length, S.hIdx + (e.key === "ArrowUp" ? -1 : 1)));
+  $("in-cmd").value = S.historial[S.hIdx] || "";
+});
+$("puerto").addEventListener("change", (e) => post("/api/puerto", { puerto: e.target.value }));
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && S.conectado) { cmd("modo reposo"); toast("Esc: vuelta a REPOSO"); }
+});
+
+// ------------------------------------------------------------------ eventos del servidor
+function conectarEventos() {
+  const ev = new EventSource("/api/eventos");
+  ev.addEventListener("open", () => { $("log").replaceChildren(); S.lineas = []; });
+  ev.addEventListener("linea", (m) => anadirLinea(JSON.parse(m.data)));
+  ev.addEventListener("estado", (m) => pintarEstado(JSON.parse(m.data)));
+  ev.addEventListener("conexion", (m) => pintarConexion(JSON.parse(m.data)));
+  ev.onerror = () => {
+    S.conectado = false; $("pill").classList.remove("on");
+    txt("pill-txt", "Panel detenido"); $("pill").title = "No responde tools/panel_esp32.py";
+  };
+}
+pintarConexion({ conectado: false, puerto: null, error: null, fijo: null, puertos: [] });
+conectarEventos();
+</script>
+</body>
+</html>

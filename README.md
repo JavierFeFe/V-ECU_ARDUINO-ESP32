@@ -2,9 +2,11 @@
 
 Sustitución / emulación de la **V-ECU** (Vehicle ECU, MID 187) de una excavadora **Volvo EC210B** (2002, motor Volvo **D6D EAE2**) con un **ESP32** (o Arduino Nano) y un potenciómetro/encoder, para poder **regular la potencia** de la máquina cuando trabaja sin V-ECU en modo de emergencia (Manual).
 
-> **Estado (2026-10-19):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Plan, hardware y pruebas en [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) y [`docs/esquema_rpm_ESP32.png`](docs/esquema_rpm_ESP32.png); montaje con la placa **ESP32_Relay X1 V1.2** que ya tenemos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
+> **Estado (2026-10-20):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Plan, hardware y pruebas en [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) y [`docs/esquema_rpm_ESP32.png`](docs/esquema_rpm_ESP32.png); montaje con la placa **ESP32_Relay X1 V1.2** que ya tenemos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
 >
-> **Hardware en banco:** la placa se programa por P4 con el programador USB-C (ESP32-D0WD-V3, flash 4 MB) y el **relé de la vía B está confirmado en GPIO16**. **Firmware v0.1** en [`firmware/esp32/`](firmware/esp32/): modos Reposo / Alto / Auto-ralentí sobre el relé, lectura J1939 en solo escucha, TSC1 tras un flag de compilación, encoder, OLED opcional y consola serie. **Grabado y verificado en la placa**: arranca en Reposo, CAN en solo escucha y el SLNT del CAN Pal (IO4) en alto. Módulo CAN elegido: **Adafruit CAN Pal**. Falta comprar el CAN Pal, la OLED y el adaptador USB-CAN ([`docs/LISTA_COMPRA.md`](docs/LISTA_COMPRA.md)).
+> **Hardware en banco:** la placa se programa por P4 con el programador USB-C (ESP32-D0WD-V3, flash 4 MB) y el **relé de la vía B está confirmado en GPIO16**. **Firmware v0.1** en [`firmware/esp32/`](firmware/esp32/): modos Reposo / Alto / Auto-ralentí sobre el relé, lectura J1939 en solo escucha, TSC1 tras un flag de compilación, encoder, OLED opcional y consola serie. **Grabado y verificado en la placa**: arranca en Reposo, CAN en solo escucha y el SLNT del CAN Pal (IO4) en alto. Módulo CAN elegido: **Adafruit CAN Pal**. Faltan el CAN Pal y la OLED ([`docs/LISTA_COMPRA.md`](docs/LISTA_COMPRA.md)); al encoder le faltan los pines soldados.
+>
+> **2026-10-20:** portátil de pruebas con **Linux** preparado (entorno `.venv`, permisos USB, firmware compilado sin internet) y **adaptador SH-C30A recibido y verificado en solo escucha**. Pruebas de mesa superadas: relé COM–NO, Auto-ralentí sin CAN se queda en alto, arranque siempre en Reposo. **E-ECU comprobada en el taller**: terminación interna de 117 Ω, masas y alimentaciones correctas. **Corregido el bus**: la V-ECU es una derivación del par CAN (JB14/JB6) y JB13/JB5 son mallas; sin V-ECU no hay que puentear nada. **Siguiente:** en la máquina, medir B1–B2 con la E-ECU montada (60 Ω → R120 OFF; 120 Ω → ON) y hacer la captura de [`docs/CAPTURA_CAN.md`](docs/CAPTURA_CAN.md).
 
 ## El problema
 
@@ -16,7 +18,7 @@ Sin V-ECU, la EC210B funciona en **Manual** con el interruptor de régimen de em
 
 | Fase | Qué hace | Cómo | Estado |
 |---|---|---|---|
-| **0** | Mediciones en la máquina | Bobina, Resistor Box, corriente real, resistencia del bus CAN | Pendiente (lista en `docs/ESQUEMA_CONEXION.md`) |
+| **0** | Mediciones en la máquina | Bobina, Resistor Box, corriente real, resistencia del bus CAN | En curso: E-ECU comprobada en el taller (terminación 117 Ω); falta medir en la máquina |
 | **1** | Regular la **potencia de la bomba** | Driver de corriente (200–650 mA, PWM + dither) sobre la válvula power shift, en lugar de la Resistor Box, con **relé de seguridad** que devuelve la Resistor Box si el ESP32 falla | Diseño listo |
 | **2** | Leer el motor y **anti-calado** | CAN J1939 en modo solo escucha (EEC1 → rpm, ET1 → temperatura); subir la corriente si caen las rpm | Diseño listo |
 | **3** | Regular las **rpm del motor** | **Vía B:** relé de la placa sobre la línea B4 (800 / 1900 rpm, auto-ralentí). **Vía A:** petición de régimen **TSC1** por J1939 desde la dirección de la V-ECU (0x11) | **En curso.** Vía B: firmware listo, relé probado en banco. Vía A: protocolo probable, pendiente de captura CAN |
@@ -57,7 +59,10 @@ firmware/
 tools/
 ├── gen_esquema_montaje.py          ← genera docs/esquema_montaje_ESP32.svg
 ├── gen_esquema_captura.py          ← genera docs/esquema_captura_CAN.svg
-└── captura_can.py                  ← captura (solo escucha) y análisis del bus J1939 con el portátil
+├── captura_can.py                  ← captura (solo escucha) y análisis del bus J1939 con el portátil
+├── panel_esp32.py / .html          ← panel en el navegador para la placa: modos, relé, ajustes y log
+├── linux/                          ← reglas udev e instalador de permisos USB (portátil de pruebas)
+└── requirements.txt                ← entorno .venv: PlatformIO y librerías de captura
 ```
 
 ## Montaje

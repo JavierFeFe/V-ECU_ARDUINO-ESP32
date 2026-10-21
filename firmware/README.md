@@ -61,6 +61,18 @@ Los ajustes (segundos de ralentí, umbral de par, consigna) se guardan en la fla
 | `rpm <n>` | Consigna TSC1 |
 | `log` | Estado cada segundo (activar/desactivar) |
 
+## Panel en el navegador
+
+Todas las funciones de la consola con botones: modo y relé, ajustes, datos del motor y del bus, log completo (filtrable y descargable) y línea de comandos libres. <kbd>Esc</kbd> vuelve a **Reposo** desde cualquier parte.
+
+```bash
+python tools/panel_esp32.py
+```
+
+Abre `http://127.0.0.1:8765` (solo accesible desde el propio portátil). El panel es el único programa que abre el puerto serie: **cerrar antes la consola de PlatformIO**. Busca solo el programador y, si se desenchufa y vuelve con otro nombre (`ttyACM0` → `ttyACM1`), lo reencuentra. Opciones: `--puerto /dev/ttyACM0`, `--http 8765`, `--no-abrir`.
+
+El relé no tiene orden propia en el firmware: en el panel, activarlo equivale a `modo alto` y desactivarlo a `modo reposo`.
+
 ## Compilar y grabar
 
 ```bash
