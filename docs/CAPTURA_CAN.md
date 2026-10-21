@@ -133,6 +133,24 @@ El esquema Volvo **SCH02-1** de la EC160B–EC290B (`esquemas/ce_EC160B-290B_SCH
 
 Con el conector identificado se compra la pareja (o un cable de diagnóstico J1939 de 9 pines si es Deutsch HD) y se hace el adaptador; la tabla de conexión de arriba se rellena con los pines de este conector.
 
+### 3c. Cómo conectarse sin cortar cables
+
+La clavija de la E-ECU no sirve como punto de conexión: los conectores A y B van juntos en la misma carcasa y no se puede pinchar por detrás. Opciones, de mejor a peor:
+
+| # | Dónde | Cómo | Ventajas | Inconvenientes |
+|---|---|---|---|---|
+| **1** | **Clavija del mazo de la V-ECU** (JA 70 / JB 16), que está libre porque la V-ECU no está montada | Pines macho de prueba del calibre correcto metidos por la **cara** de los contactos hembra, o una cabecera recuperada de una V-ECU averiada | No se corta ni se extrae nada; **están todas las señales**: CAN H **JB14**, CAN L **JB6**, emergencia/B4 **JA47** (mismo cable que MC02.1), +24 V **JB7/JB8**, masa **JA15/JA63** (mallas JB13/JB5). Es justo donde iba la V-ECU | Hay que identificar el tamaño de los contactos para no abrirlos; para el montaje definitivo hace falta una cabecera macho fija |
+| **2** | **Adaptador en "Y" en el conector redondo (MC02)** | Comprar la pareja macho + hembra del conector, hacer un latiguillo intermedio y sacar CAN H/L (y B4) de él | Reversible, profesional y limpio; se enchufa y desenchufa en segundos | Hay que identificar el conector (marca y serie) para comprar la pareja |
+| 3 | Conector redondo por detrás (back-probe) | Agujas finas por la junta trasera de MC02.2 y MC02.3 | Rápido para la **captura** de una sola vez | Puede dañar la junta estanca; no vale como montaje definitivo |
+| 4 | Extraer contactos del conector redondo | Herramienta de extracción y contactos sueltos | Sin cortar | Riesgo de dañar contactos o retenciones; desaconsejado |
+
+**Recomendación:** opción 1 para la captura y para el montaje (el ESP32 ocupa el sitio de la V-ECU), y opción 2 si la clavija de la V-ECU resulta incómoda o sus contactos no admiten pines de prueba.
+
+Comprobaciones antes de usar la clavija de la V-ECU (llave quitada):
+1. Continuidad **JB14 ↔ B1** (o MC02.2), **JB6 ↔ B2** (o MC02.3) y **JA47 ↔ B4** (o MC02.1).
+2. Resistencia **JB14–JB6**: ≈ 117 Ω o ≈ 60 Ω con la E-ECU enchufada.
+3. Con contacto: **JB7/JB8 ≈ 24 V** respecto a **JA15/JA63**; JB14 y JB6 ≈ 2,5 V.
+
 ## 4. Capturas (un fichero por prueba)
 
 ### Con el panel en el navegador (recomendado)
