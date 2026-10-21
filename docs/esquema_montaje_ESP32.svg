@@ -237,8 +237,8 @@
 <rect x="1390.0" y="962.0" width="30" height="16" rx="3" fill="#f77f00" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1405" y="974" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="bold" >3V3</text>
 <rect x="300" y="362" width="200" height="44" rx="8" fill="#ececec" stroke="#1f1f1f" stroke-width="1.5"/>
-<text x="312" y="380" font-size="12" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Masa: mismo punto que</text>
-<text x="312" y="397" font-size="10.5" fill="#444" text-anchor="start" font-weight="normal" >la E-ECU (B9/B10 o perno)</text>
+<text x="312" y="380" font-size="12" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Masa: mismo perno de chasis</text>
+<text x="312" y="397" font-size="10.5" fill="#444" text-anchor="start" font-weight="normal" >que el GND del CAN Pal</text>
 <path d="M 500 384 L 627 384" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 500 384 L 627 384" fill="none" stroke="#1f1f1f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <rect x="300" y="430" width="200" height="50" rx="8" fill="#fde8e8" stroke="#d62828" stroke-width="1.5"/>
@@ -361,63 +361,60 @@
 <path d="M 565 884 L 875 884" fill="none" stroke="#9b5de5" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 565 900 L 610 900 L 610 905.5 L 956 905.5 L 956 920" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M 565 900 L 610 900 L 610 905.5 L 956 905.5 L 956 920" fill="none" stroke="#e0459b" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
-<rect x="174" y="1044" width="90" height="18" rx="4" fill="#8c1d1d" stroke="#5a0f0f"/>
-<rect x="24" y="1060" width="390" height="170" rx="14" fill="#b32424" stroke="#5a0f0f" stroke-width="3"/>
-<rect x="38" y="1084" width="362" height="122" rx="6" fill="#2a2a2a" stroke="#111"/>
-<rect x="50" y="1098" width="20" height="20" rx="3" fill="#d4a017" stroke="#fff" stroke-width="1.5"/>
-<text x="60" y="1112" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >1</text>
-<rect x="79" y="1098" width="20" height="20" rx="3" fill="#2a9d4f" stroke="#fff" stroke-width="1.5"/>
-<text x="89" y="1112" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >2</text>
-<rect x="111" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="137" y="1098" width="20" height="20" rx="3" fill="#1d4ed8" stroke="#fff" stroke-width="1.5"/>
-<text x="147" y="1112" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >4</text>
-<rect x="169" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="198" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="227" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="256" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="282" y="1098" width="20" height="20" rx="3" fill="#1f1f1f" stroke="#fff" stroke-width="1.5"/>
-<text x="292" y="1112" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >9</text>
-<rect x="311" y="1098" width="20" height="20" rx="3" fill="#1f1f1f" stroke="#fff" stroke-width="1.5"/>
-<text x="321" y="1112" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >10</text>
-<rect x="343" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="372" y="1101" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="53" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="82" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="111" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="140" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="169" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="198" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="227" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="256" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="285" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="314" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="343" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="372" y="1139" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="53" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="82" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="111" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="140" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="169" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="198" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="227" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="256" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="285" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="314" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="343" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<rect x="372" y="1177" width="14" height="14" rx="2" fill="#555" stroke="#777"/>
-<text x="44" y="1112" font-size="9" fill="#ffffff" text-anchor="end" font-weight="normal" >1</text>
-<text x="44" y="1150" font-size="9" fill="#ffffff" text-anchor="end" font-weight="normal" >13</text>
-<text x="44" y="1188" font-size="9" fill="#ffffff" text-anchor="end" font-weight="normal" >25</text>
-<text x="219" y="1222" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="bold" >B1 CAN H · B2 CAN L · B4 emergencia · B9/B10 masa</text>
-<text x="24" y="1252" font-size="13" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Conector B de la E-ECU (rojo, lado máquina) — vista de frente</text>
-<text x="24" y="1270" font-size="10.5" fill="#555" text-anchor="start" font-weight="normal" >Filas: 1–12 arriba, 13–24 centro, 25–36 abajo (comprobar números moldeados).</text>
-<text x="24" y="1286" font-size="10.5" fill="#1d4ed8" text-anchor="start" font-weight="normal" >B4 ya está cableado al terminal 3 del interruptor 26: no se toca.</text>
-<path d="M 357 730 L 335.5 730 L 335.5 1108 L 331 1108" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
-<path d="M 357 730 L 335.5 730 L 335.5 1108 L 331 1108" fill="none" stroke="#1f1f1f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
-<path d="M 357 690 L 300 690 L 300 1022 L 46 1022 L 46 1108 L 50 1108" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
-<path d="M 357 690 L 300 690 L 300 1022 L 46 1022 L 46 1108 L 50 1108" fill="none" stroke="#d4a017" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
-<path d="M 357 770 L 320 770 L 320 1032 L 74.5 1032 L 74.5 1108 L 79 1108" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
-<path d="M 357 770 L 320 770 L 320 1032 L 74.5 1032 L 74.5 1108 L 79 1108" fill="none" stroke="#2a9d4f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
+<rect x="45" y="1006" width="190" height="16" rx="4" fill="#e8c200" stroke="#6b5800"/>
+<circle cx="140" cy="1118" r="90" fill="#151515" stroke="#000" stroke-width="3"/>
+<circle cx="140" cy="1118" r="78" fill="#2a2a2a" stroke="#444"/>
+<circle cx="105" cy="1124" r="11" fill="#9c7a1c" stroke="#111" stroke-width="2"/>
+<circle cx="134" cy="1083" r="11" fill="#d9d9d9" stroke="#111" stroke-width="2"/>
+<circle cx="175" cy="1112" r="11" fill="#d9d9d9" stroke="#111" stroke-width="2"/>
+<circle cx="146" cy="1153" r="11" fill="#9c7a1c" stroke="#111" stroke-width="2"/>
+<rect x="80" y="1148" width="18" height="18" rx="4" fill="#1b1b1b" stroke="#d62828" stroke-width="2.5"/>
+<circle cx="89" cy="1157" r="4.5" fill="#000"/>
+<text x="75" y="1171" font-size="9.5" fill="#ff6b6b" text-anchor="middle" font-weight="bold" >E1</text>
+<rect x="68" y="1100" width="18" height="18" rx="4" fill="#1b1b1b" stroke="#555" stroke-width="1.2"/>
+<circle cx="77" cy="1109" r="4.5" fill="#d9d9d9"/>
+<text x="59" y="1111" font-size="9.5" fill="#ffd54a" text-anchor="middle" font-weight="bold" >E2</text>
+<rect x="94" y="1057" width="18" height="18" rx="4" fill="#1b1b1b" stroke="#555" stroke-width="1.2"/>
+<circle cx="103" cy="1066" r="4.5" fill="#d9d9d9"/>
+<text x="93" y="1055" font-size="9.5" fill="#ffd54a" text-anchor="middle" font-weight="bold" >E3</text>
+<rect x="144" y="1046" width="18" height="18" rx="4" fill="#1b1b1b" stroke="#555" stroke-width="1.2"/>
+<circle cx="153" cy="1055" r="4.5" fill="#d9d9d9"/>
+<text x="157" y="1042" font-size="9.5" fill="#ffd54a" text-anchor="middle" font-weight="bold" >E4</text>
+<rect x="184" y="1073" width="18" height="18" rx="4" fill="#1b1b1b" stroke="#555" stroke-width="1.2"/>
+<circle cx="193" cy="1082" r="4.5" fill="#d9d9d9"/>
+<text x="208" y="1076" font-size="9.5" fill="#ffd54a" text-anchor="middle" font-weight="bold" >E5</text>
+<rect x="194" y="1120" width="18" height="18" rx="4" fill="#1b1b1b" stroke="#555" stroke-width="1.2"/>
+<circle cx="203" cy="1129" r="4.5" fill="#d9d9d9"/>
+<text x="221" y="1136" font-size="9.5" fill="#ffd54a" text-anchor="middle" font-weight="bold" >E6</text>
+<rect x="169" y="1161" width="18" height="18" rx="4" fill="#1b1b1b" stroke="#555" stroke-width="1.2"/>
+<circle cx="178" cy="1170" r="4.5" fill="#d9d9d9"/>
+<text x="188" y="1188" font-size="9.5" fill="#ffd54a" text-anchor="middle" font-weight="bold" >E7</text>
+<rect x="120" y="1172" width="18" height="18" rx="4" fill="#1b1b1b" stroke="#555" stroke-width="1.2"/>
+<circle cx="129" cy="1181" r="4.5" fill="#d9d9d9"/>
+<text x="107" y="1197" font-size="9.5" fill="#ffd54a" text-anchor="middle" font-weight="bold" >E8</text>
+<circle cx="140" cy="1118" r="12" fill="#d62828" stroke="#7a0f1b" stroke-width="2"/>
+<rect x="137.5" y="1110" width="5" height="16" rx="2" fill="#7a0f1b"/>
+<circle cx="178" cy="1170" r="12" fill="none" stroke="#d4a017" stroke-width="3.5"/>
+<circle cx="129" cy="1181" r="12" fill="none" stroke="#2a9d4f" stroke-width="3.5"/>
+<text x="28" y="998" font-size="13" fill="#1b1b1b" text-anchor="start" font-weight="bold" >Conector redondo (mazo E-ECU)</text>
+<text x="28" y="1264" font-size="10.5" fill="#444" text-anchor="start" font-weight="normal" >Cara de contactos: E7 = CAN H (B1) · E8 = CAN L (B2) · E1 vacía = referencia.</text>
+<text x="28" y="1279" font-size="10.5" fill="#1d4ed8" text-anchor="start" font-weight="normal" >B4 y masa no pasan por aquí: B4 ya va al terminal 3 del interruptor 26.</text>
+<rect x="350" y="1080" width="96" height="46" rx="5" fill="#8d9196" stroke="#555" stroke-width="1.5"/>
+<line x1="358" y1="1126" x2="368" y2="1136" stroke="#555" stroke-width="1.5"/>
+<line x1="382" y1="1126" x2="392" y2="1136" stroke="#555" stroke-width="1.5"/>
+<line x1="406" y1="1126" x2="416" y2="1136" stroke="#555" stroke-width="1.5"/>
+<line x1="430" y1="1126" x2="440" y2="1136" stroke="#555" stroke-width="1.5"/>
+<polygon points="398,1090 411,1097 411,1111 398,1118 385,1111 385,1097" fill="#d9d9d9" stroke="#444" stroke-width="1.5"/>
+<circle cx="398" cy="1104" r="5" fill="#bdbdbd" stroke="#444"/>
+<text x="398" y="1152" font-size="10.5" fill="#1b1b1b" text-anchor="middle" font-weight="bold" >perno de masa</text>
+<text x="398" y="1166" font-size="10" fill="#444" text-anchor="middle" font-weight="normal" >chasis/motor junto</text>
+<text x="398" y="1179" font-size="10" fill="#444" text-anchor="middle" font-weight="normal" >a la E-ECU o bat. −</text>
+<path d="M 357 730 L 335.5 730 L 335.5 1104 L 385 1104" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 357 730 L 335.5 730 L 335.5 1104 L 385 1104" fill="none" stroke="#1f1f1f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M 357 690 L 300 690 L 300 1222 L 177.6182561467183 1222 L 177.6182561467183 1181.7770876399966" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 357 690 L 300 690 L 300 1222 L 177.6182561467183 1222 L 177.6182561467183 1181.7770876399966" fill="none" stroke="#d4a017" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M 357 770 L 320 770 L 320 1236 L 128.88651662931645 1236 L 128.88651662931645 1193.0276961927814" fill="none" stroke="#ffffff" stroke-width="7.1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 357 770 L 320 770 L 320 1236 L 128.88651662931645 1236 L 128.88651662931645 1193.0276961927814" fill="none" stroke="#2a9d4f" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round" />
 <path d="M 296 800 C 310 806, 310 806, 324 812" stroke="#555" stroke-width="1.2" fill="none"/>
 <path d="M 296 826 C 310 832, 310 832, 324 838" stroke="#555" stroke-width="1.2" fill="none"/>
 <path d="M 296 852 C 310 858, 310 858, 324 864" stroke="#555" stroke-width="1.2" fill="none"/>
@@ -428,6 +425,7 @@
 <path d="M 296 982 C 310 988, 310 988, 324 994" stroke="#555" stroke-width="1.2" fill="none"/>
 <text x="292" y="900" font-size="11" fill="#444" text-anchor="end" font-weight="normal" >par trenzado</text>
 <text x="292" y="914" font-size="11" fill="#444" text-anchor="end" font-weight="normal" >&lt; 1 m</text>
+<text x="28" y="1294" font-size="10.5" fill="#444" text-anchor="start" font-weight="normal" >Conexión: back-probe por detrás de la pareja o adaptador en «Y».</text>
 <rect x="1500" y="272" width="90" height="290" rx="10" fill="#3a3a3a" stroke="#111" stroke-width="2"/>
 <text x="1545" y="420" font-size="22" fill="#dddddd" text-anchor="middle" font-weight="bold" >26</text>
 <rect x="1478" y="288" width="28" height="24" rx="2" fill="#e0b24a" stroke="#7a6000" stroke-width="1.2"/>
@@ -493,7 +491,7 @@
 <text x="474" y="1156" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >3. Alimentación de los módulos (3,3 V) desde la placa: cables naranja a 3V3 y negros a GND. Donde se cruzan, el cable de señal pasa por encima (no hay contacto).</text>
 <text x="474" y="1176" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >4. Los módulos están girados para simplificar el cableado; el orden de sus pines es el real, leído en el sentido del dibujo. Guiarse siempre por sus rótulos.</text>
 <text x="474" y="1196" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >5. CAN Pal: Termination en OFF en la máquina (ON solo en el banco con el USB-CAN). SLNT → IO4: el firmware lo deja en alto (silencio por hardware) salvo en el entorno TSC1.</text>
-<text x="474" y="1216" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >6. Cable de 3 hilos &lt; 1 m: H → B1, L → B2 (trenzados) y GND del CAN Pal → B10 (o B9). La masa de la placa, en el mismo punto. Interruptor 26 en RALENTÍ y selector en MANUAL.</text>
+<text x="474" y="1216" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >6. CAN: H → E7, L → E8 del conector redondo del mazo de la E-ECU (trenzados, &lt; 1 m) y GND del CAN Pal → perno de masa de chasis/motor junto a la E-ECU; la masa de la placa, en el mismo perno. Interruptor 26 en RALENTÍ y selector en MANUAL.</text>
 <text x="474" y="1236" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >7. Programador solo para grabar, 3 cables: GND y TX/RX cruzados (EN y G0 sin conectar). Mantener pulsado el botón IO0 al dar tensión. No conectar sus 3.3V/5V.</text>
 <text x="474" y="1256" font-size="11.5" fill="#3a3a3a" text-anchor="start" font-weight="normal" >8. Optoacoplador opcional (IO35 / IO39) y dial original (IO34) no dibujados: ver MONTAJE.md §3.</text>
 </g>

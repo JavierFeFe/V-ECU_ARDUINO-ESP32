@@ -184,8 +184,8 @@ for k, y in enumerate(RK):
 
 # ================================================================ alimentación de la máquina
 a('<rect x="300" y="362" width="200" height="44" rx="8" fill="#ececec" stroke="#1f1f1f" stroke-width="1.5"/>')
-text(312, 380, "Masa: mismo punto que", size=12, weight="bold")
-text(312, 397, "la E-ECU (B9/B10 o perno)", size=10.5, fill="#444")
+text(312, 380, "Masa: mismo perno de chasis", size=12, weight="bold")
+text(312, 397, "que el GND del CAN Pal", size=10.5, fill="#444")
 wire([(500, 384), (627, 384)], C["gnd"])
 a('<rect x="300" y="430" width="200" height="50" rx="8" fill="#fde8e8" stroke="#d62828" stroke-width="1.5"/>')
 text(312, 450, "+24 V tras la llave", size=13, weight="bold", fill="#9b1c1c")
@@ -284,38 +284,60 @@ text(456, 1004, "OLED SSD1306 0,96\" I²C (0x3C)", size=13, anchor="middle", wei
 wire([(565, 884), (875, 884)], C["sda"])                                              # SDA → IO21 (ext. rango 7)
 wire([(565, 900), (610, 900), (610, 905.5), (956, 905.5), (956, 920)], C["scl"])        # SCL → IO22 (int. rango 8)
 
-# ================================================================ conector B de la E-ECU (abajo a la izquierda)
-CBX, CBY = 24, 1060
-a(f'<rect x="{CBX + 150}" y="{CBY - 16}" width="90" height="18" rx="4" fill="#8c1d1d" stroke="#5a0f0f"/>')
-a(f'<rect x="{CBX}" y="{CBY}" width="390" height="170" rx="14" fill="#b32424" stroke="#5a0f0f" stroke-width="3"/>')
-a(f'<rect x="{CBX + 14}" y="{CBY + 24}" width="362" height="122" rx="6" fill="#2a2a2a" stroke="#111"/>')
-CX = [CBX + 36 + 29 * i for i in range(12)]
-RY = [CBY + 48, CBY + 86, CBY + 124]
-special = {1: ("canh", "1"), 2: ("canl", "2"), 4: ("b4", "4"), 9: ("gnd", "9"), 10: ("gnd", "10")}
-for r, y in enumerate(RY):
-    for i, x in enumerate(CX):
-        n = r * 12 + i + 1
-        if n in special:
-            col, lab = special[n]
-            a(f'<rect x="{x - 10}" y="{y - 10}" width="20" height="20" rx="3" fill="{C[col]}" stroke="#fff" stroke-width="1.5"/>')
-            text(x, y + 4, lab, size=11, fill="#ffffff", anchor="middle", weight="bold")
-        else:
-            a(f'<rect x="{x - 7}" y="{y - 7}" width="14" height="14" rx="2" fill="#555" stroke="#777"/>')
-for lab, y in [("1", RY[0]), ("13", RY[1]), ("25", RY[2])]:
-    text(CBX + 20, y + 4, lab, size=9, fill="#ffffff", anchor="end")
-text(CBX + 195, CBY + 162, "B1 CAN H · B2 CAN L · B4 emergencia · B9/B10 masa", size=11, fill="#ffffff", anchor="middle", weight="bold")
-text(CBX, CBY + 192, "Conector B de la E-ECU (rojo, lado máquina) — vista de frente", size=13, weight="bold")
-text(CBX, CBY + 210, "Filas: 1–12 arriba, 13–24 centro, 25–36 abajo (comprobar números moldeados).", size=10.5, fill="#555")
-text(CBX, CBY + 226, "B4 ya está cableado al terminal 3 del interruptor 26: no se toca.", size=10.5, fill=C["b4"])
-# GND del CAN Pal (borne G) → B10: referencia de masa común con la E-ECU
-wire([(357, 730), (335.5, 730), (335.5, RY[0]), (CX[9] + 10, RY[0])], C["gnd"])
-# H → B1, L → B2 (par trenzado)
-wire([(357, 690), (300, 690), (300, 1022), (CX[0] - 14, 1022), (CX[0] - 14, RY[0]), (CX[0] - 10, RY[0])], C["canh"])
-wire([(357, 770), (320, 770), (320, 1032), (CX[1] - 14.5, 1032), (CX[1] - 14.5, RY[0]), (CX[1] - 10, RY[0])], C["canl"])
+# ================================================================ conector redondo del mazo de la E-ECU (abajo a la izquierda)
+# La clavija de la E-ECU no se puede pinchar (A y B en la misma carcasa): CAN H/L se toman en E7/E8 del
+# conector redondo (medido 2026-10-21) y la masa en un perno de chasis. B4 y B9/B10 no pasan por él.
+# Geometría y numeración como tools/gen_conector_MC02.py (E1 = cavidad exterior vacía, sentido horario).
+RCX, RCY = 140, 1118
+
+
+def polar(r, ang):
+    t = math.radians(ang)
+    return RCX + r * math.sin(t), RCY - r * math.cos(t)
+
+
+a(f'<rect x="{RCX - 95}" y="{RCY - 112}" width="190" height="16" rx="4" fill="#e8c200" stroke="#6b5800"/>')
+a(f'<circle cx="{RCX}" cy="{RCY}" r="90" fill="#151515" stroke="#000" stroke-width="3"/>')
+a(f'<circle cx="{RCX}" cy="{RCY}" r="78" fill="#2a2a2a" stroke="#444"/>')
+for ang, montado in [(260, False), (350, True), (80, True), (170, False)]:
+    x, y = polar(36, ang)
+    a(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="11" fill="{"#d9d9d9" if montado else "#9c7a1c"}" stroke="#111" stroke-width="2"/>')
+EXT = [(233, False), (278, True), (325, True), (12, True), (56, True), (100, True), (144, True), (190, True)]
+for i, (ang, montado) in enumerate(EXT, 1):
+    x, y = polar(64, ang)
+    a(f'<rect x="{x - 9:.0f}" y="{y - 9:.0f}" width="18" height="18" rx="4" fill="#1b1b1b" '
+      f'stroke="{"#d62828" if i == 1 else "#555"}" stroke-width="{2.5 if i == 1 else 1.2}"/>')
+    a(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="4.5" fill="{"#d9d9d9" if montado else "#000"}"/>')
+    lx, ly = polar(82, ang + (14 if i == 8 else 0))
+    text(f"{lx:.0f}", f"{ly + 4:.0f}", f"E{i}", size=9.5, fill="#ff6b6b" if i == 1 else "#ffd54a", anchor="middle", weight="bold")
+a(f'<circle cx="{RCX}" cy="{RCY}" r="12" fill="#d62828" stroke="#7a0f1b" stroke-width="2"/>')
+a(f'<rect x="{RCX - 2.5}" y="{RCY - 8}" width="5" height="16" rx="2" fill="#7a0f1b"/>')
+E7, E8 = polar(64, 144), polar(64, 190)
+for (x, y), col in [(E7, C["canh"]), (E8, C["canl"])]:
+    a(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="12" fill="none" stroke="{col}" stroke-width="3.5"/>')
+text(RCX - 112, RCY - 120, "Conector redondo (mazo E-ECU)", size=13, weight="bold")
+text(RCX - 112, RCY + 146, "Cara de contactos: E7 = CAN H (B1) · E8 = CAN L (B2) · E1 vacía = referencia.", size=10.5, fill="#444")
+text(RCX - 112, RCY + 161, "B4 y masa no pasan por aquí: B4 ya va al terminal 3 del interruptor 26.", size=10.5, fill=C["b4"])
+
+# Perno de masa del chasis / motor junto a la E-ECU (o negativo de batería)
+a('<rect x="350" y="1080" width="96" height="46" rx="5" fill="#8d9196" stroke="#555" stroke-width="1.5"/>')
+for k in range(4):
+    a(f'<line x1="{358 + k * 24}" y1="1126" x2="{368 + k * 24}" y2="1136" stroke="#555" stroke-width="1.5"/>')
+a('<polygon points="398,1090 411,1097 411,1111 398,1118 385,1111 385,1097" fill="#d9d9d9" stroke="#444" stroke-width="1.5"/>')
+a('<circle cx="398" cy="1104" r="5" fill="#bdbdbd" stroke="#444"/>')
+text(398, 1152, "perno de masa", size=10.5, anchor="middle", weight="bold")
+text(398, 1166, "chasis/motor junto", size=10, fill="#444", anchor="middle")
+text(398, 1179, "a la E-ECU o bat. −", size=10, fill="#444", anchor="middle")
+# GND del CAN Pal (borne G) → perno: referencia de masa común con la E-ECU
+wire([(357, 730), (335.5, 730), (335.5, 1104), (385, 1104)], C["gnd"])
+# H → E7, L → E8 (par trenzado), por debajo del conector, sin cruces
+wire([(357, 690), (300, 690), (300, 1222), (E7[0], 1222), (E7[0], E7[1] + 12)], C["canh"])
+wire([(357, 770), (320, 770), (320, 1236), (E8[0], 1236), (E8[0], E8[1] + 12)], C["canl"])
 for y in range(800, 1000, 26):
     a(f'<path d="M 296 {y} C 310 {y + 6}, 310 {y + 6}, 324 {y + 12}" stroke="#555" stroke-width="1.2" fill="none"/>')
 text(292, 900, "par trenzado", size=11, fill="#444", anchor="end")
 text(292, 914, "< 1 m", size=11, fill="#444", anchor="end")
+text(RCX - 112, RCY + 176, "Conexión: back-probe por detrás de la pareja o adaptador en «Y».", size=10.5, fill="#444")
 
 # ================================================================ interruptor de emergencia 26 (derecha, junto al relé)
 a('<rect x="1500" y="272" width="90" height="290" rx="10" fill="#3a3a3a" stroke="#111" stroke-width="2"/>')
@@ -366,7 +388,7 @@ notas = [
     "3. Alimentación de los módulos (3,3 V) desde la placa: cables naranja a 3V3 y negros a GND. Donde se cruzan, el cable de señal pasa por encima (no hay contacto).",
     "4. Los módulos están girados para simplificar el cableado; el orden de sus pines es el real, leído en el sentido del dibujo. Guiarse siempre por sus rótulos.",
     "5. CAN Pal: Termination en OFF en la máquina (ON solo en el banco con el USB-CAN). SLNT → IO4: el firmware lo deja en alto (silencio por hardware) salvo en el entorno TSC1.",
-    "6. Cable de 3 hilos < 1 m: H → B1, L → B2 (trenzados) y GND del CAN Pal → B10 (o B9). La masa de la placa, en el mismo punto. Interruptor 26 en RALENTÍ y selector en MANUAL.",
+    "6. CAN: H → E7, L → E8 del conector redondo del mazo de la E-ECU (trenzados, < 1 m) y GND del CAN Pal → perno de masa de chasis/motor junto a la E-ECU; la masa de la placa, en el mismo perno. Interruptor 26 en RALENTÍ y selector en MANUAL.",
     "7. Programador solo para grabar, 3 cables: GND y TX/RX cruzados (EN y G0 sin conectar). Mantener pulsado el botón IO0 al dar tensión. No conectar sus 3.3V/5V.",
     "8. Optoacoplador opcional (IO35 / IO39) y dial original (IO34) no dibujados: ver MONTAJE.md §3.",
 ]

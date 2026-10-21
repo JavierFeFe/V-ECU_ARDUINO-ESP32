@@ -52,7 +52,7 @@ docs/
 ├── conector_MC02.svg/.png          ← cara de contactos del conector redondo del mazo de la E-ECU (E7 CAN H, E8 CAN L)
 ├── fotos/                          ← fotos de la máquina, la E-ECU y los conectores
 ├── esquema_rpm_ESP32.svg/.png      ← esquema de la versión solo-rpm con módulos premontados
-├── esquema_montaje_ESP32.svg/.png  ← diagrama ilustrado de montaje: placa, módulos, conector B e interruptor 26
+├── esquema_montaje_ESP32.svg/.png  ← diagrama ilustrado de montaje: placa, módulos, conector redondo (E7/E8), masa e interruptor 26
 ├── LISTA_COMPRA.md                 ← lo que falta comprar para el control de rpm (Amazon España)
 ├── esquema_conexion_ESP32.svg/.png ← esquema de conexión completo
 ├── anexos/ A…H                     ← informes de investigación con todas las fuentes y su fiabilidad
@@ -77,7 +77,7 @@ tools/
 
 ![Diagrama ilustrado de montaje](docs/esquema_montaje_ESP32.png)
 
-Conexiones de la placa ESP32_Relay X1 con el programador, el módulo CAN, la OLED, el encoder, el conector B de la E-ECU y el interruptor de emergencia 26. Fuente editable: [`docs/esquema_montaje_ESP32.svg`](docs/esquema_montaje_ESP32.svg); pasos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
+Conexiones de la placa ESP32_Relay X1 con el programador, el módulo CAN, la OLED, el encoder, el **conector redondo del mazo de la E-ECU** (CAN H → E7, CAN L → E8), el perno de masa de chasis y el interruptor de emergencia 26 (B4). Fuente editable: [`docs/esquema_montaje_ESP32.svg`](docs/esquema_montaje_ESP32.svg); pasos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
 
 ## Captura del bus con el portátil (pruebas)
 
