@@ -98,6 +98,10 @@ python tools/panel_bus.py
 
 Abre `http://127.0.0.1:8766` con el bus en directo, **siempre en solo escucha**: rpm, par real, carga, temperaturas, presión de aceite, batería y horas; gráficas de rpm y par (la del par sirve para elegir el umbral del auto-ralentí); averías DM1 con sus lámparas; nodos presentes, con aviso si aparece la V-ECU (0x11), algún TSC1 o si la E-ECU está sola en el bus; y la tabla de mensajes con los bytes que cambian. Las **6 pruebas** de la tabla de abajo tienen su botón (nombre y duración ya puestos); las **notas** se marcan con un botón o escribiendo, y quedan en el fichero y en las gráficas. Al terminar, **Analizar** muestra el mismo informe que el paso 5. Los ficheros son idénticos a los de `captura_can.py`.
 
+Arriba del panel hay una **guía paso a paso** con todo este procedimiento (seguridad, comprobar el SH-C30A, medidas, conexión, contacto, las 6 capturas y el análisis): en cada paso dice qué hacer, **qué debería verse** en el multímetro y en el panel, y comprueba en directo lo que se puede (llegan tramas, aparece la E-ECU, rpm ≈ 800 / 1900…). Las medidas del multímetro se apuntan en la guía y quedan en el registro; la medida de B1–B2 decide sola la posición del DIP 2 que indica el paso de conexión.
+
+**Registro automático:** sin pulsar nada, cada sesión del panel se guarda en `registros/bus/<fecha>_<hora>/`: `bus_completo.log` (todas las tramas y notas de la sesión, mismo formato que las capturas: se analiza con `captura_can.py analizar` o se repasa con `--reproducir`), `motor.csv` (un valor por segundo: rpm, par, carga, refrigerante, aceite, batería, tramas/s y notas) y `eventos.log` (conexiones, nodos nuevos, averías que aparecen o desaparecen, TSC1 o V-ECU detectados, grabaciones, notas y un resumen cada 10 s). `--sin-registro` lo desactiva.
+
 Para probarlo sin máquina: `python tools/panel_bus.py --demo` (E-ECU simulada; graba en `capturas/demo/`). Para repasar una captura ya hecha: `python tools/panel_bus.py --reproducir capturas/<fichero>.log`.
 
 ### Por línea de comandos

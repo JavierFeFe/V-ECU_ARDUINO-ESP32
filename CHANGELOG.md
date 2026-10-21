@@ -12,6 +12,10 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 - Diagrama de montaje: en las dos tiras de pines de la placa estaban **intercambiadas la fila interior y la exterior**. Corregido en `tools/gen_esquema_montaje.py` con el cableado rehecho (IO4/IO17/IO18/IO22 y GND en la fila interior de la tira izquierda; IO27/IO32, 3V3 y GND en la exterior de la derecha).
 - Revisión del diagrama de montaje: comentarios del generador al día con las filas corregidas, rótulo «AMS1117» legible, programador rotulado como `ttyACM0 / COMx`; en `docs/HARDWARE_PLACA_ESP32_RELE.md`, qué fila de cada tira es la interior y cuál la exterior.
 
+### Añadido (registros y guía)
+- **Registro automático de cada sesión** (carpeta `registros/`, fuera de git): el panel del bus guarda `bus_completo.log` (todas las tramas y notas), `motor.csv` (1/s) y `eventos.log` (conexiones, nodos, averías que aparecen/desaparecen, TSC1, V-ECU, grabaciones, notas y resumen cada 10 s); el panel de la placa guarda todo lo que dice la placa, los comandos y un resumen cada 10 s. Se cierran bien también al cerrar la ventana del terminal.
+- **Guía paso a paso** en el panel del bus: los 12 pasos de `CAPTURA_CAN.md` con qué hacer, qué debería verse y comprobaciones en directo; las medidas del multímetro se apuntan en la guía y van al registro.
+
 ### Añadido (panel del bus)
 - `tools/panel_bus.py` + `panel_bus.html` (127.0.0.1:8766): lectura del bus J1939 con el SH-C30A en solo escucha, en el navegador: rpm, par, carga, temperaturas, aceite, batería y horas; gráficas de rpm y par con notas; averías DM1 (también multitrama) con lámparas; nodos con avisos (V-ECU 0x11, TSC1, E-ECU sola); tabla de mensajes con bytes que cambian; grabación de las 6 pruebas de `CAPTURA_CAN.md` en el formato de `captura_can.py`, con notas y análisis al terminar. Modos `--demo` (E-ECU simulada) y `--reproducir`. Probado en demo; con el SH-C30A sin enchufar avisa y reintenta solo.
 

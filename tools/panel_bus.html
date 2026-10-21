@@ -77,6 +77,7 @@
   button:disabled { opacity: .45; cursor: not-allowed; }
   button.peq { padding: 4px 9px; font-size: 12.5px; }
   button.activo { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.prim { background: var(--accent); border-color: var(--accent); color: #fff; }
   button.grabar { background: var(--danger); border-color: var(--danger); color: #fff; }
   input[type=text], input[type=number] { font: inherit; color: var(--text); background: var(--panel);
          border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; min-width: 0; }
@@ -121,6 +122,32 @@
            padding: 9px 16px; border-radius: 9px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s;
            max-width: calc(100% - 32px); z-index: 5; }
   #toast.ver { opacity: 1; }
+  .guia { grid-column: 1 / -1; }
+  .guia-cuerpo { display: grid; grid-template-columns: 250px 1fr; gap: 18px; }
+  .pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; align-content: start; }
+  .pasos button { width: 100%; text-align: left; border: 0; background: transparent; padding: 6px 8px; font-weight: 500;
+                  display: flex; gap: 8px; align-items: center; border-radius: 7px; }
+  .pasos button:hover { background: var(--bg); }
+  .pasos button.actual { background: var(--accent-soft); color: var(--accent); font-weight: 650; }
+  .pasos .num { width: 22px; height: 22px; border-radius: 50%; flex: none; display: grid; place-items: center;
+                font-size: 11.5px; font-weight: 700; background: var(--bg); color: var(--muted); }
+  .pasos .hecho .num { background: var(--ok); color: #fff; }
+  .paso h3 { margin: 0 0 4px; font-size: 18px; }
+  .paso .donde { color: var(--muted); font-size: 12.5px; margin-bottom: 10px; }
+  .paso h4 { margin: 14px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+  .paso ol, .paso ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+  .paso .esperado { background: var(--bg); border-radius: 9px; padding: 10px 12px 10px 30px; }
+  .paso .esperado li::marker { color: var(--ok); }
+  .vivo { list-style: none; padding: 0 !important; }
+  .vivo li { display: flex; gap: 8px; align-items: baseline; }
+  .vivo .ic { width: 18px; flex: none; font-weight: 700; text-align: center; }
+  .vivo .si { color: var(--ok); } .vivo .no { color: var(--danger); } .vivo .na { color: var(--faint); }
+  .medida { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+  .medida input { width: 110px; }
+  .paso-nav { display: flex; gap: 8px; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+  .paso-nav label { display: inline-flex; gap: 6px; align-items: center; }
+  .acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  @media (max-width: 980px) { .guia-cuerpo { grid-template-columns: 1fr; } .pasos { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 980px) {
     main { grid-template-columns: 1fr; padding: 12px 16px 20px; }
     header { padding: 10px 16px; }
@@ -145,6 +172,15 @@
 <div class="banda error" id="banda-error" hidden></div>
 
 <main>
+  <section class="card guia" aria-labelledby="t-guia" id="guia">
+    <h2 id="t-guia">Guía paso a paso · en la máquina <span class="grow"></span>
+      <span class="sub" id="guia-progreso"></span>
+      <button class="peq" id="btn-guia">Ocultar</button></h2>
+    <div class="guia-cuerpo" id="guia-cuerpo">
+      <ol class="pasos" id="pasos"></ol>
+      <div class="paso" id="paso"></div>
+    </div>
+  </section>
   <div class="col">
     <section class="card" aria-labelledby="t-motor">
       <h2 id="t-motor">Motor · E-ECU (0x00)</h2>
@@ -231,6 +267,7 @@
       <h2 id="t-arch">Capturas de esta sesión</h2>
       <ul class="lista" id="grabaciones"><li class="vacio">Ninguna todavía.</li></ul>
       <ul class="lista" id="sistema"></ul>
+      <p class="sub" id="registro" style="margin:10px 0 0"></p>
     </section>
   </div>
 </main>
@@ -436,6 +473,9 @@ function pintar(f) {
     const b = document.createElement("button"); b.className = "peq"; b.textContent = "Analizar";
     b.onclick = () => analizar(a.ruta); li.append(b); return li;
   }));
+  $("registro").innerHTML = f.registro
+    ? `Registro automático de toda la sesión en <code>${f.registro}/</code> (todas las tramas, motor.csv y eventos.log)`
+    : "Sin registro automático (--sin-registro o reproducción).";
   $("sistema").replaceChildren(...f.sistema.slice(-4).reverse().map((s) => {
     const li = document.createElement("li"); li.className = "sub"; li.textContent = `${s.t} · ${s.texto}`; return li;
   }));
@@ -445,11 +485,13 @@ function pintar(f) {
     const x = document.createElement("span"); x.style.fontFamily = "inherit"; x.textContent = n.texto; li.append(x); return li;
   }));
   dibujar();
+  vivoGuia(f);
 }
 
 // ------------------------------------------------------------------ acciones
 async function cargarPruebas() {
   const r = await fetch("/api/pruebas"); const lista = await r.json();
+  PRUEBAS_LISTA = lista; pintarGuia();
   $("pruebas").replaceChildren(...lista.map((p) => {
     const b = document.createElement("button"); b.className = "prueba"; b.dataset.nombre = p.nombre;
     b.innerHTML = `${p.nombre} · ${p.duracion} s<small>${p.que}</small>`;
@@ -479,6 +521,151 @@ async function analizar(ruta) {
   $("dlg-titulo").textContent = "Análisis · " + ruta; $("dlg-texto").textContent = j.texto; $("dlg").showModal();
 }
 $("dlg-cerrar").onclick = () => $("dlg").close();
+
+// ------------------------------------------------------------------ guía paso a paso (docs/CAPTURA_CAN.md)
+const R120 = () => (S.medidaB12 == null ? "según la medida del paso 3" : S.medidaB12 < 90 ? "OFF (mediste ≈ 60 Ω)" : "ON (mediste ≈ 120 Ω)");
+const PASOS = [
+  { t: "Seguridad", donde: "Antes de tocar nada",
+    hacer: ["Máquina estacionada en llano, implementos (cuchara y brazo) apoyados en el suelo.",
+            "Palanca de seguridad BLOQUEADA (arriba).", "Selector Auto/Manual en MANUAL.",
+            "Interruptor de régimen de emergencia (26) en RALENTÍ.", "Llave QUITADA."],
+    ver: ["Nada que ver en el panel todavía. Marca el paso como hecho y sigue."] },
+  { t: "Comprobar el SH-C30A", donde: "En el taller o junto a la máquina, sin conectarlo a nada",
+    hacer: ["Interruptor DIP 1 (arranque) en OFF. En ON arranca en modo DFU y no lee el bus.",
+            "Con el multímetro en ohmios entre los tornillos CAN_H y CAN_L: DIP 2 en ON → ≈ 120 Ω; DIP 2 en OFF → abierto.",
+            "Enchufa el SH-C30A al portátil (USB-A directo o con alargador)."],
+    ver: ["En la cabecera: SOLO ESCUCHA en verde.", "Estado: «Conectado, sin tramas» (todavía no está unido al bus).",
+          "Debajo de la cabecera no debe salir la banda roja «No se encuentra el SH-C30A»."],
+    vivo: (f) => [[f.fuente.conectado && !f.fuente.demo, "El panel ve el SH-C30A en modo real" + (f.fuente.demo ? " (ahora estás en DEMO)" : "")]] },
+  { t: "Medir la resistencia del bus", donde: "Conector B de la E-ECU (rojo), E-ECU montada, LLAVE QUITADA",
+    hacer: ["Multímetro en ohmios entre B1 (amarillo) y B2 (verde), por detrás del conector con las sondas back-probe.",
+            "Apunta el valor aquí abajo: queda guardado en el registro."],
+    ver: ["≈ 60 Ω: hay dos terminaciones (E-ECU y panel) → DIP 2 (R120) del SH-C30A en OFF.",
+          "≈ 120 Ω: solo la de la E-ECU (en el taller dio 117 Ω) → DIP 2 en ON.",
+          "No se puentea nada en el conector de la V-ECU (JB13/JB5 son mallas)."],
+    medida: { id: "b12", etiqueta: "B1–B2", unidad: "Ω", nota: (v) => `Medida B1–B2 con llave quitada = ${v} Ω → DIP 2 (R120) ${v < 90 ? "OFF" : "ON"}` } },
+  { t: "Conectar el SH-C30A al conector B", donde: "Con la LLAVE QUITADA",
+    hacer: ["CAN_H (tornillo de arriba) → B1 (amarillo).", "GND (tornillo del medio) → B9 (o B10).",
+            "CAN_L (tornillo de abajo) → B2 (verde).", () => `DIP 1 en OFF; DIP 2 en ${R120()}.`,
+            "Comprueba que las sondas no se tocan entre sí."],
+    ver: ["El panel sigue en «Conectado, sin tramas»: con la llave quitada la E-ECU no transmite."],
+    vivo: (f) => [[f.fuente.conectado, "SH-C30A conectado"], [null, "Sin tramas todavía (normal con la llave quitada)"]] },
+  { t: "Dar contacto y comprobar el bus", donde: "Llave en CONTACTO, motor PARADO",
+    hacer: ["Gira la llave a contacto, sin arrancar.",
+            "Mide la tensión de B1 → B9 y de B2 → B9 y apúntalas. El pin con más tensión es CAN H."],
+    ver: ["Multímetro: ≈ 2,5 V ambos (con tráfico, CAN H 2,5–3,5 V y CAN L 1,5–2,5 V).",
+          "Panel: estado «Recibiendo», decenas de tramas/s y carga del bus de pocos %.",
+          "Nodos: aparece 0x00 E-ECU (y seguramente 0x17 panel).", "Motor: rpm 0 y temperatura del refrigerante.",
+          "Averías: puede salir algún DM1 por faltar la V-ECU. Es lo que queremos ver."],
+    medida: { id: "v", etiqueta: "B1→B9 / B2→B9", unidad: "V", doble: true, nota: (a, b) => `Tensión con contacto: B1→B9 = ${a} V · B2→B9 = ${b} V` },
+    vivo: (f) => [[f.bus.tramasS > 0, `Llegan tramas: ${fmt(f.bus.tramasS)}/s`],
+                  [f.nodos.some((n) => n.sa === "0x00"), "Aparece la E-ECU (0x00)"],
+                  [f.nodos.length > 1 ? true : null, f.nodos.length > 1 ? `Más nodos: ${f.nodos.filter((n) => n.sa !== "0x00").map((n) => n.sa).join(", ")}` : "Solo la E-ECU por ahora"],
+                  [!f.bus.vecu, "Sin tramas de la V-ECU (0x11)"]],
+    siNo: "Si no llega nada: DIP 1 en OFF, CAN_H/CAN_L cruzados (prueba a intercambiarlos), GND en B9 y llave en contacto." },
+  { t: "Captura 1 · contacto", donde: "Llave en contacto, motor parado", grabar: "01_contacto",
+    hacer: ["Pulsa el botón de grabar y no toques nada durante 60 s."],
+    ver: ["Recuadro rojo con la cuenta de 60 s y «GRABANDO» en la cabecera.", "rpm 0; el número de tramas sube."],
+    vivo: (f) => [[f.bus.tramasS > 0, "Llegan tramas"], [!!f.grabacion || S.hechas.has("01_contacto"), "Captura 01 grabando o hecha"]] },
+  { t: "Captura 2 · arranque", donde: "Empieza a grabar ANTES de girar la llave", grabar: "02_arranque", notas: ["arranco"],
+    hacer: ["Pulsa grabar.", "Marca la nota «arranco» y arranca el motor.", "Deja el motor a ralentí hasta que termine (60 s)."],
+    ver: ["En la gráfica: rpm de 0 a unos 250 (motor de arranque) y luego ≈ 800.", "Puede aparecer o cambiar alguna avería DM1."],
+    vivo: (f) => [[f.frescos.rpm && f.motor.rpm > 600, `Motor en marcha: ${fmt(f.motor.rpm)} rpm`]] },
+  { t: "Captura 3 · ralentí", donde: "Interruptor 26 en RALENTÍ, sin mover nada", grabar: "03_ralenti",
+    hacer: ["Pulsa grabar y deja el motor quieto a ralentí 120 s."],
+    ver: ["rpm estables ≈ 800.", "Par real bajo (orientativo 5–15 %): es el par «sin trabajo».", "El refrigerante va subiendo poco a poco."],
+    vivo: (f) => [[f.frescos.rpm && Math.abs(f.motor.rpm - 800) < 150, `rpm ≈ 800: ${fmt(f.motor.rpm)}`], [null, `Par ahora: ${fmt(f.motor.par)} %`]] },
+  { t: "Captura 4 · alta", donde: "Interruptor 26 en ALTA, sin mover nada", grabar: "04_alta", notas: ["interruptor en ALTA"],
+    hacer: ["Pulsa grabar.", "Pasa el interruptor 26 a ALTA y marca la nota.", "120 s sin mover implementos."],
+    ver: ["rpm sube a ≈ 1900 en pocos segundos.", "Par algo mayor que a ralentí, pero bajo: sigue siendo «sin trabajo»."],
+    vivo: (f) => [[f.frescos.rpm && Math.abs(f.motor.rpm - 1900) < 200, `rpm ≈ 1900: ${fmt(f.motor.rpm)}`], [null, `Par ahora: ${fmt(f.motor.par)} %`]] },
+  { t: "Captura 5 · con carga", donde: "En ALTA, moviendo brazo y cuchara", grabar: "05_carga", notas: ["muevo brazo y cuchara", "paro de mover"],
+    hacer: ["Pulsa grabar.", "Marca «muevo brazo y cuchara» y trabaja con los implementos (subir, bajar, cerrar cuchara).",
+            "Marca «paro de mover» en las pausas. 120 s en total."],
+    ver: ["El par sube mucho mientras trabajas (orientativo 30–80 %) y baja en las pausas.",
+          "Las rpm bajan algo con carga y se recuperan.", "Esta gráfica de par es la que decide el umbral del auto-ralentí."],
+    vivo: (f) => [[null, `Par ahora: ${fmt(f.motor.par)} % · rpm ${fmt(f.motor.rpm)}`]] },
+  { t: "Captura 6 · parada", donde: "Vuelta a ralentí y parada", grabar: "06_parada", notas: ["interruptor en RALENTÍ", "paro el motor"],
+    hacer: ["Pulsa grabar.", "Interruptor 26 a RALENTÍ (nota) y, tras unos segundos, para el motor (nota)."],
+    ver: ["rpm de 1900 a ≈ 800 y luego a 0.", "Al parar, la E-ECU sigue transmitiendo mientras haya contacto."] },
+  { t: "Analizar y decidir", donde: "Ya con la máquina parada y la llave quitada",
+    hacer: ["Desconecta las sondas con la llave quitada.", "En «Capturas de esta sesión», pulsa Analizar en cada captura.",
+            "Umbral del auto-ralentí: un valor entre el par de las capturas 3–4 (sin trabajo) y el de la 5 (con trabajo).",
+            "Apunta las averías que salgan sin V-ECU y si hay más nodos que la E-ECU y el panel."],
+    ver: ["Todo queda guardado en capturas/ (las 6 pruebas) y en registros/bus/ (la sesión entera, motor.csv y eventos.log).",
+          "Con el umbral elegido, en el panel de la placa: «par <pct>»."] },
+];
+const GUIA_KEY = "panelBusGuia";
+function guiaLeer() { try { return JSON.parse(localStorage.getItem(GUIA_KEY)) || {}; } catch { return {}; } }
+function guiaGuardar() { try { localStorage.setItem(GUIA_KEY, JSON.stringify({ i: S.paso, hechos: [...S.hechos], oculta: S.guiaOculta, b12: S.medidaB12 })); } catch {} }
+const G0 = guiaLeer();
+S.paso = Math.min(G0.i || 0, PASOS.length - 1); S.hechos = new Set(G0.hechos || []); S.guiaOculta = !!G0.oculta; S.medidaB12 = G0.b12 ?? null;
+
+function txtPaso(x) { return typeof x === "function" ? x() : x; }
+function pintarPasos() {
+  $("pasos").replaceChildren(...PASOS.map((p, i) => {
+    const li = document.createElement("li"), b = document.createElement("button");
+    b.className = (i === S.paso ? "actual " : "") + (S.hechos.has(i) ? "hecho" : "");
+    b.innerHTML = `<span class="num">${S.hechos.has(i) ? "✓" : i + 1}</span>`;
+    b.append(document.createTextNode(p.t));
+    b.onclick = () => { S.paso = i; guiaGuardar(); pintarGuia(); };
+    li.append(b); return li;
+  }));
+  $("guia-progreso").textContent = `${S.hechos.size} de ${PASOS.length} hechos`;
+}
+function pintarGuia() {
+  $("guia-cuerpo").hidden = S.guiaOculta; $("btn-guia").textContent = S.guiaOculta ? "Mostrar" : "Ocultar";
+  pintarPasos();
+  const p = PASOS[S.paso], c = $("paso");
+  const li = (arr, cls = "") => `<ul class="${cls}">${arr.map((x) => `<li>${txtPaso(x)}</li>`).join("")}</ul>`;
+  let h = `<h3>${S.paso + 1}. ${p.t}</h3><div class="donde">${p.donde}</div><h4>Qué hacer</h4>` +
+    `<ol>${p.hacer.map((x) => `<li>${txtPaso(x)}</li>`).join("")}</ol>`;
+  if (p.medida) {
+    const m = p.medida;
+    h += `<div class="medida"><strong>${m.etiqueta}</strong><input type="number" step="0.01" id="m1" placeholder="${m.unidad}" aria-label="${m.etiqueta}">` +
+      (m.doble ? `<input type="number" step="0.01" id="m2" placeholder="${m.unidad}" aria-label="segunda medida">` : "") +
+      `<button class="peq" id="btn-medida">Apuntar en el registro</button></div>`;
+  }
+  if (p.grabar) h += `<div class="acciones" id="acc"></div>`;
+  h += `<h4>Qué deberías ver</h4>${li(p.ver, "esperado")}`;
+  if (p.vivo) h += `<h4>Ahora mismo en el panel</h4><ul class="vivo" id="vivo"></ul>`;
+  if (p.siNo) h += `<div class="aviso">${p.siNo}</div>`;
+  h += `<div class="paso-nav"><button class="peq" id="btn-ant" ${S.paso === 0 ? "disabled" : ""}>← Anterior</button>` +
+    `<label><input type="checkbox" id="ck-hecho" ${S.hechos.has(S.paso) ? "checked" : ""}> Hecho</label><span class="grow"></span>` +
+    `<button class="peq prim" id="btn-sig" ${S.paso === PASOS.length - 1 ? "disabled" : ""}>Siguiente →</button></div>`;
+  c.innerHTML = h;
+  if (p.grabar) {
+    const acc = $("acc"), pr = PRUEBAS_LISTA.find((x) => x.nombre === p.grabar);
+    const b = document.createElement("button"); b.className = "grabar"; b.id = "btn-paso-grabar";
+    b.textContent = `● Grabar ${p.grabar}${pr ? ` (${pr.duracion} s)` : ""}`;
+    b.onclick = () => post("/api/grabar", { nombre: p.grabar, duracion: pr ? pr.duracion : 0 });
+    acc.append(b);
+    for (const n of p.notas || []) {
+      const bn = document.createElement("button"); bn.className = "peq"; bn.textContent = "Nota: " + n;
+      bn.onclick = () => post("/api/nota", { texto: n }); acc.append(bn);
+    }
+  }
+  if (p.medida) $("btn-medida").onclick = async () => {
+    const a = $("m1").value, b = p.medida.doble ? $("m2").value : null;
+    if (a === "" || (p.medida.doble && b === "")) return toast("Escribe la medida");
+    const r = await post("/api/nota", { texto: p.medida.doble ? p.medida.nota(a, b) : p.medida.nota(+a) });
+    if (r.ok) { toast2("Apuntado en el registro"); if (p.medida.id === "b12") { S.medidaB12 = +a; guiaGuardar(); } }
+  };
+  $("ck-hecho").onchange = (e) => { e.target.checked ? S.hechos.add(S.paso) : S.hechos.delete(S.paso); guiaGuardar(); pintarPasos(); };
+  $("btn-ant").onclick = () => { S.paso--; guiaGuardar(); pintarGuia(); };
+  $("btn-sig").onclick = () => { S.hechos.add(S.paso); S.paso++; guiaGuardar(); pintarGuia(); };
+  if (S.foto) vivoGuia(S.foto);
+}
+function vivoGuia(f) {
+  const p = PASOS[S.paso], ul = $("vivo");
+  const bg = $("btn-paso-grabar"); if (bg) bg.disabled = !!f.grabacion || !f.fuente.conectado;
+  if (!p.vivo || !ul) return;
+  ul.innerHTML = p.vivo(f).map(([ok, t]) =>
+    `<li><span class="ic ${ok === true ? "si" : ok === false ? "no" : "na"}">${ok === true ? "✓" : ok === false ? "✗" : "·"}</span><span>${t}</span></li>`).join("");
+}
+function toast2(msg) { const t = $("toast"); t.style.background = "var(--ok)"; toast(msg); setTimeout(() => (t.style.background = ""), 3600); }
+$("btn-guia").onclick = () => { S.guiaOculta = !S.guiaOculta; guiaGuardar(); pintarGuia(); };
+let PRUEBAS_LISTA = [];
 
 const ev = new EventSource("/api/eventos");
 ev.addEventListener("foto", (m) => pintar(JSON.parse(m.data)));
