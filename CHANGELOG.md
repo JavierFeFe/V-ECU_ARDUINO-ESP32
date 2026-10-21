@@ -5,6 +5,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 ## [Unreleased]
 
 ### Añadido (punto de conexión)
+- README: sección «Captura del bus con el portátil (pruebas)» con el diagrama de conexión del portátil y el del DIP del SH-C30A.
+- `docs/esquema_captura_CAN` rehecho: el SH-C30A va al **conector redondo** (CAN_H → E7, CAN_L → E8) y la masa a un **perno de chasis/motor**; medidas previas sobre E7/E8 y la masa. La clavija de la E-ECU ya no aparece como punto de conexión.
+- `docs/CAPTURA_CAN.md` §3b: resultado de la búsqueda de esquemas para el resto de contactos. No hay pinout publicado. La L120E (misma E-ECU) confirma que la masa EB9/EB10 va directa a un punto de masa. Se descartan Deutsch HD10/HD16/HD30. Propuesta [INFERIDA] para I2/I3 y E2–E6, y prueba de continuidad que lo resuelve.
 - README: estado del 2026-10-21 (punto de conexión en la máquina), sección 2e con el dibujo del conector redondo y nota en 2d sobre dónde tomar CAN, masa y B4 en la máquina; contenido del repositorio al día (`conector_MC02`, `fotos/`, `gen_conector_MC02.py`).
 - `docs/conector_MC02.svg/.png` (`tools/gen_conector_MC02.py`) y `docs/fotos/conector_MC02_frontal.jpg`: dibujo de la cara de contactos del conector redondo del mazo de la E-ECU (13 posiciones, 9 contactos montados; numeración propia con E1 = cavidad exterior vacía como referencia).
 - Mediciones en la máquina (`docs/CAPTURA_CAN.md` §3b): **E7 = CAN H (B1)** y **E8 = CAN L (B2)** confirmados; **B4 (emergencia) y B9/B10 (masa) no pasan por este conector**. La masa del SH-C30A se toma de un perno de chasis/motor o del negativo de batería; la vía B sigue en el interruptor 26 o en JA47.

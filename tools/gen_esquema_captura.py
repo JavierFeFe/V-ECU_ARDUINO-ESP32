@@ -1,10 +1,11 @@
-"""Genera docs/esquema_captura_CAN.svg: portátil + SH-C30A + conector B de la E-ECU.
+"""Genera docs/esquema_captura_CAN.svg: portátil + SH-C30A + conector redondo del mazo de la E-ECU.
 
 Uso:
     python tools/gen_esquema_captura.py docs/esquema_captura_CAN.svg
     chrome --headless=new --hide-scrollbars --window-size=1800,1100 \\
         --screenshot=docs/esquema_captura_CAN.png docs/esquema_captura_CAN.svg
 """
+import math
 import sys
 
 W, H = 1800, 1100
@@ -53,7 +54,7 @@ def interruptor(x, y, etiqueta, estado="OFF"):
 # ================================================================ lienzo
 a(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" font-family="{FONT}">')
 a(f'<rect width="{W}" height="{H}" fill="#ffffff"/>')
-text(30, 36, "Captura del bus J1939 — portátil, adaptador SH-C30A y conector B de la E-ECU", size=22, weight="bold")
+text(30, 36, "Captura del bus J1939 — portátil, adaptador SH-C30A y conector redondo del mazo de la E-ECU", size=22, weight="bold")
 text(30, 58, "Solo escucha: el adaptador no transmite ni confirma tramas · ver docs/CAPTURA_CAN.md", size=13, fill="#555")
 
 # ================================================================ portátil
@@ -108,65 +109,75 @@ text(610, 285, "DIP 1 (arranque): OFF", size=11, fill="#a01c22", weight="bold")
 text(610, 299, "DIP 2 (R120): según medida 1", size=11, fill="#a01c22", weight="bold")
 text(640, 462, "se enchufa directo al portátil (o con un alargador USB)", size=11, fill="#666", anchor="middle")
 
-# ================================================================ E-ECU con conectores B (rojo) y A (negro)
-a('<rect x="900" y="110" width="860" height="330" rx="18" fill="#a7a9ac" stroke="#6d6f72" stroke-width="3"/>')
-for bx in (930, 1720):
-    for by in (130, 410):
-        a(f'<circle cx="{bx}" cy="{by}" r="9" fill="#8a8c8f" stroke="#5a5c5e"/>')
-text(1330, 140, "E-ECU Volvo 03161983 (LucasVarity) — lado de los conectores", size=14, fill="#2b2b2b", anchor="middle", weight="bold")
-# Conector B
-BX0, BY0 = 940, 180
-a(f'<rect x="{BX0 + 150}" y="{BY0 - 14}" width="90" height="16" rx="4" fill="#8c1d1d"/>')
-a(f'<rect x="{BX0}" y="{BY0}" width="380" height="160" rx="12" fill="#b32424" stroke="#5a0f0f" stroke-width="3"/>')
-a(f'<rect x="{BX0 + 12}" y="{BY0 + 18}" width="356" height="124" rx="6" fill="#2a2a2a"/>')
-CX = [BX0 + 30 + 29 * i for i in range(12)]
-RY = [BY0 + 42, BY0 + 80, BY0 + 118]
-esp = {1: ("canh", "1"), 2: ("canl", "2"), 9: ("gnd", "9"), 4: ("gris", "4")}
-for r, y in enumerate(RY):
-    for i, x in enumerate(CX):
-        n = r * 12 + i + 1
-        if n in esp:
-            col, lab = esp[n]
-            a(f'<rect x="{x - 10}" y="{y - 10}" width="20" height="20" rx="3" fill="{C[col]}" stroke="#fff" stroke-width="1.5"/>')
-            text(x, y + 4, lab, size=10, fill="#fff", anchor="middle", weight="bold")
-        else:
-            a(f'<rect x="{x - 7}" y="{y - 7}" width="14" height="14" rx="2" fill="#555" stroke="#777"/>')
-for lab, y in [("1", RY[0]), ("13", RY[1]), ("25", RY[2])]:
-    text(BX0 + 16, y + 4, lab, size=9, fill="#fff", anchor="end")
-text(BX0 + 64, BY0 + 178, "Conector B (rojo, lado máquina)", size=13, weight="bold")
-text(BX0 + 64, BY0 + 196, "B1 CAN H · B2 CAN L · B9 masa", size=11, fill="#444")
-text(BX0 + 64, BY0 + 212, "B4 (gris): no tocar", size=11, fill="#444")
-# Conector A (no se usa)
-AX0 = 1360
-a(f'<rect x="{AX0 + 150}" y="{BY0 - 14}" width="90" height="16" rx="4" fill="#111"/>')
-a(f'<rect x="{AX0}" y="{BY0}" width="380" height="160" rx="12" fill="#1c1c1c" stroke="#000" stroke-width="3"/>')
-a(f'<rect x="{AX0 + 12}" y="{BY0 + 18}" width="356" height="124" rx="6" fill="#2e2e2e"/>')
-for y in RY:
-    for i in range(12):
-        x = AX0 + 30 + 29 * i
-        a(f'<rect x="{x - 7}" y="{y - 7}" width="14" height="14" rx="2" fill="#444" stroke="#5a5a5a"/>')
-text(AX0 + 190, BY0 + 178, "Conector A (negro, lado motor): no se toca", size=13, anchor="middle", weight="bold")
+# ================================================================ conector redondo del mazo de la E-ECU + masa de chasis
+# La clavija de la E-ECU (A y B en la misma carcasa) no se puede pinchar por detrás: el bus se toma
+# en el conector redondo (E7 = CAN H, E8 = CAN L, medido) y la masa en un perno de chasis/motor.
+# Geometría y numeración como tools/gen_conector_MC02.py (E1 = cavidad exterior vacía, sentido horario).
 
-# ================================================================ cables y sondas back-probe
-def sonda(x, color):
-    a(f'<line x1="{x}" y1="{RY[0]}" x2="{x}" y2="356" stroke="#9a9a9a" stroke-width="2"/>')
-    a(f'<rect x="{x - 6}" y="356" width="12" height="34" rx="3" fill="{color}" stroke="#333"/>')
+RX, RY0 = 1110, 235
 
 
-# H → B1 (entra por la izquierda de la columna 1), L → B2, GND → B9; por debajo, sin cruces
-wire([(798, 379), (880, 379), (880, 440), (CX[8] + 14.5, 440), (CX[8] + 14.5, 390)], C["gnd"])
-wire([(798, 402), (862, 402), (862, 420), (CX[1] - 14.5, 420), (CX[1] - 14.5, 390)], C["canl"])
-wire([(798, 356), (900, 356), (900, 400), (CX[0] - 14, 400), (CX[0] - 14, 390)], C["canh"])
-for x, col in [(CX[0] - 14, C["canh"]), (CX[1] - 14.5, C["canl"]), (CX[8] + 14.5, C["gnd"])]:
-    sonda(x, col)
-for x, tx in [(CX[0] - 14, CX[0]), (CX[1] - 14.5, CX[1]), (CX[8] + 14.5, CX[8])]:
-    a(f'<line x1="{x}" y1="{RY[0]}" x2="{tx - (8 if tx > x else -8)}" y2="{RY[0]}" stroke="#9a9a9a" stroke-width="2"/>')
-text(1110, 470, "sondas back-probe por detrás del conector, sin desconectarlo", size=12, fill="#444", anchor="middle")
-text(640, 484, "CAN_H → B1 · CAN_L → B2 · GND → B9", size=12, fill="#1b1b1b", anchor="middle", weight="bold")
+def polar(r, ang):
+    t = math.radians(ang)
+    return RX + r * math.sin(t), RY0 - r * math.cos(t)
+
+
+a('<rect x="900" y="90" width="860" height="400" rx="14" fill="#f4f4f4" stroke="#cfcfcf" stroke-width="2"/>')
+text(1110, 114, "Conector redondo del mazo de la E-ECU (cara de contactos)", size=14, anchor="middle", weight="bold")
+a(f'<rect x="{RX - 120}" y="{RY0 - 100}" width="240" height="22" rx="5" fill="#e8c200" stroke="#6b5800"/>')
+a(f'<circle cx="{RX}" cy="{RY0}" r="108" fill="#151515" stroke="#000" stroke-width="3"/>')
+a(f'<circle cx="{RX}" cy="{RY0}" r="94" fill="#2a2a2a" stroke="#444"/>')
+EXT = [(233, False), (278, True), (325, True), (12, True), (56, True), (100, True), (144, True), (190, True)]
+INT = [(260, False), (350, True), (80, True), (170, False)]
+for ang, montado in INT:
+    x, y = polar(44, ang)
+    a(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="13" fill="{"#d9d9d9" if montado else "#9c7a1c"}" stroke="#111" stroke-width="2"/>')
+for i, (ang, montado) in enumerate(EXT, 1):
+    x, y = polar(78, ang)
+    borde = "#d62828" if i == 1 else "#555"
+    a(f'<rect x="{x - 10:.0f}" y="{y - 10:.0f}" width="20" height="20" rx="4" fill="#1b1b1b" stroke="{borde}" stroke-width="{2.5 if i == 1 else 1.2}"/>')
+    a(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="5" fill="{"#d9d9d9" if montado else "#000"}"/>')
+    lx, ly = polar(100, ang + (16 if i == 8 else 0))   # E8: rótulo apartado del cable de CAN L
+    text(f"{lx:.0f}", f"{ly + 4:.0f}", f"E{i}", size=10, fill="#ff6b6b" if i == 1 else "#ffd54a", anchor="middle", weight="bold")
+a(f'<circle cx="{RX}" cy="{RY0}" r="14" fill="#d62828" stroke="#7a0f1b" stroke-width="2"/>')
+a(f'<rect x="{RX - 3}" y="{RY0 - 9}" width="6" height="18" rx="2" fill="#7a0f1b"/>')
+E7 = polar(78, 144)
+E8 = polar(78, 190)
+for (x, y), col in [(E7, C["canh"]), (E8, C["canl"])]:
+    a(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="13" fill="none" stroke="{col}" stroke-width="4"/>')
+text(915, 290, "E1 vacía", size=11, fill="#d62828", weight="bold")
+text(915, 304, "(referencia)", size=11, fill="#d62828")
+
+# Perno de masa en el chasis / motor
+a('<rect x="1330" y="250" width="200" height="70" rx="6" fill="#8d9196" stroke="#555" stroke-width="2"/>')
+for k in range(6):
+    a(f'<line x1="{1340 + k * 32}" y1="320" x2="{1352 + k * 32}" y2="332" stroke="#555" stroke-width="2"/>')
+a('<polygon points="1430,266 1446,275 1446,293 1430,302 1414,293 1414,275" fill="#d9d9d9" stroke="#444" stroke-width="2"/>')
+a('<circle cx="1430" cy="284" r="7" fill="#bdbdbd" stroke="#444"/>')
+text(1430, 244, "Perno de masa chasis/motor", size=13, anchor="middle", weight="bold")
+text(1442, 348, "junto a la E-ECU, o negativo de batería", size=11, fill="#444")
+
+# Notas
+a('<rect x="1330" y="118" width="415" height="100" rx="8" fill="#ffffff" stroke="#d0d0d0"/>')
+text(1344, 140, "Medido (2026-10-21):", size=12, weight="bold")
+text(1344, 158, "E7 = CAN H (B1) · E8 = CAN L (B2)", size=12, fill="#1b1b1b")
+text(1344, 176, "B4 y masa B9/B10 NO pasan por este conector", size=12, fill="#d62828", weight="bold")
+text(1344, 194, "Clavija de la E-ECU: no se puede pinchar (A y B juntos)", size=11, fill="#555")
+text(1344, 210, "Alternativa: clavija libre de la V-ECU, JB14 H / JB6 L", size=11, fill="#555")
+text(1550, 380, "Pinzas en E7 / E8:", size=12, anchor="middle", weight="bold")
+text(1550, 396, "back-probe por detrás de la pareja", size=11, fill="#444", anchor="middle")
+text(1550, 411, "o adaptador en «Y» (conector enchufado)", size=11, fill="#444", anchor="middle")
+
+# ================================================================ cables (con halo: los cruces se leen bien)
+wire([(798, 402), (E8[0], 402), (E8[0], E8[1] + 13)], C["canl"])
+wire([(798, 379), (835, 379), (835, 450), (1430, 450), (1430, 302)], C["gnd"])
+wire([(798, 356), (E7[0], 356), (E7[0], E7[1] + 13)], C["canh"])
+text(1180, 474, "masa: borne GND del SH-C30A → perno (imprescindible junto a CAN H/L)", size=11, fill="#444", anchor="middle")
+text(640, 484, "CAN_H → E7 · CAN_L → E8 · GND → perno de masa", size=12, fill="#1b1b1b", anchor="middle", weight="bold")
 
 # ================================================================ medidas con el multímetro
 a('<rect x="30" y="510" width="760" height="300" rx="10" fill="#f7f7f7" stroke="#d0d0d0"/>')
-text(46, 536, "1 · Antes de capturar: dos medidas con el multímetro en el conector B", size=15, weight="bold")
+text(46, 536, "1 · Antes de capturar: dos medidas con el multímetro (E7, E8 y perno de masa)", size=15, weight="bold")
 
 
 def multimetro(x, y, lectura, modo):
@@ -181,7 +192,7 @@ def multimetro(x, y, lectura, modo):
 
 multimetro(50, 560, "60.2", "Ω")
 text(190, 580, "Medida 1 — llave QUITADA", size=14, weight="bold")
-text(190, 602, "Resistencia entre B1 y B2", size=13)
+text(190, 602, "Resistencia entre E7 y E8", size=13)
 text(190, 628, "≈ 60 Ω → DIP 2 (R120) OFF", size=13, fill="#2a9d4f", weight="bold")
 text(190, 650, "≈ 120 Ω → DIP 2 (R120) ON", size=13, fill="#d62828", weight="bold")
 text(190, 670, "(solo la terminación de", size=13, fill="#555")
@@ -190,10 +201,10 @@ text(190, 710, "No puentear nada en la V-ECU", size=13, fill="#d62828")
 multimetro(420, 560, "2.61", "V⎓")
 text(560, 580, "Medida 2 — llave en", size=14, weight="bold")
 text(560, 598, "CONTACTO, motor parado", size=14, weight="bold")
-text(560, 622, "B1 → B9: 2,5–3,5 V", size=13)
-text(560, 642, "B2 → B9: 1,5–2,5 V", size=13)
+text(560, 622, "E7 → masa: 2,5–3,5 V", size=13)
+text(560, 642, "E8 → masa: 1,5–2,5 V", size=13)
 text(560, 666, "(≈ 2,5 V ambas en reposo)", size=12, fill="#555")
-text(46, 790, "Punta negra (COM) en B9 para las tensiones. Anotar ambas medidas en el informe.", size=12, fill="#555")
+text(46, 790, "Punta negra (COM) en el perno de masa para las tensiones (si no dan ≈ 2,5 V, la masa no sirve). Anotar ambas medidas.", size=12, fill="#555")
 
 # ================================================================ topología del bus
 a('<rect x="810" y="510" width="960" height="300" rx="10" fill="#f7f7f7" stroke="#d0d0d0"/>')

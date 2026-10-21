@@ -126,6 +126,43 @@ Consecuencias:
 - **Masa del SH-C30A:** de un perno de masa del chasis o del motor junto a la E-ECU, o del negativo de batería (comprobar con contacto que CAN H y CAN L dan ≈ 2,5 V respecto a ese punto). Las masas B9/B10 de la E-ECU irán probablemente a un punto de masa del motor o del bastidor y no pasan por este conector.
 - **Vía B (B4):** no se puede tomar de aquí; se sigue usando el **interruptor de emergencia 26** (terminal 2 = +24 V del F24, terminal 3 = línea B4) o la clavija de la V-ECU (**JA47**).
 
+**Búsqueda de esquemas para el resto de contactos (2026-10-21)**
+
+No se ha encontrado ningún esquema con este conector redondo de 13 posiciones ni un pinout de 9–13 vías que encaje con lo medido. Lo que sí aparece:
+
+- **La masa no pasa por conectores intermedios, también en otras máquinas Volvo** [CONFIRMADO en la L120E, misma E-ECU 03161983]. En los esquemas Sch24/Sch31 de la cargadora L120E, las señales del lado máquina de la E-ECU pasan por un conector intermedio **ES**:
+  - ES8 = EB1 CAN H
+  - ES13 = EB2 CAN L
+  - ES12/ES16 = J1708
+  - ES9 = +24 V
+  - ES6/ES11 = precalentamiento
+  - ES14 = EB24
+
+  La masa **EB9/EB10 (cable SB/W) va directa a un punto de masa (31E)**, igual que en nuestra máquina. El ES tiene ≥ 16 vías, así que no es nuestro conector: sirve de analogía, no de pinout. PDF: `manuales/volvo_ce/Volvo_L120E_Service_Training_Electrical_Schematics_Sch01-Sch100.pdf`, págs. 27 y 34.
+- **Las señales de la E-ECU se reparten entre varios conectores** [CONFIRMADO en SCH02-1, serie con I-ECU]. La alimentación de la E-ECU no va por MC02, sino por **ME01.6**. La lista de conectores de la EC210B describe ME01–ME03 como «mazo del motor». B4 puede ir por otro ramal, o no tener cable en la clavija de la E-ECU en esta serie.
+- **Familia del conector: sin identificar.** Descartados:
+  - Deutsch HD10/HD16, incluido el HD10-9-1939 de diagnóstico: 9 contactos iguales con contacto central, no llave.
+  - Deutsch HD30/HDP20: ninguna disposición tiene llave central + 4 grandes + 8 pequeños.
+  - Las tomas de diagnóstico Volvo CE de 8 y 14 pines.
+
+  Para identificarlo:
+  - Buscar marcas moldeadas en la carcasa, el anillo de bayoneta, la cara trasera o la pieza hembra del lado máquina.
+  - O pedir el nº VOE al concesionario con el nº de serie de la máquina.
+
+Propuesta para los contactos sin identificar [INFERIDO, sin fuente]:
+
+| Contacto | Señal probable |
+|---|---|
+| I2, I3 (grandes) | +24 V de la E-ECU (B11/B12) o precalentamiento (B31/B5) |
+| Dos de E2–E6 | J1708 A/B (B25/B26), que suelen ir junto al par CAN |
+| Resto de E2–E6 | Alguno de B7 (nivel de refrigerante), B8 (retorno común), B17 (presostato de admisión), B3/B13 (temperatura de admisión) o B24 (línea de servicio) |
+| E1 (vacía) | Quizá la posición prevista para la emergencia, sin cablear en esta serie |
+
+**Prueba que lo resuelve** (llave quitada, E-ECU desenchufada):
+- Continuidad de **B11, B12, B25, B26, B7, B8, B17, B3, B13, B31, B5 y B24** contra E2–E6 e I2/I3.
+- Mirar si la cavidad **B4** de la clavija de la E-ECU tiene cable; si lo tiene, seguirlo.
+- Continuidad de **B9/B10** con el bloque motor o los pernos de masa cercanos.
+
 **Identificación probable: conector MC02 ("mazo del EMS")** [INFERIDO, fiabilidad BAJA tras las mediciones: CAN H/L sí pasan, pero la emergencia B4 que el esquema pone en MC02.1 no]
 
 El esquema Volvo **SCH02-1** de la EC160B–EC290B (`esquemas/ce_EC160B-290B_SCH02-1_zoom_conector_MC02_CAN_J1587_emergencia.png`) muestra que el bus y la señal de emergencia pasan por un conector **MC02** entre la E-ECU y la cabina, y la lista de conectores de la EC210B (Anexo A/F) describe **MC02** como «conectado al mazo del EMS» (el mazo de la E-ECU). El conector redondo de la foto sale justo de ese mazo, así que muy probablemente es **MC02**:

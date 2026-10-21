@@ -47,7 +47,7 @@ docs/
 ├── HARDWARE_PLACA_ESP32_RELE.md    ← hardware disponible (placa ESP32 con relé, programador, L298N, IBT-2, SSR) y pinout
 ├── CONTROL_RPM.md                  ← alcance actual: control de rpm (TSC1 por CAN y relé sobre B4), plan de pruebas
 ├── CAPTURA_CAN.md                  ← cómo medir y capturar el bus de la máquina con el portátil y el SH-C30A
-├── esquema_captura_CAN.svg/.png    ← diagrama de conexiones de la captura (portátil, SH-C30A, conector B, bus)
+├── esquema_captura_CAN.svg/.png    ← diagrama de conexiones de la captura (portátil, SH-C30A, conector redondo E7/E8, masa)
 ├── esquema_switches_SH-C30A.svg/.png ← cómo poner el DIP del SH-C30A (arranque y R120) en cada caso
 ├── conector_MC02.svg/.png          ← cara de contactos del conector redondo del mazo de la E-ECU (E7 CAN H, E8 CAN L)
 ├── fotos/                          ← fotos de la máquina, la E-ECU y los conectores
@@ -78,6 +78,16 @@ tools/
 ![Diagrama ilustrado de montaje](docs/esquema_montaje_ESP32.png)
 
 Conexiones de la placa ESP32_Relay X1 con el programador, el módulo CAN, la OLED, el encoder, el conector B de la E-ECU y el interruptor de emergencia 26. Fuente editable: [`docs/esquema_montaje_ESP32.svg`](docs/esquema_montaje_ESP32.svg); pasos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
+
+## Captura del bus con el portátil (pruebas)
+
+![Captura del bus J1939 con el portátil y el SH-C30A](docs/esquema_captura_CAN.png)
+
+Primer paso en la máquina: escuchar el bus J1939 **sin transmitir nada** con el portátil y el adaptador **SH-C30A** (candleLight). Conexión: **CAN_H → E7** y **CAN_L → E8** del conector redondo del mazo de la E-ECU (back-probe por detrás de la pareja o adaptador en «Y»), y **GND → perno de masa** de chasis/motor junto a la E-ECU o negativo de batería. Antes de capturar, dos medidas: resistencia E7–E8 con la llave quitada (fija el DIP 2) y ≈ 2,5 V en E7 y E8 respecto a la masa con contacto. Grabación con `tools/panel_bus.py` (panel en el navegador, guía de 12 pasos) o `tools/captura_can.py`. Fuente editable: [`docs/esquema_captura_CAN.svg`](docs/esquema_captura_CAN.svg) (`tools/gen_esquema_captura.py`); procedimiento completo en [`docs/CAPTURA_CAN.md`](docs/CAPTURA_CAN.md).
+
+![DIP del SH-C30A](docs/esquema_switches_SH-C30A.png)
+
+DIP del SH-C30A: **1 = arranque** (siempre OFF salvo para actualizar su firmware) y **2 = terminación R120** (OFF si E7–E8 da ≈ 60 Ω, ON si da ≈ 120 Ω). En esta unidad la marca ON está abajo.
 
 ## Firmware
 
