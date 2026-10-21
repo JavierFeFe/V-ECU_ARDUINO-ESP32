@@ -5,6 +5,8 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 ## [Unreleased]
 
 ### Añadido (punto de conexión)
+- Diagrama de captura: la pantalla del portátil muestra el **panel del bus** (aplicación propia, 127.0.0.1:8766), con cómo abrirlo (acceso del escritorio o `panel_bus.py`, `--demo`) y el panel de la placa ESP32 por el otro USB. Pasos y análisis desde la guía y el botón Analizar del panel.
+- Guía paso a paso del panel del bus (`tools/panel_bus.html`) al día con el punto de conexión real: medidas y conexión en **E7/E8** del conector redondo y masa en un perno de chasis/motor (antes B1/B2/B9 en la clavija de la E-ECU). `docs/CAPTURA_CAN.md` §1 y §3, igual.
 - README: sección «Captura del bus con el portátil (pruebas)» con el diagrama de conexión del portátil y el del DIP del SH-C30A.
 - `docs/esquema_captura_CAN` rehecho: el SH-C30A va al **conector redondo** (CAN_H → E7, CAN_L → E8) y la masa a un **perno de chasis/motor**; medidas previas sobre E7/E8 y la masa. La clavija de la E-ECU ya no aparece como punto de conexión.
 - `docs/CAPTURA_CAN.md` §3b: resultado de la búsqueda de esquemas para el resto de contactos. No hay pinout publicado. La L120E (misma E-ECU) confirma que la masa EB9/EB10 va directa a un punto de masa. Se descartan Deutsch HD10/HD16/HD30. Propuesta [INFERIDA] para I2/I3 y E2–E6, y prueba de continuidad que lo resuelve.

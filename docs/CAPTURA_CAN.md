@@ -22,16 +22,18 @@ Configuración del DIP para cada caso (fuente: [`esquema_switches_SH-C30A.svg`](
 - Selector Auto/Manual en **MANUAL**.
 - **Solo escuchar.** El script abre el adaptador en modo *listen-only* y **se niega a capturar** si el adaptador no lo admite: en ese modo no transmite ni confirma tramas, así que es invisible para la E-ECU.
 
-## 1. Mediciones con el multímetro (conector B de la E-ECU, sin desconectar nada)
+## 1. Mediciones con el multímetro (sin desconectar nada)
+
+En la máquina la clavija de la E-ECU no se puede pinchar (§3c): CAN H y CAN L se miden en **E7** y **E8** del conector redondo del mazo de la E-ECU (§3b, son B1 y B2), y la masa en un **perno de chasis/motor** junto a la E-ECU o en el negativo de batería (B9/B10 no pasan por el conector redondo).
 
 Topología (circuito OEM, `esquemas/ce_EC-B_UPDATE_p06_zoom_bus_J1939_J1587_pines_VECU.png`): E-ECU (B1/B2), panel y V-ECU (JB14 H / JB6 L) están **empalmados en el mismo par**. Sin la V-ECU el bus E-ECU ↔ panel sigue unido; **no hay que puentear nada** en el conector de la V-ECU (JB13 y JB5 son las mallas de los cables, no CAN).
 
 | Paso | Condición | Medir | Esperado |
 |---|---|---|---|
 | 0 | En el taller, **E-ECU suelta** | Resistencia **B1–B2** en la propia E-ECU | ✅ **117 Ω medidos (2026-10-20)**: la E-ECU lleva su terminación de 120 Ω dentro |
-| 1 | **Llave quitada**, E-ECU montada | Resistencia **B1–B2** | **≈ 60 Ω**: dos terminaciones (E-ECU y panel) → DIP 2 (R120) del SH-C30A en **OFF**. **≈ 120 Ω**: solo la de la E-ECU; el panel (MDU de 2002) no termina el bus o no está en él → DIP 2 (R120) en **ON**. **Anotarlo** |
-| 1b | (opcional) Llave quitada, **E-ECU desenchufada** | Resistencia **B1–B2** en la clavija del mazo | **≈ 120 Ω**: terminación del panel. **Abierto**: no hay otra terminación en el mazo |
-| 2 | **Llave en contacto**, motor parado | Tensión **B1→B9** (CAN H) y **B2→B9** (CAN L) | ≈ 2,5 V ambas; con tráfico, CAN H 2,5–3,5 V y CAN L 1,5–2,5 V. El pin más alto es **CAN H** (tornillo de arriba del SH-C30A) |
+| 1 | **Llave quitada**, todo enchufado | Resistencia **E7–E8** (= B1–B2), back-probe | **≈ 60 Ω**: dos terminaciones (E-ECU y panel) → DIP 2 (R120) del SH-C30A en **OFF**. **≈ 120 Ω**: solo la de la E-ECU; el panel (MDU de 2002) no termina el bus o no está en él → DIP 2 (R120) en **ON**. **Anotarlo** |
+| 1b | (opcional) Llave quitada, **E-ECU desenchufada** | Resistencia **E7–E8** en la pareja del lado máquina del conector redondo | **≈ 120 Ω**: terminación del panel. **Abierto**: no hay otra terminación en el mazo |
+| 2 | **Llave en contacto**, motor parado | Tensión **E7→masa** (CAN H) y **E8→masa** (CAN L) | ≈ 2,5 V ambas; con tráfico, CAN H 2,5–3,5 V y CAN L 1,5–2,5 V. El pin más alto es **CAN H** (tornillo de arriba del SH-C30A) |
 
 ## 2. Preparar el portátil (una vez)
 
@@ -79,12 +81,12 @@ python tools/captura_can.py capturar --nombre prueba --duracion 5
 
 ## 3. Conexión a la máquina
 
-| SH-C30A | Conector B de la E-ECU | Notas |
+| SH-C30A | Máquina | Notas |
 |---|---|---|
-| CAN_H (tornillo de arriba) | **B1** (amarillo) | back-probe |
-| GND (tornillo del medio) | **B9** (o B10), **o cualquier masa buena cerca de la E-ECU**: perno de masa del chasis/motor o negativo de batería | pinza o terminal de anillo. **Imprescindible**: el SH-C30A va alimentado por el USB del portátil y sin esta masa no tiene referencia común con el bus |
-| CAN_L (tornillo de abajo) | **B2** (verde) | back-probe |
-| DIP **1** (arranque) · DIP **2** (R120) | 1 **OFF** siempre · 2 **OFF** si B1–B2 ≈ 60 Ω, **ON** si ≈ 120 Ω | el bus debe quedar con dos terminaciones (paso 1) |
+| CAN_H (tornillo de arriba) | **E7** del conector redondo (= B1, amarillo) | back-probe por detrás de la pareja o adaptador en «Y» (§3b) |
+| GND (tornillo del medio) | **Perno de masa del chasis/motor** junto a la E-ECU o negativo de batería (B9/B10 no pasan por el conector redondo) | pinza o terminal de anillo. **Imprescindible**: el SH-C30A va alimentado por el USB del portátil y sin esta masa no tiene referencia común con el bus |
+| CAN_L (tornillo de abajo) | **E8** del conector redondo (= B2, verde) | back-probe o adaptador en «Y» |
+| DIP **1** (arranque) · DIP **2** (R120) | 1 **OFF** siempre · 2 **OFF** si E7–E8 ≈ 60 Ω, **ON** si ≈ 120 Ω | el bus debe quedar con dos terminaciones (paso 1) |
 
 Alternativa: JB14 / JB6 en el mazo de la V-ECU. Conectar **antes** de dar contacto.
 
@@ -212,13 +214,15 @@ Comprobaciones antes de usar la clavija de la V-ECU (llave quitada):
 
 ### Con el panel en el navegador (recomendado)
 
+En el portátil de pruebas: acceso del escritorio **«Panel bus J1939»** (`sh tools/linux/instalar_accesos.sh` lo crea), o bien:
+
 ```bash
 python tools/panel_bus.py
 ```
 
 Abre `http://127.0.0.1:8766` con el bus en directo, **siempre en solo escucha**: rpm, par real, carga, temperaturas, presión de aceite, batería y horas; gráficas de rpm y par (la del par sirve para elegir el umbral del auto-ralentí); averías DM1 con sus lámparas; nodos presentes, con aviso si aparece la V-ECU (0x11), algún TSC1 o si la E-ECU está sola en el bus; y la tabla de mensajes con los bytes que cambian. Las **6 pruebas** de la tabla de abajo tienen su botón (nombre y duración ya puestos); las **notas** se marcan con un botón o escribiendo, y quedan en el fichero y en las gráficas. Al terminar, **Analizar** muestra el mismo informe que el paso 5. Los ficheros son idénticos a los de `captura_can.py`.
 
-Arriba del panel hay una **guía paso a paso** con todo este procedimiento (seguridad, comprobar el SH-C30A, medidas, conexión, contacto, las 6 capturas y el análisis): en cada paso dice qué hacer, **qué debería verse** en el multímetro y en el panel, y comprueba en directo lo que se puede (llegan tramas, aparece la E-ECU, rpm ≈ 800 / 1900…). Las medidas del multímetro se apuntan en la guía y quedan en el registro; la medida de B1–B2 decide sola la posición del DIP 2 que indica el paso de conexión.
+Arriba del panel hay una **guía paso a paso** con todo este procedimiento (seguridad, comprobar el SH-C30A, medidas, conexión, contacto, las 6 capturas y el análisis): en cada paso dice qué hacer, **qué debería verse** en el multímetro y en el panel, y comprueba en directo lo que se puede (llegan tramas, aparece la E-ECU, rpm ≈ 800 / 1900…). Las medidas del multímetro se apuntan en la guía y quedan en el registro; la medida de E7–E8 decide sola la posición del DIP 2 que indica el paso de conexión.
 
 **Registro automático:** sin pulsar nada, cada sesión del panel se guarda en `registros/bus/<fecha>_<hora>/`: `bus_completo.log` (todas las tramas y notas de la sesión, mismo formato que las capturas: se analiza con `captura_can.py analizar` o se repasa con `--reproducir`), `motor.csv` (un valor por segundo: rpm, par, carga, refrigerante, aceite, batería, tramas/s y notas) y `eventos.log` (conexiones, nodos nuevos, averías que aparecen o desaparecen, TSC1 o V-ECU detectados, grabaciones, notas y un resumen cada 10 s). `--sin-registro` lo desactiva.
 

@@ -59,20 +59,40 @@ text(30, 58, "Solo escucha: el adaptador no transmite ni confirma tramas · ver 
 
 # ================================================================ portátil
 a('<rect x="40" y="110" width="380" height="250" rx="12" fill="#2b2b2b" stroke="#111" stroke-width="2"/>')
-a('<rect x="56" y="126" width="348" height="218" rx="4" fill="#0d1117"/>')
-term = [
-    ("> python tools/captura_can.py capturar", "#c9d1d9"),
-    ("    --nombre 03_ralenti --duracion 120", "#c9d1d9"),
-    ("Adaptador: candleLight USB to CAN", "#8b949e"),
-    ("Modo SOLO ESCUCHA confirmado · 250 kbit/s", "#3fb950"),
-    ("Grabando en capturas/..._03_ralenti.log", "#8b949e"),
-    ("  42 s ·  4180 tramas · 14 IDs · 802 rpm · 82 °C", "#e3b341"),
-    ("interruptor en ALTA        ← nota + Enter", "#79c0ff"),
-]
-for i, (t, col) in enumerate(term):
-    text(66, 150 + i * 26, t, size=12, fill=col, family="Consolas, monospace")
+# Pantalla: panel del bus en el navegador (tools/panel_bus.py, 127.0.0.1:8766)
+a('<rect x="56" y="126" width="348" height="218" rx="4" fill="#f3f4f6"/>')
+a('<rect x="56" y="126" width="348" height="24" rx="4" fill="#dfe3e8"/>')
+for k, col in enumerate(("#ff5f57", "#febc2e", "#28c840")):
+    a(f'<circle cx="{68 + k * 12}" cy="138" r="4" fill="{col}"/>')
+a('<rect x="108" y="131" width="286" height="14" rx="7" fill="#ffffff"/>')
+text(116, 142, "127.0.0.1:8766 · Panel bus J1939", size=10, fill="#444")
+text(64, 170, "Panel bus J1939", size=13, weight="bold")
+a('<rect x="296" y="157" width="100" height="18" rx="9" fill="#2a9d4f"/>')
+text(346, 170, "SOLO ESCUCHA", size=10, fill="#fff", anchor="middle", weight="bold")
+text(64, 188, "Recibiendo · 412 tramas/s · nodos 0x00, 0x17", size=10, fill="#555")
+for k, (v, u) in enumerate([("802", "rpm"), ("9 %", "par"), ("82 °C", "refrig.")]):
+    x = 64 + k * 112
+    a(f'<rect x="{x}" y="196" width="104" height="44" rx="6" fill="#ffffff" stroke="#d5d9de"/>')
+    text(x + 52, 220, v, size=16, anchor="middle", weight="bold")
+    text(x + 52, 234, u, size=9, fill="#666", anchor="middle")
+a('<rect x="64" y="248" width="216" height="58" rx="6" fill="#ffffff" stroke="#d5d9de"/>')
+a('<polyline points="70,298 100,298 108,292 116,272 124,268 150,268 158,280 166,286 200,286 214,270 240,268 274,268" '
+  'fill="none" stroke="#1d4ed8" stroke-width="2"/>')
+text(72, 261, "rpm", size=9, fill="#666")
+a('<rect x="288" y="248" width="108" height="58" rx="6" fill="#fff7e0" stroke="#e0c46c"/>')
+text(342, 265, "Guía 8/12", size=10, anchor="middle", weight="bold")
+text(342, 280, "Captura 3", size=9, fill="#555", anchor="middle")
+text(342, 293, "ralentí", size=9, fill="#555", anchor="middle")
+a('<rect x="64" y="314" width="156" height="22" rx="5" fill="#d62828"/>')
+text(142, 329, "● GRABANDO 03_ralenti", size=10, fill="#fff", anchor="middle", weight="bold")
+text(230, 329, "42 s / 120 s", size=10, fill="#555")
 a('<path d="M 20 360 L 440 360 L 470 400 L -10 400 Z" fill="#bdbdbd" stroke="#777" stroke-width="2"/>')
-text(230, 388, "Portátil (Linux o Windows + Python)", size=13, anchor="middle", weight="bold")
+text(230, 388, "Portátil de pruebas (Linux, entorno .venv)", size=13, anchor="middle", weight="bold")
+a('<rect x="40" y="416" width="420" height="74" rx="8" fill="#f7f7f7" stroke="#d0d0d0"/>')
+text(52, 436, "Abrir: acceso del escritorio «Panel bus J1939»", size=12, weight="bold")
+text(52, 453, "o  python tools/panel_bus.py   (sin máquina: --demo)", size=11, fill="#444", family="Consolas, monospace")
+text(52, 471, "Otro USB (opcional): programador → placa ESP32,", size=11, fill="#555")
+text(52, 485, "acceso «Panel placa ESP32» (127.0.0.1:8765)", size=11, fill="#555")
 a('<rect x="440" y="366" width="18" height="10" rx="2" fill="#666"/>')
 
 # ================================================================ SH-C30A (enchufado directo por USB-A)
@@ -257,8 +277,8 @@ izq = [
     "• Selector Auto/Manual en MANUAL. Interruptor 26 en ralentí al empezar.",
     "• Conectar las sondas con la llave QUITADA; después dar contacto.",
     "• SH-C30A, DIP: 1 (arranque) en OFF; 2 (R120) OFF con 60 Ω, ON con 120 Ω (medida 1).",
-    "• El script se niega a grabar si el adaptador no confirma el modo solo escucha.",
-    "• Comprobación previa sin máquina:  capturar --nombre prueba --duracion 5",
+    "• El panel abre el adaptador en solo escucha y no graba si no lo confirma.",
+    "• Prueba previa en casa: panel con --demo (E-ECU simulada). En la máquina, seguir la guía del panel.",
 ]
 der = [
     "01_contacto · llave en contacto, motor parado (60 s)",
@@ -270,10 +290,10 @@ der = [
 ]
 for i, t in enumerate(izq):
     text(46, 886 + i * 26, t, size=13, fill="#3a3a3a")
-text(930, 886, "Capturas (python tools/captura_can.py capturar --nombre …):", size=13, weight="bold")
+text(930, 886, "Guía del panel (12 pasos) · cada captura tiene su botón de grabar:", size=13, weight="bold")
 for i, t in enumerate(der):
     text(946, 912 + i * 24, t, size=13, fill="#3a3a3a", family="Consolas, monospace")
-text(930, 1064, "Después:  python tools/captura_can.py analizar \"capturas/*.log\" --informe capturas/resumen.md",
+text(930, 1064, "Después: botón Analizar en cada captura · todo queda en capturas/ y registros/bus/",
      size=13, fill="#1d4ed8", weight="bold")
 
 a("</svg>")
