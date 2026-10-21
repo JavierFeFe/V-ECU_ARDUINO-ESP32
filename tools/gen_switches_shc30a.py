@@ -37,8 +37,9 @@ def dip(x, y, s1, s2, escala=1.0):
     """DIP de 2 posiciones visto de frente. s1/s2: 'ON', 'OFF' o None (indiferente)."""
     w, h = 150 * escala, 120 * escala
     a(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{6 * escala}" fill="#1b1b1b" stroke="#000" stroke-width="2"/>')
-    text(x + 12 * escala, y + 22 * escala, "ON", size=14 * escala, fill="#ffffff", weight="bold")
-    a(f'<path d="M {x + 42 * escala} {y + 12 * escala} l {6 * escala} {-7 * escala} l {6 * escala} {7 * escala}" '
+    # Marca ON abajo (comprobado en la unidad real: palanca abajo = ON, arriba = OFF)
+    text(x + 12 * escala, y + h - 8 * escala, "ON", size=14 * escala, fill="#ffffff", weight="bold")
+    a(f'<path d="M {x + 42 * escala} {y + h - 19 * escala} l {6 * escala} {7 * escala} l {6 * escala} {-7 * escala}" '
       f'fill="none" stroke="#fff" stroke-width="2"/>')
     for i, estado in enumerate((s1, s2)):
         cx = x + (52 + 56 * i) * escala
@@ -49,16 +50,16 @@ def dip(x, y, s1, s2, escala=1.0):
               f'rx="2" fill="none" stroke="#aaa" stroke-dasharray="4 3"/>')
             text(cx, top + alto / 2 + 5 * escala, "?", size=16 * escala, fill="#aaa", anchor="middle", weight="bold")
         else:
-            py = top + 4 * escala if estado == "ON" else top + alto / 2
+            py = top + alto / 2 if estado == "ON" else top + 4 * escala
             col = VERDE if estado == "ON" else "#eeeeee"
             a(f'<rect x="{cx - 13 * escala}" y="{py}" width="{26 * escala}" height="{alto / 2 - 4 * escala}" rx="2" fill="{col}" stroke="#222"/>')
-        text(cx, y + h - 8 * escala, str(i + 1), size=15 * escala, fill="#ffffff", anchor="middle", weight="bold")
+        text(cx, y + 22 * escala, str(i + 1), size=15 * escala, fill="#ffffff", anchor="middle", weight="bold")
 
 
 a(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" font-family="{FONT}">')
 a(f'<rect width="{W}" height="{H}" fill="#ffffff"/>')
 text(30, 38, "SH-C30A — cómo poner los interruptores (DIP SW1)", size=24, weight="bold")
-text(30, 62, "Interruptor hacia la marca ON = ON (palanca arriba) · hacia abajo = OFF. Cambiarlo siempre con el adaptador DESENCHUFADO del USB.",
+text(30, 62, "Palanca hacia la marca ON (abajo) = ON · hacia arriba = OFF. Cambiarlo siempre con el adaptador DESENCHUFADO del USB.",
      size=13, fill="#555")
 
 # ---------------------------------------------------------------- qué es cada interruptor

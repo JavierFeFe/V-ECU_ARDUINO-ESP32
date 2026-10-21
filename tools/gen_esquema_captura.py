@@ -91,9 +91,9 @@ text(610, 414, "STM32", size=9, fill="#d9f2df", anchor="middle")
 a('<rect x="666" y="332" width="44" height="30" rx="2" fill="#1b1b1b" stroke="#000"/>')
 for n, x in [("1", 671), ("2", 691)]:
     a(f'<rect x="{x}" y="336" width="14" height="22" rx="1" fill="#444"/>')
-    a(f'<rect x="{x + 2}" y="347" width="10" height="9" rx="1" fill="#eeeeee"/>')   # palanca abajo = OFF
-    text(x + 7, 372, n, size=9, fill="#ffffff", anchor="middle", weight="bold")
-text(668, 330, "ON↑", size=8, fill="#ffffff")
+    a(f'<rect x="{x + 2}" y="338" width="10" height="9" rx="1" fill="#eeeeee"/>')   # palanca arriba = OFF (ON está abajo)
+    text(x + 7, 330, n, size=9, fill="#ffffff", anchor="middle", weight="bold")
+text(668, 372, "ON↓", size=8, fill="#ffffff")
 for cx in (608, 628, 648, 668):
     a(f'<rect x="{cx - 3}" y="424" width="6" height="6" fill="#d8b25a"/>')
 # Bornero: CAN_H arriba, GND, CAN_L abajo

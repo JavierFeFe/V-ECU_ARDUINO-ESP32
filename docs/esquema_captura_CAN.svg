@@ -23,12 +23,12 @@
 <text x="610" y="414" font-size="9" fill="#d9f2df" text-anchor="middle" font-weight="normal" >STM32</text>
 <rect x="666" y="332" width="44" height="30" rx="2" fill="#1b1b1b" stroke="#000"/>
 <rect x="671" y="336" width="14" height="22" rx="1" fill="#444"/>
-<rect x="673" y="347" width="10" height="9" rx="1" fill="#eeeeee"/>
-<text x="678" y="372" font-size="9" fill="#ffffff" text-anchor="middle" font-weight="bold" >1</text>
+<rect x="673" y="338" width="10" height="9" rx="1" fill="#eeeeee"/>
+<text x="678" y="330" font-size="9" fill="#ffffff" text-anchor="middle" font-weight="bold" >1</text>
 <rect x="691" y="336" width="14" height="22" rx="1" fill="#444"/>
-<rect x="693" y="347" width="10" height="9" rx="1" fill="#eeeeee"/>
-<text x="698" y="372" font-size="9" fill="#ffffff" text-anchor="middle" font-weight="bold" >2</text>
-<text x="668" y="330" font-size="8" fill="#ffffff" text-anchor="start" font-weight="normal" >ON↑</text>
+<rect x="693" y="338" width="10" height="9" rx="1" fill="#eeeeee"/>
+<text x="698" y="330" font-size="9" fill="#ffffff" text-anchor="middle" font-weight="bold" >2</text>
+<text x="668" y="372" font-size="8" fill="#ffffff" text-anchor="start" font-weight="normal" >ON↓</text>
 <rect x="605" y="424" width="6" height="6" fill="#d8b25a"/>
 <rect x="625" y="424" width="6" height="6" fill="#d8b25a"/>
 <rect x="645" y="424" width="6" height="6" fill="#d8b25a"/>

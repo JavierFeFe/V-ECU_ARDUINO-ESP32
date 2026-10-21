@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="810" viewBox="0 0 1500 810" font-family="Segoe UI, Arial, Helvetica, sans-serif">
 <rect width="1500" height="810" fill="#ffffff"/>
 <text x="30" y="38" font-size="24" fill="#1b1b1b" text-anchor="start" font-weight="bold">SH-C30A — cómo poner los interruptores (DIP SW1)</text>
-<text x="30" y="62" font-size="13" fill="#555" text-anchor="start" font-weight="normal">Interruptor hacia la marca ON = ON (palanca arriba) · hacia abajo = OFF. Cambiarlo siempre con el adaptador DESENCHUFADO del USB.</text>
+<text x="30" y="62" font-size="13" fill="#555" text-anchor="start" font-weight="normal">Palanca hacia la marca ON (abajo) = ON · hacia arriba = OFF. Cambiarlo siempre con el adaptador DESENCHUFADO del USB.</text>
 <rect x="30" y="84" width="1440" height="200" rx="10" fill="#f7f7f7" stroke="#d0d0d0"/>
 <rect x="60" y="120" width="172.5" height="138.0" rx="6.8999999999999995" fill="#1b1b1b" stroke="#000" stroke-width="2"/>
-<text x="73.8" y="145.3" font-size="16.099999999999998" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
-<path d="M 108.3 133.8 l 6.8999999999999995 -8.049999999999999 l 6.8999999999999995 8.049999999999999" fill="none" stroke="#fff" stroke-width="2"/>
+<text x="73.8" y="248.8" font-size="16.099999999999998" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
+<path d="M 108.3 236.15 l 6.8999999999999995 8.049999999999999 l 6.8999999999999995 -8.049999999999999" fill="none" stroke="#fff" stroke-width="2"/>
 <rect x="100.25" y="154.5" width="39.099999999999994" height="75.89999999999999" rx="3" fill="#3a3a3a"/>
-<rect x="104.85" y="192.45" width="29.9" height="33.349999999999994" rx="2" fill="#eeeeee" stroke="#222"/>
-<text x="119.8" y="248.8" font-size="17.25" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
+<rect x="104.85" y="159.1" width="29.9" height="33.349999999999994" rx="2" fill="#eeeeee" stroke="#222"/>
+<text x="119.8" y="145.3" font-size="17.25" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
 <rect x="164.64999999999998" y="154.5" width="39.099999999999994" height="75.89999999999999" rx="3" fill="#3a3a3a"/>
-<rect x="169.25" y="192.45" width="29.9" height="33.349999999999994" rx="2" fill="#eeeeee" stroke="#222"/>
-<text x="184.2" y="248.8" font-size="17.25" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
+<rect x="169.25" y="159.1" width="29.9" height="33.349999999999994" rx="2" fill="#eeeeee" stroke="#222"/>
+<text x="184.2" y="145.3" font-size="17.25" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
 <text x="260" y="120" font-size="17" fill="#1b1b1b" text-anchor="start" font-weight="bold">Interruptor 1 — ARRANQUE (BOOT0)</text>
 <text x="260" y="144" font-size="14" fill="#1b1b1b" text-anchor="start" font-weight="normal">ON  → el adaptador arranca en modo DFU: solo sirve para actualizar el firmware, NO captura.</text>
 <text x="260" y="166" font-size="14" fill="#2a9d4f" text-anchor="start" font-weight="bold">OFF → modo de trabajo. Es su posición normal.</text>
@@ -25,14 +25,14 @@
 <text x="46" y="332" font-size="17" fill="#ffffff" text-anchor="start" font-weight="bold">A · Captura en la máquina</text>
 <text x="46" y="353" font-size="13" fill="#ffffff" text-anchor="start" font-weight="normal">B1–B2 ≈ 60 Ω (medida 1)</text>
 <rect x="128" y="382" width="150.0" height="120.0" rx="6.0" fill="#1b1b1b" stroke="#000" stroke-width="2"/>
-<text x="140.0" y="404.0" font-size="14.0" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
-<path d="M 170.0 394.0 l 6.0 -7.0 l 6.0 7.0" fill="none" stroke="#fff" stroke-width="2"/>
+<text x="140.0" y="494.0" font-size="14.0" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
+<path d="M 170.0 483.0 l 6.0 7.0 l 6.0 -7.0" fill="none" stroke="#fff" stroke-width="2"/>
 <rect x="163.0" y="412.0" width="34.0" height="66.0" rx="3" fill="#3a3a3a"/>
-<rect x="167.0" y="445.0" width="26.0" height="29.0" rx="2" fill="#eeeeee" stroke="#222"/>
-<text x="180.0" y="494.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
+<rect x="167.0" y="416.0" width="26.0" height="29.0" rx="2" fill="#eeeeee" stroke="#222"/>
+<text x="180.0" y="404.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
 <rect x="219.0" y="412.0" width="34.0" height="66.0" rx="3" fill="#3a3a3a"/>
-<rect x="223.0" y="445.0" width="26.0" height="29.0" rx="2" fill="#eeeeee" stroke="#222"/>
-<text x="236.0" y="494.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
+<rect x="223.0" y="416.0" width="26.0" height="29.0" rx="2" fill="#eeeeee" stroke="#222"/>
+<text x="236.0" y="404.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
 <text x="203" y="528" font-size="16" fill="#1b1b1b" text-anchor="middle" font-weight="bold">1: OFF   ·   2: OFF</text>
 <text x="203" y="566" font-size="13.5" fill="#333" text-anchor="middle" font-weight="normal">El bus ya tiene dos terminaciones</text>
 <text x="203" y="588" font-size="13.5" fill="#333" text-anchor="middle" font-weight="normal">(E-ECU y panel).</text>
@@ -43,14 +43,14 @@
 <text x="408" y="332" font-size="17" fill="#ffffff" text-anchor="start" font-weight="bold">B · Captura en la máquina</text>
 <text x="408" y="353" font-size="13" fill="#ffffff" text-anchor="start" font-weight="normal">B1–B2 ≈ 120 Ω (medida 1)</text>
 <rect x="490" y="382" width="150.0" height="120.0" rx="6.0" fill="#1b1b1b" stroke="#000" stroke-width="2"/>
-<text x="502.0" y="404.0" font-size="14.0" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
-<path d="M 532.0 394.0 l 6.0 -7.0 l 6.0 7.0" fill="none" stroke="#fff" stroke-width="2"/>
+<text x="502.0" y="494.0" font-size="14.0" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
+<path d="M 532.0 483.0 l 6.0 7.0 l 6.0 -7.0" fill="none" stroke="#fff" stroke-width="2"/>
 <rect x="525.0" y="412.0" width="34.0" height="66.0" rx="3" fill="#3a3a3a"/>
-<rect x="529.0" y="445.0" width="26.0" height="29.0" rx="2" fill="#eeeeee" stroke="#222"/>
-<text x="542.0" y="494.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
+<rect x="529.0" y="416.0" width="26.0" height="29.0" rx="2" fill="#eeeeee" stroke="#222"/>
+<text x="542.0" y="404.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
 <rect x="581.0" y="412.0" width="34.0" height="66.0" rx="3" fill="#3a3a3a"/>
-<rect x="585.0" y="416.0" width="26.0" height="29.0" rx="2" fill="#2a9d4f" stroke="#222"/>
-<text x="598.0" y="494.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
+<rect x="585.0" y="445.0" width="26.0" height="29.0" rx="2" fill="#2a9d4f" stroke="#222"/>
+<text x="598.0" y="404.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
 <text x="565" y="528" font-size="16" fill="#1b1b1b" text-anchor="middle" font-weight="bold">1: OFF   ·   2: ON</text>
 <text x="565" y="566" font-size="13.5" fill="#333" text-anchor="middle" font-weight="normal">Solo termina la E-ECU:</text>
 <text x="565" y="588" font-size="13.5" fill="#333" text-anchor="middle" font-weight="normal">el adaptador pone la segunda</text>
@@ -61,14 +61,14 @@
 <text x="770" y="332" font-size="17" fill="#ffffff" text-anchor="start" font-weight="bold">C · Prueba de banco</text>
 <text x="770" y="353" font-size="13" fill="#ffffff" text-anchor="start" font-weight="normal">SH-C30A ↔ ESP32 + CAN Pal</text>
 <rect x="852" y="382" width="150.0" height="120.0" rx="6.0" fill="#1b1b1b" stroke="#000" stroke-width="2"/>
-<text x="864.0" y="404.0" font-size="14.0" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
-<path d="M 894.0 394.0 l 6.0 -7.0 l 6.0 7.0" fill="none" stroke="#fff" stroke-width="2"/>
+<text x="864.0" y="494.0" font-size="14.0" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
+<path d="M 894.0 483.0 l 6.0 7.0 l 6.0 -7.0" fill="none" stroke="#fff" stroke-width="2"/>
 <rect x="887.0" y="412.0" width="34.0" height="66.0" rx="3" fill="#3a3a3a"/>
-<rect x="891.0" y="445.0" width="26.0" height="29.0" rx="2" fill="#eeeeee" stroke="#222"/>
-<text x="904.0" y="494.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
+<rect x="891.0" y="416.0" width="26.0" height="29.0" rx="2" fill="#eeeeee" stroke="#222"/>
+<text x="904.0" y="404.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
 <rect x="943.0" y="412.0" width="34.0" height="66.0" rx="3" fill="#3a3a3a"/>
-<rect x="947.0" y="416.0" width="26.0" height="29.0" rx="2" fill="#2a9d4f" stroke="#222"/>
-<text x="960.0" y="494.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
+<rect x="947.0" y="445.0" width="26.0" height="29.0" rx="2" fill="#2a9d4f" stroke="#222"/>
+<text x="960.0" y="404.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
 <text x="927" y="528" font-size="16" fill="#1b1b1b" text-anchor="middle" font-weight="bold">1: OFF   ·   2: ON</text>
 <text x="927" y="566" font-size="13.5" fill="#333" text-anchor="middle" font-weight="normal">Dos nodos solos en la mesa:</text>
 <text x="927" y="588" font-size="13.5" fill="#333" text-anchor="middle" font-weight="normal">R120 ON aquí y Termination ON</text>
@@ -79,15 +79,15 @@
 <text x="1132" y="332" font-size="17" fill="#ffffff" text-anchor="start" font-weight="bold">D · Actualizar el firmware</text>
 <text x="1132" y="353" font-size="13" fill="#ffffff" text-anchor="start" font-weight="normal">solo si hace falta</text>
 <rect x="1214" y="382" width="150.0" height="120.0" rx="6.0" fill="#1b1b1b" stroke="#000" stroke-width="2"/>
-<text x="1226.0" y="404.0" font-size="14.0" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
-<path d="M 1256.0 394.0 l 6.0 -7.0 l 6.0 7.0" fill="none" stroke="#fff" stroke-width="2"/>
+<text x="1226.0" y="494.0" font-size="14.0" fill="#ffffff" text-anchor="start" font-weight="bold">ON</text>
+<path d="M 1256.0 483.0 l 6.0 7.0 l 6.0 -7.0" fill="none" stroke="#fff" stroke-width="2"/>
 <rect x="1249.0" y="412.0" width="34.0" height="66.0" rx="3" fill="#3a3a3a"/>
-<rect x="1253.0" y="416.0" width="26.0" height="29.0" rx="2" fill="#2a9d4f" stroke="#222"/>
-<text x="1266.0" y="494.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
+<rect x="1253.0" y="445.0" width="26.0" height="29.0" rx="2" fill="#2a9d4f" stroke="#222"/>
+<text x="1266.0" y="404.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">1</text>
 <rect x="1305.0" y="412.0" width="34.0" height="66.0" rx="3" fill="#3a3a3a"/>
 <rect x="1309.0" y="416.0" width="26.0" height="58.0" rx="2" fill="none" stroke="#aaa" stroke-dasharray="4 3"/>
 <text x="1322.0" y="450.0" font-size="16.0" fill="#aaa" text-anchor="middle" font-weight="bold">?</text>
-<text x="1322.0" y="494.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
+<text x="1322.0" y="404.0" font-size="15.0" fill="#ffffff" text-anchor="middle" font-weight="bold">2</text>
 <text x="1289" y="528" font-size="16" fill="#1b1b1b" text-anchor="middle" font-weight="bold">1: ON   ·   2: indiferente</text>
 <text x="1289" y="566" font-size="13.5" fill="#333" text-anchor="middle" font-weight="normal">Poner 1 en ON y luego enchufar:</text>
 <text x="1289" y="588" font-size="13.5" fill="#333" text-anchor="middle" font-weight="normal">aparece como dispositivo DFU.</text>
