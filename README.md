@@ -6,6 +6,8 @@ Sustitución / emulación de la **V-ECU** (Vehicle ECU, MID 187) de una excavado
 >
 > **Hardware en banco:** la placa se programa por P4 con el programador USB-C (ESP32-D0WD-V3, flash 4 MB) y el **relé de la vía B está confirmado en GPIO16**. **Firmware v0.1** en [`firmware/esp32/`](firmware/esp32/): modos Reposo / Alto / Auto-ralentí sobre el relé, lectura J1939 en solo escucha, TSC1 tras un flag de compilación, encoder, OLED opcional y consola serie. **Grabado y verificado en la placa**: arranca en Reposo, CAN en solo escucha y el SLNT del CAN Pal (IO4) en alto. Módulo CAN elegido: **Adafruit CAN Pal**. Encoder y OLED conectados y verificados (2026-10-21). Falta el CAN Pal ([`docs/LISTA_COMPRA.md`](docs/LISTA_COMPRA.md)).
 >
+> **2026-10-21 — punto de conexión en la máquina:** la clavija de la E-ECU no se puede pinchar (conectores A y B en la misma carcasa), así que el bus se toma del **conector redondo del mazo de la E-ECU** (escuadra amarilla). Medido con el multímetro: **E7 = CAN H (B1)** y **E8 = CAN L (B2)**; **B4 (emergencia) y B9/B10 (masa) no pasan por ese conector**. La masa del SH-C30A se toma de un perno de chasis/motor o del negativo de batería, y la vía B (B4) sigue en el interruptor de emergencia 26 o en JA47 de la clavija de la V-ECU. Dibujo en [`docs/conector_MC02.png`](docs/conector_MC02.png); detalles en [`docs/CAPTURA_CAN.md`](docs/CAPTURA_CAN.md) §3b–3c. **Siguiente:** identificar la marca del conector (adaptador en «Y») y el resto de contactos, y hacer la captura del bus.
+>
 > **2026-10-20:** portátil de pruebas con **Linux** preparado (entorno `.venv`, permisos USB, firmware compilado sin internet) y **adaptador SH-C30A recibido y verificado en solo escucha**. Pruebas de mesa superadas: relé COM–NO, Auto-ralentí sin CAN se queda en alto, arranque siempre en Reposo. **E-ECU comprobada en el taller**: terminación interna de 117 Ω, masas y alimentaciones correctas. **Corregido el bus**: la V-ECU es una derivación del par CAN (JB14/JB6) y JB13/JB5 son mallas; sin V-ECU no hay que puentear nada. **Siguiente:** en la máquina, medir B1–B2 con la E-ECU montada (60 Ω → R120 OFF; 120 Ω → ON) y hacer la captura de [`docs/CAPTURA_CAN.md`](docs/CAPTURA_CAN.md).
 
 ## El problema
@@ -47,6 +49,8 @@ docs/
 ├── CAPTURA_CAN.md                  ← cómo medir y capturar el bus de la máquina con el portátil y el SH-C30A
 ├── esquema_captura_CAN.svg/.png    ← diagrama de conexiones de la captura (portátil, SH-C30A, conector B, bus)
 ├── esquema_switches_SH-C30A.svg/.png ← cómo poner el DIP del SH-C30A (arranque y R120) en cada caso
+├── conector_MC02.svg/.png          ← cara de contactos del conector redondo del mazo de la E-ECU (E7 CAN H, E8 CAN L)
+├── fotos/                          ← fotos de la máquina, la E-ECU y los conectores
 ├── esquema_rpm_ESP32.svg/.png      ← esquema de la versión solo-rpm con módulos premontados
 ├── esquema_montaje_ESP32.svg/.png  ← diagrama ilustrado de montaje: placa, módulos, conector B e interruptor 26
 ├── LISTA_COMPRA.md                 ← lo que falta comprar para el control de rpm (Amazon España)
@@ -61,6 +65,7 @@ tools/
 ├── gen_esquema_montaje.py          ← genera docs/esquema_montaje_ESP32.svg
 ├── gen_esquema_captura.py          ← genera docs/esquema_captura_CAN.svg
 ├── gen_switches_shc30a.py          ← genera docs/esquema_switches_SH-C30A.svg
+├── gen_conector_MC02.py            ← genera docs/conector_MC02.svg
 ├── captura_can.py                  ← captura (solo escucha) y análisis del bus J1939 con el portátil
 ├── panel_esp32.py / .html          ← panel en el navegador para la placa: modos, relé, ajustes y log
 ├── panel_bus.py / .html            ← panel en el navegador para leer y grabar el bus J1939 con el SH-C30A (solo escucha)
@@ -144,6 +149,14 @@ El fusible **F24 (5 A)** alimenta el terminal 2 del interruptor de 3 posiciones.
 ![Pinout conector B E-ECU](docs/pinout_E-ECU_conector_B_ESP32.png)
 
 Diagrama propio a partir del circuito OEM y de la tabla EB del manual Vectro II. Del conector de 36 pines **solo se tocan cuatro**: **B1 (CAN H, amarillo)** y **B2 (CAN L, verde)** al módulo CAN (**Adafruit CAN Pal** con la terminación en OFF), **B10 (o B9) (masa)** al borne GND del CAN Pal como masa común (cable de 3 hilos), y opcionalmente **B4** (estado del interruptor de emergencia) a través del optoacoplador hacia GPIO35. **No** se alimenta el ESP32 desde B11/B12 (solo viven con el relé R3 activo) ni se conecta nada en B24 (programación de fábrica) o en los pines de sensores. Tablas completas de los conectores A y B, colores de cable y procedimiento de conexión en [`docs/PINOUT_E-ECU.md`](docs/PINOUT_E-ECU.md).
+
+> En la máquina la clavija de la E-ECU no se puede pinchar por detrás: CAN H/L se toman en el conector redondo (2e) o en la clavija libre de la V-ECU (JB14/JB6), la masa en un perno de chasis/motor y B4 en el interruptor 26 o en JA47.
+
+### 2e. Conector redondo del mazo de la E-ECU (punto de conexión del CAN)
+
+![Conector redondo del mazo de la E-ECU](docs/conector_MC02.png)
+
+Conector de 13 posiciones (9 contactos montados) que sale del mazo de la E-ECU, sujeto a una escuadra amarilla. Dibujado desde [`docs/fotos/conector_MC02_frontal.jpg`](docs/fotos/conector_MC02_frontal.jpg) con numeración propia (E1 = cavidad exterior vacía, sentido horario). **Medido:** E7 = CAN H (B1), E8 = CAN L (B2); B4 y B9/B10 no pasan. Probablemente es el **MC02** del esquema SCH02-1, aunque ahí la emergencia aparece en MC02.1 y en esta máquina no está, así que la identificación queda en fiabilidad baja. Resto de contactos y marca del conector, pendientes ([`docs/CAPTURA_CAN.md`](docs/CAPTURA_CAN.md) §3b).
 
 ### 3. Circuito OEM de la E-ECU (motor D6D, EC160B–290B)
 

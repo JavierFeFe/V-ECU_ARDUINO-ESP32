@@ -5,6 +5,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 ## [Unreleased]
 
 ### Añadido (punto de conexión)
+- README: estado del 2026-10-21 (punto de conexión en la máquina), sección 2e con el dibujo del conector redondo y nota en 2d sobre dónde tomar CAN, masa y B4 en la máquina; contenido del repositorio al día (`conector_MC02`, `fotos/`, `gen_conector_MC02.py`).
 - `docs/conector_MC02.svg/.png` (`tools/gen_conector_MC02.py`) y `docs/fotos/conector_MC02_frontal.jpg`: dibujo de la cara de contactos del conector redondo del mazo de la E-ECU (13 posiciones, 9 contactos montados; numeración propia con E1 = cavidad exterior vacía como referencia).
 - Mediciones en la máquina (`docs/CAPTURA_CAN.md` §3b): **E7 = CAN H (B1)** y **E8 = CAN L (B2)** confirmados; **B4 (emergencia) y B9/B10 (masa) no pasan por este conector**. La masa del SH-C30A se toma de un perno de chasis/motor o del negativo de batería; la vía B sigue en el interruptor 26 o en JA47.
 
