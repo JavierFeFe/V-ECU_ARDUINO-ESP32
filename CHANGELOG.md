@@ -4,6 +4,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (punto de conexión)
+- `docs/CAPTURA_CAN.md` §3b y `docs/fotos/conector_redondo_mazo_maquina.jpg`: conector redondo del mazo de la E-ECU como posible punto de conexión del CAN (la tapa de la clavija de la E-ECU impide el back-probe). Procedimiento para identificar CAN H/L y masa con el multímetro; conector pendiente de identificar.
+
 ### Corregido (SH-C30A)
 - DIP del SH-C30A dibujado al revés: en la unidad real la marca **ON está abajo** (palanca abajo = ON, arriba = OFF). Corregidos `esquema_switches_SH-C30A` y el DIP de `esquema_captura_CAN` (generadores y PNG).
 

@@ -88,6 +88,23 @@ python tools/captura_can.py capturar --nombre prueba --duracion 5
 
 Alternativa: JB14 / JB6 en el mazo de la V-ECU. Conectar **antes** de dar contacto.
 
+### 3b. Punto de acceso en estudio: conector redondo del mazo de la E-ECU
+
+![Conector redondo del mazo](fotos/conector_redondo_mazo_maquina.jpg)
+
+En la clavija del mazo de la E-ECU (carcasa negra con aletas, palanca de cierre metálica) los cables quedan tapados por la tapa trasera, así que el back-probe de B1/B2/B9 no es cómodo. Del mismo mazo sale un **conector redondo** sujeto a una escuadra amarilla (centro con llave roja, ≈ 8–9 contactos): si lleva el par J1939, es el mejor punto para conectar el SH-C30A con un **adaptador en "Y"** sin tocar la E-ECU.
+
+**Pendiente de identificar** (no hay datos en la documentación OEM consultada):
+1. Fabricante y serie (posible Deutsch HD10/HD16 de 9 vías, como la toma J1939 de diagnóstico, o conector propio de Volvo): mirar marcas en la carcasa y las letras A, B, C… junto a cada contacto.
+2. Qué pines son **CAN H, CAN L y masa**, con la E-ECU **desenchufada** y la llave quitada:
+   - Continuidad entre la cara de la clavija de la E-ECU (**B1, B2, B9/B10**) y cada contacto del conector redondo.
+   - Comprobación cruzada: con la E-ECU **enchufada**, la resistencia entre los dos pines del par CAN debe dar **≈ 117 Ω** (su terminación interna) o ≈ 60 Ω si el panel también termina.
+   - Con contacto: ≈ 2,5 V en CAN H y en CAN L respecto a masa.
+3. Colores: CAN H amarillo, CAN L verde (según los esquemas de la misma E-ECU).
+4. A qué va conectado el otro lado (mazo de cabina, toma de diagnóstico, panel…).
+
+Con el conector identificado se compra la pareja (o un cable de diagnóstico J1939 de 9 pines si es Deutsch HD) y se hace el adaptador; la tabla de conexión de arriba se rellena con los pines de este conector.
+
 ## 4. Capturas (un fichero por prueba)
 
 ### Con el panel en el navegador (recomendado)
