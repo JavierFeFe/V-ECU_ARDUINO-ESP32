@@ -81,6 +81,9 @@ class Adaptador:
         backend = libusb_package.get_libusb1_backend()
         devs = list(usb.core.find(find_all=True, backend=backend, custom_match=GsUsb.is_gs_usb_device))
         if not devs:
+            if usb.core.find(backend=backend, idVendor=0x0483, idProduct=0xDF11):  # bootloader DFU del STM32
+                raise FuenteError("El SH-C30A está en modo DFU (actualización de firmware): pon el interruptor DIP 1 "
+                                  "(arranque) en OFF y vuelve a enchufarlo.")
             raise FuenteError("No se encuentra el SH-C30A. ¿Está enchufado con el interruptor 1 (arranque) en OFF?")
         self.dev = GsUsb(devs[0])
         if not self.dev.set_bitrate(cc.BITRATE):

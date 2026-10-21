@@ -4,6 +4,9 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Corregido (SH-C30A)
+- DIP del SH-C30A dibujado al revés: en la unidad real la marca **ON está abajo** (palanca abajo = ON, arriba = OFF). Corregidos `esquema_switches_SH-C30A` y el DIP de `esquema_captura_CAN` (generadores y PNG).
+
 ### Añadido (SH-C30A)
 - `docs/esquema_switches_SH-C30A.svg/.png` (`tools/gen_switches_shc30a.py`): cómo poner el **DIP de 2 interruptores** del SH-C30A para cada caso (captura con 60 Ω o 120 Ω, banco, actualizar firmware). Asignación sacada del esquema oficial: **1 = arranque (BOOT0, ON = DFU)**, **2 = terminación R120**. Diagrama de captura y `CAPTURA_CAN.md` actualizados con el DIP.
 - Diagrama de montaje: aviso junto a los cables del programador de que **TX → RXD y RX → TXD van cruzados a propósito** (es lo correcto).
@@ -17,6 +20,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 - **Guía paso a paso** en el panel del bus: los 12 pasos de `CAPTURA_CAN.md` con qué hacer, qué debería verse y comprobaciones en directo; las medidas del multímetro se apuntan en la guía y van al registro.
 
 ### Añadido (panel del bus)
+- Si el SH-C30A arranca en modo DFU (interruptor DIP 1 en ON, aparece como `0483:df11`), el panel lo dice en lugar de «no se encuentra».
 - `tools/panel_bus.py` + `panel_bus.html` (127.0.0.1:8766): lectura del bus J1939 con el SH-C30A en solo escucha, en el navegador: rpm, par, carga, temperaturas, aceite, batería y horas; gráficas de rpm y par con notas; averías DM1 (también multitrama) con lámparas; nodos con avisos (V-ECU 0x11, TSC1, E-ECU sola); tabla de mensajes con bytes que cambian; grabación de las 6 pruebas de `CAPTURA_CAN.md` en el formato de `captura_can.py`, con notas y análisis al terminar. Modos `--demo` (E-ECU simulada) y `--reproducir`. Probado en demo; con el SH-C30A sin enchufar avisa y reintenta solo.
 
 - Accesos en el escritorio a los dos paneles: `tools/linux/instalar_accesos.sh` crea «Panel placa ESP32» y «Panel bus J1939», que lanzan `tools/linux/abrir_panel.sh`. Si un panel ya está en marcha, una segunda copia solo abre el navegador (y no toca el adaptador).
