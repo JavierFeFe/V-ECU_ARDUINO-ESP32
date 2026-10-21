@@ -94,6 +94,18 @@ Alternativa: JB14 / JB6 en el mazo de la V-ECU. Conectar **antes** de dar contac
 
 En la clavija del mazo de la E-ECU (carcasa negra con aletas, palanca de cierre metálica) los cables quedan tapados por la tapa trasera, así que el back-probe de B1/B2/B9 no es cómodo. Del mismo mazo sale un **conector redondo** sujeto a una escuadra amarilla (centro con llave roja, ≈ 8–9 contactos): si lleva el par J1939, es el mejor punto para conectar el SH-C30A con un **adaptador en "Y"** sin tocar la E-ECU.
 
+**Pines que hacen falta de este conector:**
+
+| Señal | Equivale a | Para qué | ¿Imprescindible? |
+|---|---|---|---|
+| **CAN H** | B1 (amarillo) | Captura del bus y firmware | Sí |
+| **CAN L** | B2 (verde) | Captura del bus y firmware | Sí |
+| **Masa** | B9 / B10 | Referencia común del CAN | Sí |
+| Línea **B4** (emergency speed) | B4 | Vía B: el relé pone 24 V aquí (1900 rpm). Si no pasa por este conector, el relé se conecta en el interruptor 26 como hasta ahora | Solo para la vía B |
+| **+24 V tras la llave** | — (no B11/B12) | Alimentar la placa ESP32 y el COM del relé, con fusible propio. Si no está, se toma de JB7/JB8 o de la caja de fusibles | Opcional |
+
+No hacen falta: J1708 (B25/B26), alimentación de la E-ECU (B11/B12, solo viva con el relé R3), B24 (programación de fábrica) ni los pines de sensores.
+
 **Pendiente de identificar** (no hay datos en la documentación OEM consultada):
 1. Fabricante y serie (posible Deutsch HD10/HD16 de 9 vías, como la toma J1939 de diagnóstico, o conector propio de Volvo): mirar marcas en la carcasa y las letras A, B, C… junto a cada contacto.
 2. Qué pines son **CAN H, CAN L y masa**, con la E-ECU **desenchufada** y la llave quitada:
