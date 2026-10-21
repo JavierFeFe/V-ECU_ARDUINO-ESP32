@@ -41,7 +41,7 @@ Diagrama: [`pinout_E-ECU_conector_B_ESP32.svg`](pinout_E-ECU_conector_B_ESP32.sv
 
 Observaciones:
 - **No hay pin de llave/contacto.** La E-ECU se alimenta por el relé R3 y recibe la posición de la llave **por J1939 desde la V-ECU**. Es una de las cosas que un emulador completo de V-ECU tendría que enviar.
-- **Terminación interna confirmada:** B1–B2 en la E-ECU suelta = **117 Ω** (medido en el taller, 2026-10-20).
+- **Comprobaciones en el taller con la E-ECU suelta (2026-10-20):** B1–B2 = **117 Ω** (terminación interna confirmada); B9–B10 en continuidad (masas unidas); B11–B12 en continuidad (+24 V unidos); B11–B9 sin continuidad (sin cortocircuito de alimentación).
 - Sin V-ECU en el bus, la E-ECU registra **SID 231 / PSID 201** (pérdida de comunicación con la V-ECU) y usa la entrada B4 como "limp home".
 
 ## 2. Conector A (negro, lado motor) — solo para referencia, no se toca
