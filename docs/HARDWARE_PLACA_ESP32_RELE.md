@@ -68,6 +68,8 @@ Serigrafía del reverso (dos tiras dobles de 2×10 taladros, sin soldar):
 |---|---|---|---|---|---|---|---|---|---|---|
 | **Tira inferior (fila 2)** | GND | CMD | SD2 | G12 | G27 | G25 | G32 | G34 | SVP (G36) | 3V3 |
 
+**Qué fila es la interior** (la más cercana al módulo ESP32) y cuál la exterior, confirmado con la placa (2026-10-21): en la **tira superior**, la **fila 1** (3V3 … G23) es la **exterior** y la **fila 2** (CLK … GND) la **interior**; en la **tira inferior**, la **fila 1** (5V … GND) es la **interior** y la **fila 2** (GND … 3V3) la **exterior**. Así está dibujado en [`esquema_montaje_ESP32.png`](esquema_montaje_ESP32.png).
+
 Otros: borne **VCC / GND** (alimentación de entrada), borne del relé **NC / COM / NO**, **P4** (programación).
 
 ### Asignación propuesta para el control de rpm

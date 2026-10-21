@@ -114,7 +114,7 @@ a('<circle cx="846" cy="618" r="20" fill="#222" stroke="#666" stroke-width="2"/>
 a('<circle cx="672" cy="597" r="32" fill="#222" stroke="#777" stroke-width="2"/>')
 a('<path d="M 652 575 L 692 575" stroke="#999" stroke-width="3"/>')
 a('<rect x="790" y="732" width="62" height="40" rx="3" fill="#1b1b1b" stroke="#444"/>')
-text(821, 786, "AMS1117", size=10, fill="#d9f2df", anchor="middle")
+text(821, 757, "AMS1117", size=10, fill="#d9f2df", anchor="middle")  # dentro del chip, entre los cables TX y RX
 a('<rect x="622" y="748" width="58" height="40" rx="4" fill="#c0c0c0" stroke="#777" stroke-width="1.5"/>')
 text(628, 802, "micro-USB (solo 5 V)", size=10, fill="#d9f2df")
 a('<rect x="786" y="918" width="48" height="48" rx="4" fill="#d0d0d0" stroke="#666"/>')
@@ -163,10 +163,10 @@ text(1163, 1000, "antena", size=10, fill="#bbbbbb", anchor="middle")
 
 # Tiras de pines (2×10). Rango k: 0 arriba (junto a P4), 9 abajo (junto a la antena).
 RK = [583 + 43 * k for k in range(10)]
-# Tira izquierda (serigrafía "superior"): exterior = fila CLK…, interior = fila 3V3…
+# Tira izquierda (serigrafía "superior"): exterior = fila 3V3… (fila 1), interior = fila CLK… (fila 2)
 IZQ_EXT = ["3V3", "IO7", "IO15", "IO0", "IO16", "IO5", "IO19", "IO21", "IO1", "IO23"]
 IZQ_INT = ["IO6", "IO8", "IO2", "IO4", "IO17", "IO18", "GND", "IO3", "IO22", "GND"]
-# Tira derecha (serigrafía "inferior"): interior = fila GND…, exterior = fila 5V…
+# Tira derecha (serigrafía "inferior"): interior = fila 5V… (fila 1), exterior = fila GND… (fila 2)
 DER_INT = ["5V", "IO10", "IO13", "IO14", "IO26", "IO33", "IO35", "IO39", "EN", "GND"]
 DER_EXT = ["GND", "IO11", "IO9", "IO12", "IO27", "IO25", "IO32", "IO34", "IO36", "3V3"]
 XI_E, XI_I, XD_I, XD_E = 923, 956, 1340, 1373
@@ -201,7 +201,7 @@ a('<rect x="40" y="412" width="210" height="160" rx="10" fill="#1c1c1c" stroke="
 a('<rect x="26" y="470" width="28" height="46" rx="8" fill="#c0c0c0" stroke="#777"/>')
 a('<rect x="80" y="470" width="38" height="38" rx="3" fill="#333" stroke="#555"/>')
 text(99, 522, "CH9102", size=9, fill="#aaaaaa", anchor="middle")
-text(145, 404, "Programador USB-C (COM5)", size=13, anchor="middle", weight="bold")
+text(145, 404, "Programador USB-C (ttyACM0 / COMx)", size=13, anchor="middle", weight="bold")
 prog = [("5V", 422), ("3.3V", 438), ("RXD", 470), ("TXD", 490), ("EN", 510), ("G0", 530), ("GND", 550)]
 for n, y in prog:
     pad(250, y, "#9a9a9a" if n in ("5V", "3.3V", "EN", "G0") else "#d8b25a")
@@ -247,7 +247,7 @@ text(470, 854, "Termination: OFF en la máquina", size=11, fill="#2a9d4f", ancho
 # ---------------------------------------------------------------- alimentación de los módulos
 def junction(x, y, color):
     a(f'<circle cx="{x}" cy="{y}" r="5" fill="{color}" stroke="#fff" stroke-width="1.5"/>')
-# CAN Pal y OLED: GND → GND (IO… fila exterior, rango 6); Vcc → 3V3 (fila interior, rango 0)
+# CAN Pal y OLED: GND → GND (fila interior, rangos 6 y 9); Vcc → 3V3 (fila exterior, rango 0)
 wire([(565, 760), (578, 760), (578, 819.5), (956, 819.5), (956, 834)], C["gnd"])          # CAN GND → GND (int. rango 6)
 wire([(565, 932), (580, 932), (580, 948.5), (956, 948.5), (956, 963)], C["gnd"])        # OLED GND → GND (int. rango 9)
 wire([(565, 776), (586, 776), (586, 560), (923, 560), (923, 576)], C["3v3"])            # Vcc → 3V3 (ext. rango 0)
