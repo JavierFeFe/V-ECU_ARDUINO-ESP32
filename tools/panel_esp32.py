@@ -346,9 +346,16 @@ def main():
     args = ap.parse_args()
 
     placa = Placa(args.puerto)
-    threading.Thread(target=placa.bucle, daemon=True).start()
-    servidor = ThreadingHTTPServer(("127.0.0.1", args.http), crear_manejador(placa))
+    try:
+        servidor = ThreadingHTTPServer(("127.0.0.1", args.http), crear_manejador(placa))
+    except OSError:  # ya hay un panel en marcha en ese puerto: se abre ese
+        url = f"http://127.0.0.1:{args.http}"
+        print(f"El panel ya está en marcha: se abre {url}")
+        if not args.no_abrir:
+            webbrowser.open(url)
+        return
     servidor.daemon_threads = True
+    threading.Thread(target=placa.bucle, daemon=True).start()
     url = f"http://127.0.0.1:{args.http}"
     print(f"Panel V-ECU en {url}  (Ctrl+C para salir)")
     if not args.no_abrir:

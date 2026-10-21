@@ -12,6 +12,11 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 - Diagrama de montaje: en las dos tiras de pines de la placa estaban **intercambiadas la fila interior y la exterior**. Corregido en `tools/gen_esquema_montaje.py` con el cableado rehecho (IO4/IO17/IO18/IO22 y GND en la fila interior de la tira izquierda; IO27/IO32, 3V3 y GND en la exterior de la derecha).
 - Revisión del diagrama de montaje: comentarios del generador al día con las filas corregidas, rótulo «AMS1117» legible, programador rotulado como `ttyACM0 / COMx`; en `docs/HARDWARE_PLACA_ESP32_RELE.md`, qué fila de cada tira es la interior y cuál la exterior.
 
+### Añadido (panel del bus)
+- `tools/panel_bus.py` + `panel_bus.html` (127.0.0.1:8766): lectura del bus J1939 con el SH-C30A en solo escucha, en el navegador: rpm, par, carga, temperaturas, aceite, batería y horas; gráficas de rpm y par con notas; averías DM1 (también multitrama) con lámparas; nodos con avisos (V-ECU 0x11, TSC1, E-ECU sola); tabla de mensajes con bytes que cambian; grabación de las 6 pruebas de `CAPTURA_CAN.md` en el formato de `captura_can.py`, con notas y análisis al terminar. Modos `--demo` (E-ECU simulada) y `--reproducir`. Probado en demo; con el SH-C30A sin enchufar avisa y reintenta solo.
+
+- Accesos en el escritorio a los dos paneles: `tools/linux/instalar_accesos.sh` crea «Panel placa ESP32» y «Panel bus J1939», que lanzan `tools/linux/abrir_panel.sh`. Si un panel ya está en marcha, una segunda copia solo abre el navegador (y no toca el adaptador).
+
 ### Añadido (panel)
 - `tools/panel_esp32.py` + `panel_esp32.html`: panel en el navegador (127.0.0.1:8765) con todas las funciones de la consola serie: modos y relé, ajustes (ralentí, par, consigna TSC1), datos del motor y del bus CAN, log filtrable y descargable, comandos libres y <kbd>Esc</kbd> = Reposo. Abre el puerto en exclusiva y reencuentra el programador si cambia de nombre. Probado con la placa real (2026-10-21). Documentado en `firmware/README.md`.
 - Panel: el modo actual se ve en grande y con color propio (Reposo verde, Alto naranja, Auto-ralentí azul, TSC1 morado) en la cabecera fija, en una franja con las rpm objetivo y en el título de la pestaña.

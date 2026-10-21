@@ -63,7 +63,8 @@ tools/
 ├── gen_switches_shc30a.py          ← genera docs/esquema_switches_SH-C30A.svg
 ├── captura_can.py                  ← captura (solo escucha) y análisis del bus J1939 con el portátil
 ├── panel_esp32.py / .html          ← panel en el navegador para la placa: modos, relé, ajustes y log
-├── linux/                          ← reglas udev e instalador de permisos USB (portátil de pruebas)
+├── panel_bus.py / .html            ← panel en el navegador para leer y grabar el bus J1939 con el SH-C30A (solo escucha)
+├── linux/                          ← permisos USB (udev) y accesos del escritorio a los dos paneles (portátil de pruebas)
 └── requirements.txt                ← entorno .venv: PlatformIO y librerías de captura
 ```
 
