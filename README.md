@@ -2,13 +2,7 @@
 
 Sustitución / emulación de la **V-ECU** (Vehicle ECU, MID 187) de una excavadora **Volvo EC210B** (2002, motor Volvo **D6D EAE2**) con un **ESP32** (o Arduino Nano) y un potenciómetro/encoder, para poder **regular la potencia** de la máquina cuando trabaja sin V-ECU en modo de emergencia (Manual).
 
-> **Estado (2026-10-20):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Plan, hardware y pruebas en [`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md) y [`docs/esquema_rpm_ESP32.png`](docs/esquema_rpm_ESP32.png); montaje con la placa **ESP32_Relay X1 V1.2** que ya tenemos en [`docs/MONTAJE.md`](docs/MONTAJE.md).
->
-> **Hardware en banco:** la placa se programa por P4 con el programador USB-C (ESP32-D0WD-V3, flash 4 MB) y el **relé de la vía B está confirmado en GPIO16**. **Firmware v0.1** en [`firmware/esp32/`](firmware/esp32/): modos Reposo / Alto / Auto-ralentí sobre el relé, lectura J1939 en solo escucha, TSC1 tras un flag de compilación, encoder, OLED opcional y consola serie. **Grabado y verificado en la placa**: arranca en Reposo, CAN en solo escucha y el SLNT del CAN Pal (IO4) en alto. Módulo CAN elegido: **Adafruit CAN Pal**. Encoder y OLED conectados y verificados (2026-10-21). Falta el CAN Pal ([`docs/LISTA_COMPRA.md`](docs/LISTA_COMPRA.md)).
->
-> **2026-10-21 — punto de conexión en la máquina:** la clavija de la E-ECU no se puede pinchar (conectores A y B en la misma carcasa), así que el bus se toma del **conector redondo del mazo de la E-ECU** (escuadra amarilla). Medido con el multímetro: **E7 = CAN H (B1)** y **E8 = CAN L (B2)**; **B4 (emergencia) y B9/B10 (masa) no pasan por ese conector**. La masa del SH-C30A se toma de un perno de chasis/motor o del negativo de batería, y la vía B (B4) sigue en el interruptor de emergencia 26 o en JA47 de la clavija de la V-ECU. Dibujo en [`docs/conector_MC02.png`](docs/conector_MC02.png); detalles en [`docs/CAPTURA_CAN.md`](docs/CAPTURA_CAN.md) §3b–3c. **Siguiente:** identificar la marca del conector (adaptador en «Y») y el resto de contactos, y hacer la captura del bus.
->
-> **2026-10-20:** portátil de pruebas con **Linux** preparado (entorno `.venv`, permisos USB, firmware compilado sin internet) y **adaptador SH-C30A recibido y verificado en solo escucha**. Pruebas de mesa superadas: relé COM–NO, Auto-ralentí sin CAN se queda en alto, arranque siempre en Reposo. **E-ECU comprobada en el taller**: terminación interna de 117 Ω, masas y alimentaciones correctas. **Corregido el bus**: la V-ECU es una derivación del par CAN (JB14/JB6) y JB13/JB5 son mallas; sin V-ECU no hay que puentear nada. **Siguiente:** en la máquina, medir B1–B2 con la E-ECU montada (60 Ω → R120 OFF; 120 Ω → ON) y hacer la captura de [`docs/CAPTURA_CAN.md`](docs/CAPTURA_CAN.md).
+> **Estado (2026-10-21):** investigación y cableado confirmados con documentación OEM. **Alcance actual: solo la gestión de las rpm del motor**, con módulos premontados; la parte hidráulica (válvula power shift) queda aplazada. Placa **ESP32_Relay X1 V1.2** con firmware v0.1 probada en el banco (relé, encoder, OLED); portátil de pruebas y adaptador **SH-C30A** listos con los paneles propios. En la máquina, el bus se toma del **conector redondo del mazo de la E-ECU** (**E7 = CAN H, E8 = CAN L**, medido) y la masa de un perno de chasis. **Siguiente:** captura del bus con el panel del bus. Detalle y lista de pruebas en [Procedimiento y pruebas](#procedimiento-y-pruebas).
 
 ## El problema
 
@@ -20,10 +14,84 @@ Sin V-ECU, la EC210B funciona en **Manual** con el interruptor de régimen de em
 
 | Fase | Qué hace | Cómo | Estado |
 |---|---|---|---|
-| **0** | Mediciones en la máquina | Bobina, Resistor Box, corriente real, resistencia del bus CAN | En curso: E-ECU comprobada en el taller (terminación 117 Ω); falta medir en la máquina |
+| **0** | Mediciones en la máquina | Bobina, Resistor Box, corriente real, resistencia del bus CAN | En curso: E-ECU comprobada en el taller (117 Ω); punto de conexión del bus localizado (E7/E8); falta medir y capturar en la máquina |
 | **1** | Regular la **potencia de la bomba** | Driver de corriente (200–650 mA, PWM + dither) sobre la válvula power shift, en lugar de la Resistor Box, con **relé de seguridad** que devuelve la Resistor Box si el ESP32 falla | Diseño listo |
 | **2** | Leer el motor y **anti-calado** | CAN J1939 en modo solo escucha (EEC1 → rpm, ET1 → temperatura); subir la corriente si caen las rpm | Diseño listo |
-| **3** | Regular las **rpm del motor** | **Vía B:** relé de la placa sobre la línea B4 (800 / 1900 rpm, auto-ralentí). **Vía A:** petición de régimen **TSC1** por J1939 desde la dirección de la V-ECU (0x11) | **En curso.** Vía B: firmware listo, relé probado en banco. Vía A: protocolo probable, pendiente de captura CAN |
+| **3** | Regular las **rpm del motor** | **Vía B:** relé de la placa sobre la línea B4 (800 / 1900 rpm, auto-ralentí). **Vía A:** petición de régimen **TSC1** por J1939 desde la dirección de la V-ECU (0x11) | **En curso.** Vía B: firmware listo, relé, encoder y OLED probados en banco. Vía A: protocolo probable, pendiente de captura CAN |
+
+## Procedimiento y pruebas
+
+Orden de trabajo completo, de la mesa a la máquina. Las casillas marcadas son pruebas **superadas con éxito** (con su fecha); las vacías, lo que falta. Reglas que valen para todo lo que se hace en la máquina: máquina **estacionada**, implementos apoyados, **palanca de seguridad bloqueada**, selector Auto/Manual en **MANUAL** (en Auto sin V-ECU la bomba va al máximo y el motor puede calarse) y conexiones siempre con la **llave quitada**.
+
+### 1. Investigación y documentación
+
+- [x] E-ECU identificada: Volvo 03161983 P03 (LucasVarity), programada para la EC210 nº 10828.
+- [x] Pinouts de la E-ECU (conector B) y de la V-ECU (JA/JB) confirmados con el circuito OEM Volvo.
+- [x] Topología del bus: E-ECU, panel y V-ECU en el mismo par; sin V-ECU el bus sigue unido y **no se puentea nada** (JB13/JB5 son mallas).
+- [x] Vías de control de rpm: **B** (relé sobre B4, 800/1900 rpm) confirmada; **A** (TSC1 por J1939) probable, pendiente de validar en la máquina ([`docs/CONTROL_RPM.md`](docs/CONTROL_RPM.md)).
+
+### 2. Portátil de pruebas (Linux)
+
+- [x] Entorno `.venv` con PlatformIO y librerías de captura; firmware compilado sin internet (2026-10-20).
+- [x] Permisos USB sin sudo para el SH-C30A y el programador (`tools/linux/instalar_permisos.sh`); accesos del escritorio a los dos paneles (`tools/linux/instalar_accesos.sh`).
+- [x] Adaptador **SH-C30A** recibido y **modo solo escucha verificado** (2026-10-20); DIP 1 = arranque, DIP 2 = R120 (marca ON abajo).
+- [x] **Panel del bus** (`tools/panel_bus.py`, 127.0.0.1:8766) probado en modo `--demo`: datos del motor, gráficas, DM1, nodos, grabación, guía de 12 pasos y botón 📐 Diagramas.
+- [x] **Panel de la placa** (`tools/panel_esp32.py`, 127.0.0.1:8765) usado con la placa: modos, relé, ajustes, log; solo lista puertos USB y reencuentra el programador.
+
+### 3. Placa ESP32 en el banco ([`docs/MONTAJE.md`](docs/MONTAJE.md) §5)
+
+- [x] Programación por P4 con el programador USB-C (solo GND, TX y RX cruzados; botón IO0 al dar tensión): ESP32-D0WD-V3, flash 4 MB.
+- [x] Relé en **GPIO16** (clic con `firmware/pruebas/rele`).
+- [x] Contactos del relé (2026-10-20): COM–NO abierto en Reposo y cerrado en Alto; COM–NC al revés.
+- [x] Firmware v0.1 grabado (2026-10-19): arranca en **Reposo**, consola serie, CAN en solo escucha y SLNT (IO4) en alto.
+- [x] Auto-ralentí **sin datos CAN se queda en alto** (> 20 s sin bajar a 800 rpm) (2026-10-20).
+- [x] Tras quitar y dar tensión vuelve a arrancar en Reposo (2026-10-20) y **sin pulso del relé** al arrancar (2026-10-21).
+- [x] **Encoder** KY-040 (G32/G33/G27) (2026-10-21): un paso por clic, elección de modo, edición de parámetro y pulsación larga → Reposo.
+- [x] **OLED** SSD1306 (IO21/IO22) (2026-10-21): detectada al arrancar; modo, `> MODO ?`, edición y `----` rpm sin CAN.
+- [ ] Comprar el **Adafruit CAN Pal** ([`docs/LISTA_COMPRA.md`](docs/LISTA_COMPRA.md)) y cablearlo (G17/G18/G4, 3V3, GND).
+- [ ] Banco CAN: CAN Pal ↔ SH-C30A a 250 kbit/s (terminación del CAN Pal en ON solo en el banco); `estado` → «tramas rx» sube.
+- [ ] Panel de la placa: con el visor de diagramas abierto, <kbd>Esc</kbd> solo lo cierra (no manda Reposo).
+- [ ] (Opcional) optoacoplador: estado de B4 (G35) y selector Auto/Manual (G39).
+
+### 4. E-ECU en el taller
+
+- [x] B1–B2 de la E-ECU suelta = **117 Ω**: terminación interna confirmada (2026-10-20).
+- [x] B9–B10 y B11–B12 en continuidad; B11–B9 sin cortocircuito (2026-10-20).
+
+### 5. Punto de conexión en la máquina ([`docs/CAPTURA_CAN.md`](docs/CAPTURA_CAN.md) §3b–3c)
+
+- [x] La clavija de la E-ECU no se puede pinchar (A y B en la misma carcasa): se usa el **conector redondo del mazo de la E-ECU** (escuadra amarilla).
+- [x] Continuidad (2026-10-21): **E7 = CAN H (B1)** y **E8 = CAN L (B2)**. Dibujo: [`docs/conector_MC02.png`](docs/conector_MC02.png).
+- [x] Comprobado que **B4 y B9/B10 no pasan por ese conector** (2026-10-21): masa de un perno de chasis/motor; B4 sigue en el terminal 3 del interruptor 26 (o JA47).
+- [ ] Elegir el perno de masa (continuidad de B9/B10 con el bloque motor o el chasis).
+- [ ] (Opcional) resto de contactos: continuidad de B11, B12, B25, B26, B7, B8, B17, B3, B13, B31, B5 y B24 con E2–E6 e I2/I3.
+- [ ] (Opcional) marca del conector para hacer un adaptador en «Y»; mientras tanto, back-probe en E7/E8.
+
+### 6. Captura del bus (solo escucha) — con el panel del bus
+
+Abrir «Panel bus J1939» en el portátil y seguir su guía (diagrama en [Captura del bus con el portátil](#captura-del-bus-con-el-portátil-pruebas)):
+
+- [ ] SH-C30A comprobado antes de ir: DIP 1 en OFF; CAN_H–CAN_L ≈ 120 Ω con DIP 2 en ON y abierto en OFF.
+- [ ] **Medida 1** (llave quitada): resistencia **E7–E8** → ≈ 60 Ω DIP 2 en OFF; ≈ 120 Ω DIP 2 en ON.
+- [ ] Conectar CAN_H → E7, CAN_L → E8, GND → perno de masa (llave quitada).
+- [ ] **Medida 2** (contacto, motor parado): E7 y E8 ≈ 2,5 V respecto a la masa; en el panel aparece la E-ECU (0x00) y llegan tramas.
+- [ ] Capturas: 01 contacto · 02 arranque · 03 ralentí · 04 alta · 05 con carga · 06 parada.
+- [ ] Analizar: IDs y periodos, averías DM1 sin V-ECU, par sin trabajo (03–04) y con trabajo (05) → **umbral del auto-ralentí**.
+- [ ] (Recomendado) captura de una EC210B/240B/290B sana en Auto para ver qué manda la V-ECU (SA 0x11).
+
+### 7. Vía B en la máquina (relé sobre B4)
+
+- [ ] Montaje ([`docs/MONTAJE.md`](docs/MONTAJE.md) §4): VCC ← +24 V tras la llave con fusible de 3 A; GND al mismo perno de masa que el CAN Pal; relé COM → terminal 2 y NO → terminal 3 del interruptor 26 (sin cortar cables).
+- [ ] CAN Pal en E7/E8 (terminación según la medida 1), solo escucha: la OLED muestra las rpm reales.
+- [ ] Interruptor 26 en **RALENTÍ**: modo Alto → 1900 rpm; Reposo → 800 rpm; pulsación larga → Reposo.
+- [ ] Auto-ralentí con el umbral de par de la captura (`par <pct>`): baja a 800 rpm sin trabajo y sube al mover un mando o el encoder.
+
+### 8. Vía A: TSC1 por CAN (solo tras la captura)
+
+- [ ] Grabar el entorno `esp32dev_tsc1`. Máquina parada, palanca bloqueada, selector en **MANUAL**, interruptor 26 en ralentí.
+- [ ] Enviar TSC1 (`0x0C000011`, 10 ms, 900 rpm) y comprobar en EEC1 que el motor sigue la consigna.
+- [ ] Al dejar de enviar TSC1 o reiniciar el ESP32, el motor vuelve a lo que marca B4.
+- [ ] Consigna continua 800–2000 rpm con el encoder.
 
 ## Lo que ya sabemos (confirmado con documentación OEM Volvo)
 
@@ -210,7 +278,7 @@ Del manual Volvo Trucks "Vectro II" (PV776-144528). El conector EB del camión c
 
 - Pruebas siempre con la máquina **estacionada**, palanca de seguridad bloqueada y el equipo apoyado.
 - Con la válvula a **0 mA la bomba absorbe el máximo** y puede calar el motor: el relé de seguridad en reposo mantiene la Resistor Box de fábrica.
-- Transmitir por CAN **solo** tras una captura en modo escucha, con la V-ECU original desconectada y el selector en Auto.
+- Transmitir por CAN **solo** tras una captura en modo escucha, con la V-ECU original desconectada y el selector en **MANUAL** (en Auto sin V-ECU la válvula queda a 0 mA y la bomba al máximo).
 - Límites por software: 200–650 mA en la válvula, 800–2000 rpm en TSC1.
 - El firmware arranca siempre en **Reposo** (manda el interruptor original), lleva watchdog de 500 ms, y la **pulsación larga del encoder** vuelve a Reposo en cualquier momento.
 

@@ -4,6 +4,13 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 
 ## [Unreleased]
 
+### Añadido (README)
+- Sección **«Procedimiento y pruebas»**: orden de trabajo completo en 8 etapas: investigación, portátil, placa en el banco, E-ECU en el taller, punto de conexión, captura del bus, vía B y vía A (TSC1). Las pruebas superadas van marcadas con su fecha y lo pendiente como casillas vacías.
+- Estado del proyecto resumido en un solo bloque que enlaza a esa sección.
+
+### Corregido (README)
+- Seguridad: la prueba de TSC1 se hace con el selector en **MANUAL**, no en Auto, coherente con `CONTROL_RPM.md`. En Auto sin V-ECU la bomba va al máximo.
+
 ### Añadido (punto de conexión)
 - `esquema_rpm_ESP32` y `esquema_conexion_ESP32`: punto de conexión del CAN en **E7/E8 del conector redondo** y masa en un **perno de chasis/motor** (antes B1/B2 y B9/B10 de la clavija de la E-ECU). En el de rpm, la herramienta de captura pasa a ser el SH-C30A con el panel propio (`tools/panel_bus.py`).
 - Diagrama de montaje (`esquema_montaje_ESP32`, `tools/gen_esquema_montaje.py`): el conector B de la E-ECU se sustituye por el **conector redondo del mazo de la E-ECU** (H → E7, L → E8) y un **perno de masa de chasis** para el GND del CAN Pal y de la placa; B4 sigue en el terminal 3 del interruptor 26. `MONTAJE.md` §3–§4 y README al día.
