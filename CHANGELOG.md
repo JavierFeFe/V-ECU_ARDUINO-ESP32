@@ -5,6 +5,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 ## [Unreleased]
 
 ### Añadido (punto de conexión)
+- `esquema_rpm_ESP32` y `esquema_conexion_ESP32`: punto de conexión del CAN en **E7/E8 del conector redondo** y masa en un **perno de chasis/motor** (antes B1/B2 y B9/B10 de la clavija de la E-ECU). En el de rpm, la herramienta de captura pasa a ser el SH-C30A con el panel propio (`tools/panel_bus.py`).
 - Diagrama de montaje (`esquema_montaje_ESP32`, `tools/gen_esquema_montaje.py`): el conector B de la E-ECU se sustituye por el **conector redondo del mazo de la E-ECU** (H → E7, L → E8) y un **perno de masa de chasis** para el GND del CAN Pal y de la placa; B4 sigue en el terminal 3 del interruptor 26. `MONTAJE.md` §3–§4 y README al día.
 - Diagrama de captura: la pantalla del portátil muestra el **panel del bus** (aplicación propia, 127.0.0.1:8766), con cómo abrirlo (acceso del escritorio o `panel_bus.py`, `--demo`) y el panel de la placa ESP32 por el otro USB. Pasos y análisis desde la guía y el botón Analizar del panel.
 - Guía paso a paso del panel del bus (`tools/panel_bus.html`) al día con el punto de conexión real: medidas y conexión en **E7/E8** del conector redondo y masa en un perno de chasis/motor (antes B1/B2/B9 en la clavija de la E-ECU). `docs/CAPTURA_CAN.md` §1 y §3, igual.

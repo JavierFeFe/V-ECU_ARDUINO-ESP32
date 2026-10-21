@@ -138,10 +138,10 @@
     <rect x="0" y="0" width="260" height="150" class="mach" rx="6"/>
     <text x="10" y="20" class="h">MÁQUINA — Bus J1939 (250 kbit/s)</text>
     <text x="10" y="42" class="pin">Punto de conexión (elegir uno):</text>
-    <text x="10" y="58" class="pin">• E-ECU conector B: B1 = CAN H, B2 = CAN L ✔</text>
+    <text x="10" y="58" class="pin">• Conector redondo E-ECU: E7 = H, E8 = L ✔</text>
     <text x="10" y="74" class="pin">• Mazo V-ECU: JB14 = H, JB6 = L ✔</text>
     <text x="10" y="90" class="pin">• Panel: 21C1 = H, 21C2 = L ✔</text>
-    <text x="10" y="112" class="warn">SIN 120 Ω en el ESP32 si B1–B2 ≈ 60 Ω</text>
+    <text x="10" y="112" class="warn">SIN 120 Ω en el ESP32 si H–L ≈ 60 Ω</text>
     <text x="10" y="128" class="pin">(E-ECU 117 Ω y panel). JB13/JB5 = mallas:</text>
     <text x="10" y="142" class="pin">sin V-ECU no se puentea nada.</text>
   </g>
@@ -199,7 +199,7 @@
     <rect x="0" y="0" width="540" height="190" class="box" rx="6"/>
     <text x="10" y="20" class="h">NOTAS DE MONTAJE Y SEGURIDAD</text>
     <g class="note">
-      <text x="10" y="42">1. Masa única: GND del ESP32 al mismo punto de masa que la E-ECU (B9/B10) o JB15/16.</text>
+      <text x="10" y="42">1. Masa única: GND del ESP32 a un perno de masa de chasis/motor junto a la E-ECU.</text>
       <text x="10" y="60">2. CAN: primero en modo SOLO ESCUCHA. TSC1 solo con la V-ECU desconectada y selector en Auto.</text>
       <text x="10" y="78">3. 0 mA en la válvula = bomba al máximo. K1 en reposo garantiza los 340 mA de fábrica.</text>
       <text x="10" y="96">4. Watchdog 500 ms: si el lazo se detiene → PWM a 0 y K1 suelto.</text>

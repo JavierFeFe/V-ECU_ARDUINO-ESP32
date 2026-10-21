@@ -28,17 +28,17 @@
     <text x="10" y="18" class="h">MÁQUINA — 24 V</text>
     <text x="10" y="40" class="pin">+24 V tras llave: JB7/JB8 del mazo V-ECU</text>
     <text x="10" y="56" class="pin">   o salida de la caja de fusibles</text>
-    <text x="10" y="74" class="pin">Masa: JA15/JA63 o chasis junto a la E-ECU</text>
+    <text x="10" y="74" class="pin">Masa: perno de chasis/motor junto a la E-ECU</text>
     <text x="10" y="92" class="pin">Fusible en línea 3 A</text>
     <circle cx="260" cy="40" r="4" fill="#d62728"/><circle cx="260" cy="74" r="4" fill="#222"/>
   </g>
   <g transform="translate(20,230)">
     <rect x="0" y="0" width="260" height="120" class="mach" rx="6"/>
     <text x="10" y="18" class="h">MÁQUINA — Bus J1939 (250 kbit/s)</text>
-    <text x="10" y="40" class="pin">E-ECU conector B: B1 = CAN H (amarillo)</text>
-    <text x="10" y="56" class="pin">                   B2 = CAN L (verde)</text>
+    <text x="10" y="40" class="pin">Conector redondo del mazo E-ECU:</text>
+    <text x="10" y="56" class="pin">   E7 = CAN H (B1) · E8 = CAN L (B2)</text>
     <text x="10" y="74" class="pin">o mazo V-ECU: JB14 (H) / JB6 (L)</text>
-    <text x="10" y="94" class="warn">Sin 120 Ω si B1–B2 ≈ 60 Ω</text>
+    <text x="10" y="94" class="warn">Sin 120 Ω si E7–E8 ≈ 60 Ω</text>
     <text x="10" y="112" class="pin">JB13/JB5 son mallas: no puentear</text>
     <circle cx="260" cy="40" r="4" fill="#e5c100"/><circle cx="260" cy="56" r="4" fill="#2ca02c"/>
   </g>
@@ -81,7 +81,7 @@
     <text x="10" y="18" class="h">M2 · Módulo CAN Adafruit CAN Pal</text>
     <text x="10" y="38" class="pin">TJA1051T/3, 3,3 V · SLNT ← G4 (alto = silencio)</text>
     <text x="10" y="58" class="warn">Interruptor de terminación en OFF</text>
-    <text x="10" y="78" class="pin">CANH ← B1 · CANL ← B2 · GND ← B10 (3 hilos)</text>
+    <text x="10" y="78" class="pin">CANH ← E7 · CANL ← E8 · GND ← perno de masa</text>
     <text x="10" y="94" class="pin">CTX ← G17 · CRX → G18 · 3V3 · GND</text>
     <text x="10" y="112" class="pin">Modo escucha primero; TSC1 solo tras validar</text>
   </g>
@@ -155,8 +155,8 @@
   <g transform="translate(1120,90)">
     <rect x="0" y="0" width="360" height="200" class="mod" rx="6"/>
     <text x="10" y="18" class="h">Herramienta: adaptador USB-CAN + PC</text>
-    <text x="10" y="38" class="pin">CANable / candleLight o "USB CAN analyzer"</text>
-    <text x="10" y="54" class="pin">SavvyCAN · python-can · can-j1939</text>
+    <text x="10" y="38" class="pin">SH-C30A (candleLight) + portátil de pruebas</text>
+    <text x="10" y="54" class="pin">Panel propio: tools/panel_bus.py (solo escucha)</text>
     <text x="10" y="78" class="pin">Paso previo imprescindible:</text>
     <text x="10" y="94" class="pin">1. Capturar el bus de ESTA máquina (motor en marcha).</text>
     <text x="10" y="110" class="pin">2. Capturar el bus de una EC210B SANA en Auto:</text>
@@ -164,7 +164,7 @@
     <text x="10" y="142" class="pin">   bytes cambian al mover el dial de régimen.</text>
     <text x="10" y="158" class="pin">3. Probar TSC1 (ID 0x0C000011, 10 ms) con rpm bajas</text>
     <text x="10" y="174" class="pin">   y comprobar EEC1 (0x0CF00400).</text>
-    <text x="10" y="192" class="pin">Se conecta en el mismo punto B1/B2 (paralelo).</text>
+    <text x="10" y="192" class="pin">Se conecta en el mismo punto E7/E8 (paralelo).</text>
   </g>
 
   <!-- Notas -->
