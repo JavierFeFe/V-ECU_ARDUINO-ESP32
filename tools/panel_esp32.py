@@ -11,10 +11,12 @@ otro nombre (ttyACM0 → ttyACM1, COM5 → COM6), lo vuelve a encontrar solo.
 Dependencias: pyserial (viene con PlatformIO; tools/requirements.txt).
 """
 import argparse
+import datetime as dt
 import json
 import os
 import queue
 import re
+import signal
 import sys
 import threading
 import time
@@ -32,6 +34,9 @@ except ImportError:
 BAUDIOS = 115200
 PERIODO_ESTADO_S = 1.0
 HTML = os.path.join(os.path.dirname(os.path.abspath(__file__)), "panel_esp32.html")
+RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CARPETA_REG = os.path.join(RAIZ, "registros", "placa")
+RESUMEN_S = 10.0
 
 # Programadores USB-serie habituales: WCH (CH340/CH343/CH9102), CP210x, FTDI, ESP32-S3 nativo.
 VIDS_CONOCIDOS = {0x1A86, 0x10C4, 0x0403, 0x303A}
@@ -66,6 +71,34 @@ class Placa:
                        "logFirmware": None, "ultimoEstado": None}
         self.ultimo_sondeo = 0.0
         self.bloque_estado = 0  # líneas de estado pendientes de un sondeo propio
+        self.reg = None         # registro de la sesión (registros/placa/<fecha>_<hora>.log)
+        self.ruta_reg = None
+        self.ultimo_resumen = 0.0
+
+    def abrir_registro(self):
+        os.makedirs(CARPETA_REG, exist_ok=True)
+        self.ruta_reg = os.path.join(CARPETA_REG, f"{dt.datetime.now():%Y-%m-%d_%H%M%S}.log")
+        self.reg = open(self.ruta_reg, "w", encoding="utf-8", buffering=1)
+        self.reg.write(f"# Registro del panel de la placa V-ECU · {dt.datetime.now().isoformat(timespec='seconds')}\n"
+                       f"# Todo lo que dice la placa, los comandos enviados (>) y un [resumen] cada {RESUMEN_S:.0f} s.\n")
+
+    def registrar(self, texto, tipo):
+        if self.reg:
+            pre = "> " if tipo == "enviado" else ""
+            self.reg.write(f"{dt.datetime.now():%Y-%m-%d %H:%M:%S.%f}"[:-3] + f" [{tipo}] {pre}{texto}\n")
+
+    def resumen(self):
+        e = self.estado
+        if not self.reg or not e.get("modo"):
+            return
+        m, c = e.get("motor"), e.get("can") or {}
+        motor = (f"{m['rpm']:.0f} rpm, par {m['parPct']} %, refrig. {m['refrigeranteC']} °C, DTC {m['numDtc']}"
+                 if m else "sin EEC1")
+        nivel = f"({e['ralentiNivel']})" if e.get("ralentiNivel") else ""
+        self.registrar(f"modo {e['modo']}{nivel} · relé {'ON' if e['rele'] else 'off'} · ralentí {e['ralentiS']} s · "
+                       f"par mín. {e['parPct']} % · consigna {e['rpmConsigna']} · motor: {motor} · "
+                       f"CAN {c.get('bus', '?')} {'solo escucha' if c.get('soloEscucha') else 'TX'} "
+                       f"{c.get('tramasRx', 0)} rx · OLED {'sí' if c.get('oled') else 'no'}", "resumen")
 
     # ------------------------------------------------------------ difusión a navegadores
     def suscribir(self):
@@ -89,11 +122,14 @@ class Placa:
 
     def linea(self, texto, tipo):
         item = {"t": ahora_txt(), "texto": texto, "tipo": tipo}
+        if tipo != "sondeo":
+            self.registrar(texto, tipo)
         self.historial.append(item)
         self.emitir("linea", item)
 
     def conexion(self):
         return {"conectado": self.ser is not None, "puerto": self.puerto, "error": self.error,
+                "registro": os.path.relpath(self.ruta_reg, RAIZ) if self.ruta_reg else None,
                 "fijo": self.puerto_fijo, "puertos": puertos_disponibles()}
 
     # ------------------------------------------------------------ puerto serie
@@ -248,6 +284,9 @@ class Placa:
                 if len(resto) > 512:  # basura sin salto de línea (p. ej. al quitar tensión)
                     self.linea(resto.decode("utf-8", errors="replace"), "placa")
                     resto = b""
+            if self.ser and time.time() - self.ultimo_resumen >= RESUMEN_S and self.estado.get("ultimoEstado"):
+                self.ultimo_resumen = time.time()
+                self.resumen()
             if time.time() - self.ultimo_sondeo >= PERIODO_ESTADO_S:
                 self.ultimo_sondeo = time.time()
                 self.enviar("estado", sondeo=True)
@@ -343,6 +382,7 @@ def main():
     ap.add_argument("--puerto", help="puerto serie fijo (por defecto se busca el programador solo)")
     ap.add_argument("--http", type=int, default=8765, help="puerto del panel en 127.0.0.1 (8765)")
     ap.add_argument("--no-abrir", action="store_true", help="no abrir el navegador")
+    ap.add_argument("--sin-registro", action="store_true", help="no guardar el registro en registros/placa/")
     args = ap.parse_args()
 
     placa = Placa(args.puerto)
@@ -355,16 +395,26 @@ def main():
             webbrowser.open(url)
         return
     servidor.daemon_threads = True
+    if not args.sin_registro:
+        placa.abrir_registro()
+        print(f"Registro de la sesión en {os.path.relpath(placa.ruta_reg, RAIZ)}")
     threading.Thread(target=placa.bucle, daemon=True).start()
     url = f"http://127.0.0.1:{args.http}"
     print(f"Panel V-ECU en {url}  (Ctrl+C para salir)")
     if not args.no_abrir:
         threading.Timer(0.8, lambda: webbrowser.open(url)).start()
+    def _salir(*_):  # cerrar la ventana del terminal (SIGHUP) o SIGTERM: cerrar como con Ctrl+C
+        raise KeyboardInterrupt
+    for sig in ("SIGTERM", "SIGHUP"):
+        if hasattr(signal, sig):
+            signal.signal(getattr(signal, sig), _salir)
     try:
         servidor.serve_forever()
     except KeyboardInterrupt:
         print("\nCerrando panel.")
         placa.cerrar("Panel cerrado")
+        if placa.reg:
+            placa.reg.close()
 
 
 if __name__ == "__main__":

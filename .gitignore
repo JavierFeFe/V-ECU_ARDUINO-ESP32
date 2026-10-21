@@ -15,6 +15,9 @@ build/
 .venv/
 __pycache__/
 
+# Registros automáticos de los paneles (tools/panel_bus.py, tools/panel_esp32.py)
+registros/
+
 # Editores y sistema
 .vscode/
 .idea/

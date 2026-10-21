@@ -71,6 +71,8 @@ python tools/panel_esp32.py
 
 Abre `http://127.0.0.1:8765` (solo accesible desde el propio portátil). El panel es el único programa que abre el puerto serie: **cerrar antes la consola de PlatformIO**. Busca solo el programador y, si se desenchufa y vuelve con otro nombre (`ttyACM0` → `ttyACM1`), lo reencuentra. Opciones: `--puerto /dev/ttyACM0`, `--http 8765`, `--no-abrir`.
 
+**Registro automático:** cada sesión del panel se guarda en `registros/placa/<fecha>_<hora>.log` con todo lo que dice la placa, los comandos enviados y un resumen del estado cada 10 s (`--sin-registro` lo desactiva).
+
 El relé no tiene orden propia en el firmware: en el panel, activarlo equivale a `modo alto` y desactivarlo a `modo reposo`.
 
 ## Compilar y grabar

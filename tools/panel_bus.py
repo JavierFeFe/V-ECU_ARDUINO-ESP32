@@ -11,6 +11,7 @@ capturas en el mismo formato que tools/captura_can.py (candump -l, con notas) y 
 Dependencias: tools/requirements.txt (gs_usb, pyusb, libusb-package).
 """
 import argparse
+import csv
 import datetime as dt
 import json
 import math
@@ -18,6 +19,7 @@ import os
 import queue
 import random
 import re
+import signal
 import sys
 import threading
 import time
@@ -32,6 +34,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(AQUI)
 HTML = os.path.join(AQUI, "panel_bus.html")
 CARPETA = os.path.join(RAIZ, "capturas")
+CARPETA_REG = os.path.join(RAIZ, "registros", "bus")
 BITS_TRAMA = 130  # trama extendida de 8 bytes con relleno de bits (igual que captura_can.py)
 MUESTREO_S = 0.2  # puntos de la gráfica: 5 por segundo
 MAX_PUNTOS = 3000  # 10 minutos
@@ -229,10 +232,68 @@ class Reproduccion:
         pass
 
 
+# ------------------------------------------------------------------ registro automático de la sesión
+
+class Registro:
+    """Todo lo de la sesión en registros/bus/<fecha>_<hora>/, sin tener que pulsar Grabar:
+    bus_completo.log (todas las tramas y notas, formato de captura_can.py), motor.csv (1 por segundo)
+    y eventos.log (conexiones, nodos, averías, notas, grabaciones y un resumen cada 10 s)."""
+
+    COLUMNAS = ["hora", "rpm", "par_pct", "carga_pct", "refrigerante_c", "aceite_kpa", "bateria_v",
+                "tramas_s", "errores_bus", "grabando", "nota"]
+
+    def __init__(self, descripcion, sufijo=""):
+        self.carpeta = os.path.join(CARPETA_REG, f"{dt.datetime.now():%Y-%m-%d_%H%M%S}{sufijo}")
+        os.makedirs(self.carpeta, exist_ok=True)
+        self.raw = open(os.path.join(self.carpeta, "bus_completo.log"), "w", encoding="utf-8")
+        self.raw.write(f"# sesión completa · {dt.datetime.now().isoformat(timespec='seconds')} · "
+                       f"{cc.BITRATE} bit/s · solo escucha · {descripcion}\n")
+        self.csv = open(os.path.join(self.carpeta, "motor.csv"), "w", encoding="utf-8", newline="")
+        self.csvw = csv.writer(self.csv)
+        self.csvw.writerow(self.COLUMNAS)
+        self.ev = open(os.path.join(self.carpeta, "eventos.log"), "w", encoding="utf-8", buffering=1)
+        self.notas_pendientes = []
+        self.tramas = 0
+        self.evento(f"Inicio de sesión · {descripcion}")
+
+    def ruta(self):
+        return os.path.relpath(self.carpeta, RAIZ)
+
+    def evento(self, texto):
+        self.ev.write(f"{dt.datetime.now():%Y-%m-%d %H:%M:%S} · {texto}\n")
+
+    def trama(self, ts, ident, ext, remota, datos):
+        fmt_id = f"{ident:08X}" if ext else f"{ident:03X}"
+        self.raw.write(f"({ts:.6f}) can0 {fmt_id}{'#R' if remota else '#'}{datos.hex().upper()}\n")
+        self.tramas += 1
+
+    def nota(self, ts, texto):
+        self.raw.write(f"# ({ts:.6f}) {texto}\n")
+        self.notas_pendientes.append(texto)
+        self.evento(f"NOTA: {texto}")
+
+    def muestra(self, motor, frescos, fps, errores, grabando):
+        def val(clave, dec):
+            v = motor.get(clave)
+            return "" if v is None or not frescos.get(clave) else round(v, dec)
+        self.csvw.writerow([dt.datetime.now().strftime("%H:%M:%S"), val("rpm", 0), val("par", 0), val("carga", 0),
+                            val("refrigerante", 0), val("aceiteKpa", 0), val("bateriaV", 2), fps, errores,
+                            grabando or "", " | ".join(self.notas_pendientes)])
+        self.notas_pendientes = []
+        self.raw.flush()
+        self.csv.flush()
+
+    def cerrar(self, motivo):
+        self.evento(f"Fin de sesión ({motivo}) · {self.tramas} tramas guardadas")
+        for f in (self.raw, self.csv, self.ev):
+            f.close()
+
+
 # ------------------------------------------------------------------ estado del bus
 
 class Bus:
-    def __init__(self, crear_fuente, demo=False):
+    def __init__(self, crear_fuente, demo=False, registro=None):
+        self.registro = registro
         self.crear_fuente = crear_fuente
         self.demo = demo
         self.fuente = None
@@ -261,6 +322,8 @@ class Bus:
 
     def sistema(self, texto):
         self.mensajes_sistema.append({"t": time.strftime("%H:%M:%S"), "texto": texto})
+        if self.registro:
+            self.registro.evento(texto)
 
     # ---------------------------------------------------------------- tramas
     def procesar(self, ts, ident, ext, remota, datos):
@@ -286,10 +349,15 @@ class Bus:
         if not ext:
             return
         _, pgn, _, sa = cc.descomponer(ident)
+        if sa not in self.nodos and self.registro:
+            aviso = " ⚠️ ¿V-ECU conectada?" if sa == 0x11 else ""
+            self.registro.evento(f"Nodo nuevo en el bus: {cc.nombre_dir(sa)} (primera trama {ident:08X}){aviso}")
         nodo = self.nodos.setdefault(sa, {"n": 0, "tu": ts})
         nodo["n"] += 1
         nodo["tu"] = ts
         if pgn == 0:
+            if not self.tsc1 and self.registro:
+                self.registro.evento(f"⚠️ TSC1 en el bus ({ident:08X}): alguien pide régimen al motor")
             self.tsc1 = True
         if sa != 0:
             self.decodificar_comun(pgn, sa, datos)
@@ -298,14 +366,14 @@ class Bus:
         m, t = self.motor, self.t_motor
         if pgn == 61444 and len(d) >= 5:      # EEC1
             m["rpm"], m["par"] = v2(d[3], d[4], 0.125), v1(d[2], 1, -125)
-            t["rpm"] = ts
+            t["rpm"] = t["par"] = ts
         elif pgn == 61443 and len(d) >= 3:    # EEC2
             m["acelerador"], m["carga"] = v1(d[1], 0.4), v1(d[2], 1)
-            t["carga"] = ts
+            t["carga"] = t["acelerador"] = ts
         elif pgn == 65262 and len(d) >= 1:    # ET1
             m["refrigerante"] = v1(d[0], 1, -40)
             m["combustibleC"] = v1(d[1], 1, -40) if len(d) >= 2 else None
-            t["refrigerante"] = ts
+            t["refrigerante"] = t["combustibleC"] = ts
         elif pgn == 65263 and len(d) >= 4:    # EFL/P1
             m["aceiteKpa"] = v1(d[3], 4)
             t["aceiteKpa"] = ts
@@ -337,6 +405,13 @@ class Bus:
 
     def fijar_dm1(self, sa, d):
         l = d[0]
+        if self.registro:
+            antes = {(x["spn"], x["fmi"]) for x in self.averias.get(sa, {}).get("dtc", [])}
+            ahora = {(s_, f_) for s_, f_, _ in cc.dtcs(d)}
+            for s_, f_ in sorted(ahora - antes):
+                self.registro.evento(f"Avería ACTIVA en {cc.nombre_dir(sa)}: SPN {s_} FMI {f_} (lámparas 0x{l:02X})")
+            for s_, f_ in sorted(antes - ahora):
+                self.registro.evento(f"Avería ya no activa en {cc.nombre_dir(sa)}: SPN {s_} FMI {f_}")
         self.averias[sa] = {"lamparas": {"MIL": (l >> 6) & 3 == 1, "parada": (l >> 4) & 3 == 1,
                                          "aviso": (l >> 2) & 3 == 1, "proteccion": l & 3 == 1},
                             "dtc": [{"spn": s, "fmi": f, "oc": o} for s, f, o in cc.dtcs(d)],
@@ -376,6 +451,8 @@ class Bus:
             return False, "Nota vacía."
         ahora = time.time()
         self.notas.append((ahora, texto))
+        if self.registro:
+            self.registro.nota(ahora, texto)
         if self.grab:
             self.grab["f"].write(f"# ({ahora:.6f}) {texto}\n")
         return True, None
@@ -390,7 +467,7 @@ class Bus:
 
     # ---------------------------------------------------------------- bucle de lectura
     def bucle(self):
-        ultimo_punto = 0.0
+        ultimo_punto = ultima_muestra = ultimo_resumen = 0.0
         while True:
             if not self.fuente:
                 if self.fatal:
@@ -419,8 +496,15 @@ class Bus:
             with self.lock:
                 if tr:
                     self.escribir(*tr)
+                    if self.registro:
+                        self.registro.trama(*tr)
                     self.procesar(*tr)
                 ahora = time.time()
+                if self.registro and ahora - ultima_muestra >= 1.0:
+                    ultima_muestra = ahora
+                    self.registrar(ahora, resumen=ahora - ultimo_resumen >= 10.0)
+                    if ahora - ultimo_resumen >= 10.0:
+                        ultimo_resumen = ahora
                 g = self.grab
                 if g:
                     if g["duracion"] and ahora - g["t0"] >= g["duracion"]:
@@ -435,6 +519,25 @@ class Bus:
                     self.puntos.append((self.seq, round(ahora, 2),
                                         self.motor.get("rpm") if fresco else None,
                                         self.motor.get("par") if fresco else None))
+
+    def registrar(self, ahora, resumen):
+        while self.t_rate and ahora - self.t_rate[0] > 1.0:
+            self.t_rate.popleft()
+        fps = len(self.t_rate)
+        frescos = {k: ahora - t < 3.0 for k, t in self.t_motor.items()}
+        errores = getattr(self.fuente, "errores", 0) if self.fuente else 0
+        self.registro.muestra(self.motor, frescos, fps, errores, self.grab["nombre"] if self.grab else None)
+        if resumen:
+            m = self.motor
+
+            def f(clave, suf, dec=0):
+                v = m.get(clave)
+                return "—" if v is None or not frescos.get(clave) else f"{v:.{dec}f}{suf}"
+            self.registro.evento(
+                f"Resumen: {f('rpm', ' rpm')} · par {f('par', ' %')} · carga {f('carga', ' %')} · "
+                f"refrig. {f('refrigerante', ' °C')} · aceite {f('aceiteKpa', ' kPa')} · batería {f('bateriaV', ' V', 1)} · "
+                f"{fps} tramas/s · nodos {', '.join(f'0x{x:02X}' for x in sorted(self.nodos)) or '—'}"
+                + (f" · {errores} errores de bus" if errores else "") + ("" if self.fuente else " · SIN ADAPTADOR"))
 
     # ---------------------------------------------------------------- foto para el navegador
     def foto(self, desde_seq):
@@ -475,6 +578,7 @@ class Bus:
                                                  "tramas": g["tramas"]},
                 "grabaciones": self.grabaciones[-20:],
                 "sistema": list(self.mensajes_sistema)[-8:],
+                "registro": self.registro.ruta() if self.registro else None,
                 "ahora": round(ahora, 2),
             }
 
@@ -528,6 +632,7 @@ def crear_manejador(bus):
                 elif self.path == "/api/nota":
                     ok, err = bus.nota(str(c.get("texto", "")))
                 elif self.path == "/api/limpiar":
+                    bus.sistema("Contadores, tabla y gráficas reiniciados desde el panel")
                     bus.reiniciar_estadisticas()
                     bus.puntos.clear()
                 elif self.path == "/api/analizar":
@@ -568,6 +673,7 @@ def main():
     ap.add_argument("--velocidad", type=float, default=1.0, help="velocidad de la reproducción (1 = real)")
     ap.add_argument("--http", type=int, default=8766, help="puerto del panel en 127.0.0.1 (8766)")
     ap.add_argument("--no-abrir", action="store_true", help="no abrir el navegador")
+    ap.add_argument("--sin-registro", action="store_true", help="no guardar el registro de la sesión en registros/bus/")
     args = ap.parse_args()
 
     if args.demo:
@@ -586,17 +692,27 @@ def main():
             webbrowser.open(url)
         return
     servidor.daemon_threads = True
+    if not args.sin_registro and not args.reproducir:
+        bus.registro = Registro("DEMO · E-ECU simulada" if args.demo else "SH-C30A", "_demo" if args.demo else "")
+        print(f"Registro de la sesión en {bus.registro.ruta()}/")
     threading.Thread(target=bus.bucle, daemon=True).start()
     url = f"http://127.0.0.1:{args.http}"
     print(f"Panel del bus en {url}  (Ctrl+C para salir)")
     if not args.no_abrir:
         threading.Timer(0.8, lambda: webbrowser.open(url)).start()
+    def _salir(*_):  # cerrar la ventana del terminal (SIGHUP) o SIGTERM: cerrar como con Ctrl+C
+        raise KeyboardInterrupt
+    for sig in ("SIGTERM", "SIGHUP"):
+        if hasattr(signal, sig):
+            signal.signal(getattr(signal, sig), _salir)
     try:
         servidor.serve_forever()
     except KeyboardInterrupt:
         print("\nCerrando panel.")
         with bus.lock:
             bus.parar("panel cerrado")
+            if bus.registro:
+                bus.registro.cerrar("panel cerrado")
         if bus.fuente:
             bus.fuente.cerrar()
 

@@ -135,6 +135,7 @@
   <div>
     <h1>Panel V-ECU</h1>
     <div class="sub">Placa ESP32_Relay X1 · control de rpm del D6D · <kbd>Esc</kbd> = REPOSO</div>
+    <div class="sub" id="registro"></div>
   </div>
   <span class="chip-modo" id="chip-modo" role="status" aria-live="polite">MODO: —</span>
   <div class="grow"></div>
@@ -357,7 +358,8 @@ function pintarConexion(c) {
   S.conectado = c.conectado;
   $("pill").classList.toggle("on", c.conectado);
   txt("pill-txt", c.conectado ? `Conectado · ${c.puerto}` : (c.error ? "Sin conexión" : "Buscando placa…"));
-  $("pill").title = c.error || "";
+  $("pill").title = (c.error ? c.error + "\n" : "") + (c.registro ? "Registro: " + c.registro : "Sin registro");
+  $("registro").textContent = c.registro ? `Registro de la sesión: ${c.registro}` : "";
   const sel = $("puerto"), actual = c.fijo || "";
   const opciones = [["", "Automático" + (!c.fijo && c.puerto ? ` (${c.puerto})` : "")]]
     .concat(c.puertos.map((p) => [p.device, `${p.device}${p.desc && p.desc !== "n/a" ? " · " + p.desc : ""}`]));
