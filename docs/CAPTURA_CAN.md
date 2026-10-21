@@ -106,7 +106,23 @@ En la clavija del mazo de la E-ECU (carcasa negra con aletas, palanca de cierre 
 
 No hacen falta: J1708 (B25/B26), alimentación de la E-ECU (B11/B12, solo viva con el relé R3), B24 (programación de fábrica) ni los pines de sensores.
 
-**Pendiente de identificar** (no hay datos en la documentación OEM consultada):
+**Identificación probable: conector MC02 ("mazo del EMS")** [INFERIDO, fiabilidad MEDIA]
+
+El esquema Volvo **SCH02-1** de la EC160B–EC290B (`esquemas/ce_EC160B-290B_SCH02-1_zoom_conector_MC02_CAN_J1587_emergencia.png`) muestra que el bus y la señal de emergencia pasan por un conector **MC02** entre la E-ECU y la cabina, y la lista de conectores de la EC210B (Anexo A/F) describe **MC02** como «conectado al mazo del EMS» (el mazo de la E-ECU). El conector redondo de la foto sale justo de ese mazo, así que muy probablemente es **MC02**:
+
+| Pin MC02 | Cable (lado cabina) | Señal | Va a la V-ECU | Equivale en la E-ECU |
+|---|---|---|---|---|
+| **MC02.2** | amarillo (Y), C50 | **CAN H** | JB14 | B1 |
+| **MC02.3** | verde (GN), C51 | **CAN L** | JB6 | B2 |
+| MC02.4 | rojo (R), C52 | J1587 A | JB12 | B25 |
+| MC02.5 | blanco (W), C53 | J1587 B | JB4 | B26 |
+| **MC02.1** | azul/blanco (BL/W), C61 | **Emergencia (B4)**: viene del interruptor 26 (SW2704, posición alta) y también llega a la V-ECU (JA47) | JA47 | B4 |
+
+- Los pares CAN y J1587 llevan malla (JB13 y JB5 en la V-ECU son las mallas).
+- La **masa no aparece en MC02** en esa hoja: el GND del SH-C30A se sigue tomando en B9/B10 o en el perno de masa junto a la E-ECU.
+- El esquema es de máquinas con I-ECU (serie posterior a la nuestra) y puede tener más pines de los que se ven en esa hoja; **confirmarlo con el multímetro** antes de conectar nada.
+
+**Comprobación en la máquina** (no hay datos de este conector en la documentación consultada más allá de esa hoja):
 1. Fabricante y serie (posible Deutsch HD10/HD16 de 9 vías, como la toma J1939 de diagnóstico, o conector propio de Volvo): mirar marcas en la carcasa y las letras A, B, C… junto a cada contacto.
 2. Qué pines son **CAN H, CAN L y masa**, con la E-ECU **desenchufada** y la llave quitada:
    - Continuidad entre la cara de la clavija de la E-ECU (**B1, B2, B9/B10**) y cada contacto del conector redondo.

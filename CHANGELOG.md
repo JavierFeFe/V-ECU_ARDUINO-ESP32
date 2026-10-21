@@ -5,6 +5,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 ## [Unreleased]
 
 ### Añadido (punto de conexión)
+- Conector redondo identificado como probable **MC02** («mazo del EMS») a partir del esquema SCH02-1 de la EC160B–290B: MC02.2 CAN H, MC02.3 CAN L, MC02.4/5 J1587 A/B, MC02.1 línea de emergencia (B4); sin masa. Tabla en `docs/CAPTURA_CAN.md` §3b y ampliación del esquema en `docs/esquemas/`. Pendiente de confirmar con el multímetro.
 - `docs/CAPTURA_CAN.md` §3b y `docs/fotos/conector_redondo_mazo_maquina.jpg`: conector redondo del mazo de la E-ECU como posible punto de conexión del CAN (la tapa de la clavija de la E-ECU impide el back-probe). Procedimiento para identificar CAN H/L y masa con el multímetro; conector pendiente de identificar.
 
 ### Corregido (SH-C30A)
