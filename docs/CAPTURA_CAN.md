@@ -82,7 +82,7 @@ python tools/captura_can.py capturar --nombre prueba --duracion 5
 | SH-C30A | Conector B de la E-ECU | Notas |
 |---|---|---|
 | CAN_H (tornillo de arriba) | **B1** (amarillo) | back-probe |
-| GND (tornillo del medio) | **B9** (o B10) | back-probe |
+| GND (tornillo del medio) | **B9** (o B10), **o cualquier masa buena cerca de la E-ECU**: perno de masa del chasis/motor o negativo de batería | pinza o terminal de anillo. **Imprescindible**: el SH-C30A va alimentado por el USB del portátil y sin esta masa no tiene referencia común con el bus |
 | CAN_L (tornillo de abajo) | **B2** (verde) | back-probe |
 | DIP **1** (arranque) · DIP **2** (R120) | 1 **OFF** siempre · 2 **OFF** si B1–B2 ≈ 60 Ω, **ON** si ≈ 120 Ω | el bus debe quedar con dos terminaciones (paso 1) |
 
