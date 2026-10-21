@@ -24,6 +24,7 @@ Todos los cambios relevantes del proyecto se documentan aquí. Formato basado en
 - `docs/CAPTURA_CAN.md` §3b y `docs/fotos/conector_redondo_mazo_maquina.jpg`: conector redondo del mazo de la E-ECU como posible punto de conexión del CAN (la tapa de la clavija de la E-ECU impide el back-probe). Procedimiento para identificar CAN H/L y masa con el multímetro; conector pendiente de identificar.
 
 ### Añadido (diagramas en los paneles)
+- README: mención del botón 📐 Diagramas en la sección de captura con el portátil.
 - Botón **📐 Diagramas** en los dos paneles: visor con miniaturas, ampliación y apertura en pestaña de los diagramas y fotos de `docs/` que hacen falta en cada caso (los servidores solo sirven imágenes de `docs/`). En el panel de la placa, Esc con el visor abierto solo lo cierra.
 - Registro del bus: se apunta también por qué no hay adaptador (no encontrado, modo DFU…).
 
